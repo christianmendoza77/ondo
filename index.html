@@ -502,7 +502,7 @@
     flex: 1;
     display: flex;
     align-items: flex-end;
-    gap: 8px;
+    gap: 10px;
     margin-top: 16px;
     min-height: 0;
   }
@@ -757,7 +757,7 @@
                 <p class="apy-subtitle">*Benchmarked to the 3-month U.S. T-Bill</p>
               </div>
               <div class="apy-chart-area">
-                <div style="position:absolute;top:0;right:0;border:1px solid #004830;border-radius:3px;padding:5px 8px;font-family:'A2 Record Gothic Mono','Courier New',monospace;font-size:10px;line-height:1.32;color:#004830;white-space:nowrap;background:#fff;z-index:1;">3.86% APY</div>
+                <div style="position:absolute;top:0;right:0;border:1px solid #007A4B;border-radius:3px;padding:5px 8px;font-family:'A2 Record Gothic Mono','Courier New',monospace;font-size:10px;line-height:1.32;color:#007A4B;white-space:nowrap;background:#fff;z-index:1;">3.86% APY</div>
                 <svg viewBox="0 0 380 160" style="width:100%;height:100%;display:block;" preserveAspectRatio="none">
                   <!-- Grid lines -->
                   <line x1="0" y1="5"   x2="380" y2="5"   stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
@@ -769,19 +769,19 @@
                   <line x1="0" y1="155" x2="380" y2="155" stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
                   <!-- US T-Bill dashed line (lower, gray) -->
                   <polyline points="0,130 40,128 80,125 120,122 160,118 200,114 240,110 280,107 320,104 360,101 380,99"
-                    fill="none" stroke="#DEDEDE" stroke-width="2" stroke-dasharray="5 4"/>
+                    fill="none" stroke="#5BC396" stroke-width="1.5" stroke-dasharray="5 4"/>
                   <!-- Ondo APY solid green line -->
                   <polyline points="0,145 40,138 80,128 120,112 160,98 200,82 240,68 280,56 320,44 360,34 380,28"
-                    fill="none" stroke="#1DA66A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    fill="none" stroke="#007A4B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
               <div class="apy-legend">
                 <div class="legend-item">
-                  <span class="legend-dot" style="background:#1DA66A;"></span>
+                  <span class="legend-dot" style="background:#007A4B;"></span>
                   Ondo's APY
                 </div>
                 <div class="legend-item">
-                  <span class="legend-dash" style="border-color:#DEDEDE;"></span>
+                  <span class="legend-dash" style="border-color:#5BC396;"></span>
                   US Treasury Bill's APY
                 </div>
               </div>
@@ -833,7 +833,7 @@
                 <p class="apy-subtitle">*Benchmarked to the 3-month U.S. T-Bill</p>
               </div>
               <div class="apy-chart-area">
-                <div style="position:absolute;top:0;right:0;border:1px solid #1C3966;border-radius:3px;padding:5px 8px;font-family:'A2 Record Gothic Mono','Courier New',monospace;font-size:10px;line-height:1.32;color:#1C3966;white-space:nowrap;background:#fff;z-index:1;">3.75% APY</div>
+                <div style="position:absolute;top:0;right:0;border:1px solid #365F9F;border-radius:3px;padding:5px 8px;font-family:'A2 Record Gothic Mono','Courier New',monospace;font-size:10px;line-height:1.32;color:#365F9F;white-space:nowrap;background:#fff;z-index:1;">3.75% APY</div>
                 <svg viewBox="0 0 380 160" style="width:100%;height:100%;display:block;" preserveAspectRatio="none">
                   <!-- Grid lines -->
                   <line x1="0" y1="5"   x2="380" y2="5"   stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
@@ -845,19 +845,19 @@
                   <line x1="0" y1="155" x2="380" y2="155" stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
                   <!-- US T-Bill dashed line (lower, gray) -->
                   <polyline points="0,130 40,128 80,125 120,122 160,118 200,114 240,110 280,107 320,104 360,101 380,99"
-                    fill="none" stroke="#DEDEDE" stroke-width="2" stroke-dasharray="5 4"/>
+                    fill="none" stroke="#8CB1ED" stroke-width="1.5" stroke-dasharray="5 4"/>
                   <!-- Ondo APY solid blue line -->
                   <polyline points="0,145 40,138 80,128 120,112 160,98 200,82 240,68 280,56 320,44 360,34 380,28"
-                    fill="none" stroke="#5A86CC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    fill="none" stroke="#365F9F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
               <div class="apy-legend">
                 <div class="legend-item">
-                  <span class="legend-dot" style="background:#5A86CC;"></span>
+                  <span class="legend-dot" style="background:#365F9F;"></span>
                   Ondo's APY
                 </div>
                 <div class="legend-item">
-                  <span class="legend-dash" style="border-color:#DEDEDE;"></span>
+                  <span class="legend-dash" style="border-color:#8CB1ED;"></span>
                   US Treasury Bill's APY
                 </div>
               </div>
@@ -906,7 +906,7 @@
 
 <script>
 (function () {
-  const DURATION = 8000;
+  const DURATION = 7000;
 
   const DOT_DATA = [
     [10.5,236],[25.5,228],[40.5,212],[55.5,201],[70.5,191],
@@ -920,7 +920,7 @@
 
   // ── Per-slide config ────────────────────────────────────────────────
   const SLIDE_CONFIG = [
-    { dotColor: '#b770fa', tvl: '$362.7M', tagColor: '#450e78', contentBg: '#e0ecff' },
+    { dotColor: '#b770fa', tvl: '$362.7M', tagColor: '#450e78', contentBg: '#F0F0F0' },
     { dotColor: '#1DA66A', tvl: '$783.57M', tagColor: '#004830', contentBg: '#D5E5CF' },
     { dotColor: '#5A86CC', tvl: '$216.01M', tagColor: '#1C3966', contentBg: '#e0ecff' },
   ];
@@ -981,24 +981,56 @@
   function animateIn() {
     const activeRow = statsRows.find(r => r.classList.contains('active'));
 
-    // Collect elements from the active stats-row only
-    const rowAnimEls = activeRow ? Array.from(activeRow.querySelectorAll('.anim-item')) : [];
     const tokenIcons = activeRow ? Array.from(activeRow.querySelectorAll('.token-icon')) : [];
     const bars       = activeRow ? Array.from(activeRow.querySelectorAll('.bar-chart .bar')) : [];
     const pillBars   = activeRow ? Array.from(activeRow.querySelectorAll('.pill-bar')) : [];
     const apyLines   = activeRow ? Array.from(activeRow.querySelectorAll('.apy-chart-area polyline')) : [];
 
-    // Also animate the TVL tile (always present)
     const tvlTile = document.querySelector('.tile-tvl');
 
-    // Reset TVL tile
-    resetEl(tvlTile);
+    // Make tile containers instantly visible (no animation on white boxes)
+    const allTiles = [tvlTile, ...(activeRow ? Array.from(activeRow.querySelectorAll('.tile')) : [])];
+    allTiles.forEach(tile => {
+      tile.style.transition = 'none';
+      tile.style.opacity = '1';
+      tile.style.transform = 'translateY(0)';
+    });
 
-    // Reset stats-row anim items
-    rowAnimEls.filter(el => !el.classList.contains('token-icon')).forEach(resetEl);
+    // Collect inner content elements to animate
+    const contentEls = [];
+    const tvlLeft  = tvlTile.querySelector('.tile-tvl-left');
+    const tvlTooltip = tvlTile.querySelector('.graph-tooltip');
+    if (tvlLeft)    contentEls.push(tvlLeft);
+    if (tvlTooltip) contentEls.push(tvlTooltip);
+
+    if (activeRow) {
+      activeRow.querySelectorAll('.tile').forEach(tile => {
+        // Animate direct div children that are not chart/grid containers
+        Array.from(tile.querySelectorAll(':scope > div')).forEach(d => {
+          if (!d.classList.contains('bar-chart') && !d.classList.contains('pill-chart') &&
+              !d.classList.contains('apy-chart-area') && !d.classList.contains('token-grid') &&
+              !d.classList.contains('apy-legend')) {
+            contentEls.push(d);
+          }
+        });
+        // Also animate the legend
+        const legend = tile.querySelector('.apy-legend');
+        if (legend) contentEls.push(legend);
+      });
+    }
+
+    // Reset content elements
+    contentEls.forEach(resetEl);
+
+    // Reset chart elements
     tokenIcons.forEach(resetEl);
     bars.forEach(b => { b.style.transition = 'none'; b.style.height = '0'; });
-    pillBars.forEach(p => { p.style.transition = 'none'; p.style.height = '0'; });
+    pillBars.forEach(p => {
+      p.style.transition = 'none';
+      p.style.opacity = '1';
+      p.style.height = p.dataset.ph + 'px';
+      p.style.transform = 'scaleY(0)';
+    });
     apyLines.forEach(line => {
       const len = line.getTotalLength();
       line.style.transition = 'none';
@@ -1011,21 +1043,13 @@
     // Force reflow
     void document.body.offsetHeight;
 
-    // TVL tile
-    setTimeout(() => {
-      tvlTile.style.transition = 'opacity 0.55s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1)';
-      tvlTile.style.opacity = '1';
-      tvlTile.style.transform = 'translateY(0)';
-    }, 60);
-
-    // Stats row tiles (non-icon anim-items)
-    const tiles = rowAnimEls.filter(el => !el.classList.contains('token-icon'));
-    tiles.forEach((el, i) => {
+    // Animate inner content elements (staggered fade-up)
+    contentEls.forEach((el, i) => {
       setTimeout(() => {
         el.style.transition = 'opacity 0.55s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1)';
         el.style.opacity = '1';
         el.style.transform = 'translateY(0)';
-      }, 160 + i * 100);
+      }, 60 + i * 80);
     });
 
     // Grid lines
@@ -1057,11 +1081,11 @@
       }, 420 + i * 90);
     });
 
-    // Pill bars grow (slides 1 & 2)
+    // Pill bars scaleY – same timing as dots (slides 1 & 2)
     pillBars.forEach((pill, i) => {
       setTimeout(() => {
-        pill.style.transition = 'height 0.25s cubic-bezier(0.34,1.56,0.64,1)';
-        pill.style.height = pill.dataset.ph + 'px';
+        pill.style.transition = 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1)';
+        pill.style.transform = 'scaleY(1)';
       }, 500 + i * 20);
     });
 
