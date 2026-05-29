@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Ondo – Products Section</title>
+<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
 <style>
   :root {
     --black: #1d1d1d;
@@ -438,7 +439,7 @@
     font-weight: 400;
     color: var(--gray-500);
     letter-spacing: -0.11px;
-    margin-top: 4px;
+    margin-top: 8px;
     line-height: 1.4;
   }
 
@@ -451,8 +452,8 @@
 
   .apy-legend {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
+    flex-direction: row;
+    gap: 12px;
     margin-top: 12px;
   }
 
@@ -489,18 +490,19 @@
   }
 
   .price-change {
-    font-size: 12px;
-    font-weight: 500;
-    color: #1DA66A;
-    letter-spacing: -0.12px;
-    margin-top: 2px;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--gray-500);
+    letter-spacing: -0.11px;
+    margin-top: 8px;
+    line-height: 1.4;
   }
 
   .pill-chart {
     flex: 1;
     display: flex;
     align-items: flex-end;
-    gap: 3px;
+    gap: 8px;
     margin-top: 16px;
     min-height: 0;
   }
@@ -749,20 +751,28 @@
 
             <!-- APY Tile -->
             <div class="tile tile-apy anim-item">
-              <div class="stat-label" style="color:#004830;">APY</div>
-              <div class="stat-value">3.86%</div>
-              <p class="apy-subtitle">*Benchmarked to the 3-month U.S. T-Bill</p>
+              <div>
+                <div class="stat-label">APY</div>
+                <div class="stat-value">3.86%</div>
+                <p class="apy-subtitle">*Benchmarked to the 3-month U.S. T-Bill</p>
+              </div>
               <div class="apy-chart-area">
+                <div style="position:absolute;top:0;right:0;border:1px solid #004830;border-radius:3px;padding:5px 8px;font-family:'A2 Record Gothic Mono','Courier New',monospace;font-size:10px;line-height:1.32;color:#004830;white-space:nowrap;background:#fff;z-index:1;">3.86% APY</div>
                 <svg viewBox="0 0 380 160" style="width:100%;height:100%;display:block;" preserveAspectRatio="none">
+                  <!-- Grid lines -->
+                  <line x1="0" y1="5"   x2="380" y2="5"   stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                  <line x1="0" y1="28"  x2="380" y2="28"  stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                  <line x1="0" y1="55"  x2="380" y2="55"  stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                  <line x1="0" y1="82"  x2="380" y2="82"  stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                  <line x1="0" y1="110" x2="380" y2="110" stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                  <line x1="0" y1="135" x2="380" y2="135" stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                  <line x1="0" y1="155" x2="380" y2="155" stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
                   <!-- US T-Bill dashed line (lower, gray) -->
                   <polyline points="0,130 40,128 80,125 120,122 160,118 200,114 240,110 280,107 320,104 360,101 380,99"
                     fill="none" stroke="#DEDEDE" stroke-width="2" stroke-dasharray="5 4"/>
                   <!-- Ondo APY solid green line -->
                   <polyline points="0,145 40,138 80,128 120,112 160,98 200,82 240,68 280,56 320,44 360,34 380,28"
                     fill="none" stroke="#1DA66A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <!-- Badge -->
-                  <rect x="296" y="12" width="84" height="24" rx="3" fill="none" stroke="#004830" stroke-width="1"/>
-                  <text x="304" y="28" font-family="'A2 Record Gothic Mono','Courier New',monospace" font-size="10" fill="#004830">3.86% APY</text>
                 </svg>
               </div>
               <div class="apy-legend">
@@ -817,20 +827,28 @@
 
             <!-- APY Tile -->
             <div class="tile tile-apy anim-item">
-              <div class="stat-label" style="color:#1C3966;">APY</div>
-              <div class="stat-value">3.75%</div>
-              <p class="apy-subtitle">*Benchmarked to the 3-month U.S. T-Bill</p>
+              <div>
+                <div class="stat-label">APY</div>
+                <div class="stat-value">3.75%</div>
+                <p class="apy-subtitle">*Benchmarked to the 3-month U.S. T-Bill</p>
+              </div>
               <div class="apy-chart-area">
+                <div style="position:absolute;top:0;right:0;border:1px solid #1C3966;border-radius:3px;padding:5px 8px;font-family:'A2 Record Gothic Mono','Courier New',monospace;font-size:10px;line-height:1.32;color:#1C3966;white-space:nowrap;background:#fff;z-index:1;">3.75% APY</div>
                 <svg viewBox="0 0 380 160" style="width:100%;height:100%;display:block;" preserveAspectRatio="none">
+                  <!-- Grid lines -->
+                  <line x1="0" y1="5"   x2="380" y2="5"   stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                  <line x1="0" y1="28"  x2="380" y2="28"  stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                  <line x1="0" y1="55"  x2="380" y2="55"  stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                  <line x1="0" y1="82"  x2="380" y2="82"  stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                  <line x1="0" y1="110" x2="380" y2="110" stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                  <line x1="0" y1="135" x2="380" y2="135" stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                  <line x1="0" y1="155" x2="380" y2="155" stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
                   <!-- US T-Bill dashed line (lower, gray) -->
                   <polyline points="0,130 40,128 80,125 120,122 160,118 200,114 240,110 280,107 320,104 360,101 380,99"
                     fill="none" stroke="#DEDEDE" stroke-width="2" stroke-dasharray="5 4"/>
                   <!-- Ondo APY solid blue line -->
                   <polyline points="0,145 40,138 80,128 120,112 160,98 200,82 240,68 280,56 320,44 360,34 380,28"
                     fill="none" stroke="#5A86CC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <!-- Badge -->
-                  <rect x="296" y="12" width="84" height="24" rx="3" fill="none" stroke="#1C3966" stroke-width="1"/>
-                  <text x="304" y="28" font-family="'A2 Record Gothic Mono','Courier New',monospace" font-size="10" fill="#1C3966">3.75% APY</text>
                 </svg>
               </div>
               <div class="apy-legend">
@@ -850,7 +868,7 @@
               <div>
                 <div class="stat-label">Price</div>
                 <div class="stat-value">$1.1207</div>
-                <div class="price-change" style="color:#5A86CC;">+$0.0115 today</div>
+                <div class="price-change">+$0.0115 today</div>
               </div>
               <div class="pill-chart" id="pill-chart-ousg">
                 <!-- 21 pill bars, blue palette -->
@@ -968,6 +986,7 @@
     const tokenIcons = activeRow ? Array.from(activeRow.querySelectorAll('.token-icon')) : [];
     const bars       = activeRow ? Array.from(activeRow.querySelectorAll('.bar-chart .bar')) : [];
     const pillBars   = activeRow ? Array.from(activeRow.querySelectorAll('.pill-bar')) : [];
+    const apyLines   = activeRow ? Array.from(activeRow.querySelectorAll('.apy-chart-area polyline')) : [];
 
     // Also animate the TVL tile (always present)
     const tvlTile = document.querySelector('.tile-tvl');
@@ -980,6 +999,12 @@
     tokenIcons.forEach(resetEl);
     bars.forEach(b => { b.style.transition = 'none'; b.style.height = '0'; });
     pillBars.forEach(p => { p.style.transition = 'none'; p.style.height = '0'; });
+    apyLines.forEach(line => {
+      const len = line.getTotalLength();
+      line.style.transition = 'none';
+      line.style.strokeDasharray = len;
+      line.style.strokeDashoffset = len;
+    });
     dots.forEach(resetDot);
     gridLines.classList.remove('gl-in');
 
@@ -1035,10 +1060,20 @@
     // Pill bars grow (slides 1 & 2)
     pillBars.forEach((pill, i) => {
       setTimeout(() => {
-        pill.style.transition = 'height 0.55s cubic-bezier(0.34,1.56,0.64,1)';
+        pill.style.transition = 'height 0.25s cubic-bezier(0.34,1.56,0.64,1)';
         pill.style.height = pill.dataset.ph + 'px';
-      }, 380 + i * 30);
+      }, 500 + i * 20);
     });
+
+    // APY line chart draw (slides 1 & 2)
+    if (apyLines.length) {
+      setTimeout(() => {
+        apyLines.forEach(line => {
+          line.style.transition = 'stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+          line.style.strokeDashoffset = '0';
+        });
+      }, 300);
+    }
   }
 
   // ── Progress state ──────────────────────────────────────────────────
@@ -1146,6 +1181,19 @@
   startProgress(0);
   requestAnimationFrame(() => requestAnimationFrame(() => animateIn()));
 })();
+</script>
+<script>
+  const lenis = new Lenis({
+    lerp: 0.08,
+    smoothWheel: true,
+    smoothTouch: false,
+  });
+
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
 </script>
 </body>
 </html>
