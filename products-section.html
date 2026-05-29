@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ondo – Products Section</title>
+<style>
+  :root {
+    --black: #1d1d1d;
+    --gray-200: #dedede;
+    --gray-500: #626262;
+    --blue-50: #e0ecff;
+    --blue-100: #b9d2fa;
+    --blue-200: #8cb1ed;
+    --blue-300: #5a86cc;
+    --blue-500: #1c3966;
+    --purple-300: #b770fa;
+    --purple-500: #450e78;
+    --green-600: #002b20;
+    --slide-duration: 6s;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Gellix', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #fff;
+    color: #000;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Header ── */
+  .products-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding: 120px 0;
+  }
+
+  .eyebrow {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.16px;
+  }
+
+  .headline {
+    font-size: 56px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -1.68px;
+    text-align: center;
+  }
+  .headline .muted { color: var(--gray-500); }
+
+  .subhead {
+    font-family: 'ABC Arizona Text', Georgia, 'Times New Roman', serif;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.32;
+    letter-spacing: -0.2px;
+    text-align: center;
+    width: 550px;
+  }
+
+  /* ── Carousel wrapper ── */
+  .carousel-outer {
+    overflow-x: auto;
+    padding: 0 44px 120px;
+  }
+
+  .carousel-container {
+    width: 1512px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  /* ── Side Nav ── */
+  .side-nav {
+    width: 420px;
+    padding-left: 24px;
+    padding-top: 24px;
+    flex-shrink: 0;
+  }
+
+  .nav-item {
+    position: relative;
+    cursor: pointer;
+    border-top: 1px solid var(--gray-200);
+  }
+
+  /* Gray track + black fill progress bar */
+  .progress-track {
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: #000;
+    width: 0%;
+    will-change: width;
+  }
+
+  .nav-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 32px 0;
+  }
+
+  .nav-title {
+    font-size: 36px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.72px;
+    flex: 1;
+    color: var(--gray-500);
+    transition: color 0.2s ease;
+  }
+
+  .nav-arrow {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Default: arrow points ↓ */
+    transform: rotate(90deg);
+    transition: transform 0.25s ease;
+  }
+
+  .nav-arrow svg path {
+    stroke: var(--gray-500);
+    transition: stroke 0.2s ease;
+  }
+
+  /* Hover on inactive: text goes black, arrow swings back → */
+  .nav-item:not(.active):hover .nav-title { color: #000; }
+  .nav-item:not(.active):hover .nav-arrow { transform: none; }
+  .nav-item:not(.active):hover .nav-arrow svg path { stroke: #000; }
+
+  /* Active: text black, arrow → (same as hover), black */
+  .nav-item.active .nav-title { color: #000; }
+  .nav-item.active .nav-arrow { transform: none; }
+  .nav-item.active .nav-arrow svg path { stroke: #000; }
+
+  /* Side nav as flex column so button aligns to bottom */
+  .side-nav {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Pause/Play button */
+  .pause-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 80px;
+    background: #f0f0f0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+    transition: background 0.2s ease;
+    flex-shrink: 0;
+    padding: 0;
+  }
+
+  .pause-btn:hover { background: #dedede; }
+  .pause-btn svg { display: block; }
+
+  /* Collapsible content */
+  .nav-expanded {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  }
+
+  .nav-item.active .nav-expanded {
+    max-height: 280px;
+    opacity: 1;
+  }
+
+  .nav-desc {
+    font-family: 'ABC Arizona Text', Georgia, serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: var(--gray-500);
+    margin-bottom: 104px;
+    padding-bottom: 0;
+  }
+
+  .nav-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 32px;
+  }
+
+  .btn-primary {
+    background: var(--black);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    height: 36px;
+    padding: 0 12px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .chain-logos {
+    display: flex;
+    align-items: center;
+  }
+
+  .chain-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    object-fit: cover;
+    margin-left: -4px;
+  }
+  .chain-logo:first-child { margin-left: 0; }
+
+  /* OUSG: tight overlap */
+  .chain-logos.overlap .chain-logo { margin-left: -8px; }
+  .chain-logos.overlap .chain-logo:first-child { margin-left: 0; }
+
+  /* ── Content Panel ── */
+  .content-panel {
+    width: 1000px;
+    flex-shrink: 0;
+    background: var(--blue-50);
+    border-radius: 36px;
+    padding: 32px;
+    overflow: hidden;
+  }
+
+  .content-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* ── Tiles ── */
+  .tile {
+    background: #fff;
+    border-radius: 24px;
+    padding: 24px;
+  }
+
+  .tile-tvl {
+    height: 336px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .tile-tvl-left { flex-shrink: 0; }
+
+  .tile-tvl-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 100%;
+    width: 532px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: -0.12px;
+    line-height: 1.32;
+  }
+
+  .stat-value {
+    font-family: 'ABC Arizona Text', Georgia, serif;
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.72px;
+    margin-top: 8px;
+  }
+
+  .graph-tooltip {
+    background: #fff;
+    border: 1px solid var(--purple-500);
+    border-radius: 3px;
+    padding: 6px 8px;
+    font-family: 'A2 Record Gothic Mono', 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.32;
+    color: var(--purple-500);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .chart-wrapper {
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  /* ── Stats Row ── */
+  .stats-row {
+    display: flex;
+    gap: 8px;
+    height: 388px;
+  }
+
+  .tile-assets {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .tile-holders {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+  }
+
+  /* ── Token Grid ── */
+  .token-grid {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .token-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .token-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── Bar Chart ── */
+  .bar-chart {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    min-height: 0;
+  }
+
+  .bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-end;
+    height: 100%;
+  }
+
+  .bar-col.has-label {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-end;
+    gap: 16px;
+    height: 100%;
+  }
+
+  .bar-label-badge {
+    flex-shrink: 0;
+    align-self: flex-end;
+    border: 1px solid var(--blue-500);
+    border-radius: 3px;
+    padding: 6px 8px;
+    font-family: 'A2 Record Gothic Mono', 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.32;
+    color: var(--blue-500);
+    white-space: nowrap;
+  }
+
+  .bar {
+    width: 100%;
+    border-radius: 8px;
+    transform-origin: bottom;
+    transition: height 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* ── Animation: anim-item slides up+fade ── */
+  .anim-item {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .anim-item.in {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* ── Multi-slide stats rows ── */
+  .stats-row { display: none; }
+  .stats-row.active { display: flex; }
+
+  /* ── APY Tile ── */
+  .tile-apy {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .apy-subtitle {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--gray-500);
+    letter-spacing: -0.11px;
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  .apy-chart-area {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    margin-top: 12px;
+  }
+
+  .apy-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--gray-500);
+    letter-spacing: -0.11px;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .legend-dash {
+    width: 16px;
+    height: 2px;
+    border-top: 2px dashed;
+    flex-shrink: 0;
+  }
+
+  /* ── Price Tile ── */
+  .tile-price {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .price-change {
+    font-size: 12px;
+    font-weight: 500;
+    color: #1DA66A;
+    letter-spacing: -0.12px;
+    margin-top: 2px;
+  }
+
+  .pill-chart {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    margin-top: 16px;
+    min-height: 0;
+  }
+
+  .pill-bar {
+    flex: 1;
+    border-radius: 100px;
+    transform-origin: bottom;
+    min-width: 0;
+  }
+
+  /* SVG animation helpers */
+  .chart-dot {
+    opacity: 0;
+    transform-origin: center;
+    transform-box: fill-box;
+    transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .chart-dot.dot-in {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .grid-lines line {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .grid-lines.gl-in line { opacity: 1; }
+</style>
+</head>
+<body>
+
+<section>
+  <!-- Header -->
+  <div class="products-header">
+    <span class="eyebrow">Our Products</span>
+    <h2 class="headline">A New Standard<br><span class="muted">for Tokenized Finance.</span></h2>
+    <p class="subhead">A set of onchain products bridging traditional finance and DeFi.</p>
+  </div>
+
+  <!-- Carousel -->
+  <div class="carousel-outer">
+    <div class="carousel-container" style="align-items:stretch;">
+
+      <!-- Side Nav -->
+      <nav class="side-nav">
+
+        <!-- Item: Global Markets -->
+        <div class="nav-item active" data-index="0">
+          <div class="progress-track"><div class="progress-fill"></div></div>
+          <div class="nav-item-header">
+            <span class="nav-title">Global Markets</span>
+            <span class="nav-arrow">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M7.5 5l5 5-5 5" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+          <div class="nav-expanded">
+            <p class="nav-desc">Ondo Global Markets is a platform that brings traditional public securities onchain, with tokens that are freely transferable¹ and usable in DeFi.</p>
+            <div class="nav-footer">
+              <button class="btn-primary">Learn More</button>
+              <div class="chain-logos">
+                <img class="chain-logo" src="assets/ondo.finance-7 1.png" alt="BNB">
+                <img class="chain-logo" src="assets/ondo.finance-6 1.png" alt="ETH">
+                <img class="chain-logo" src="assets/ondo.finance-8 1.png" alt="SOL">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item: USDY -->
+        <div class="nav-item" data-index="1">
+          <div class="progress-track"><div class="progress-fill"></div></div>
+          <div class="nav-item-header">
+            <span class="nav-title">USDY</span>
+            <span class="nav-arrow">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M7.5 5l5 5-5 5" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+          <div class="nav-expanded">
+            <p class="nav-desc">The world's leading permissionless yieldcoin. Enjoy the utility of stablecoins, now with safer daily yield.</p>
+            <div class="nav-footer">
+              <button class="btn-primary">Learn More</button>
+              <div class="chain-logos">
+                <img class="chain-logo" src="assets/usdy/Network-1.png"      alt="Polygon">
+                <img class="chain-logo" src="assets/usdy/Network.png"         alt="ETH">
+                <img class="chain-logo" src="assets/usdy/Network-2.png"       alt="SOL">
+                <img class="chain-logo" src="assets/usdy/Crypto Tokens.png"   alt="Multi">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item: OUSG -->
+        <div class="nav-item" data-index="2">
+          <div class="progress-track"><div class="progress-fill"></div></div>
+          <div class="nav-item-header">
+            <span class="nav-title">OUSG</span>
+            <span class="nav-arrow">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M7.5 5l5 5-5 5" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+          <div class="nav-expanded">
+            <p class="nav-desc">Built for institutional investors, OUSG offers exposure to short-term US Treasuries with 24/7 instant mints and redemptions.</p>
+            <div class="nav-footer">
+              <button class="btn-primary">Learn More</button>
+              <div class="chain-logos overlap">
+                <img class="chain-logo" src="assets/ousg/Network-4.png" alt="">
+                <img class="chain-logo" src="assets/ousg/Network-2.png" alt="">
+                <img class="chain-logo" src="assets/ousg/Network-3.png" alt="">
+                <img class="chain-logo" src="assets/ousg/Network.png"   alt="">
+                <img class="chain-logo" src="assets/ousg/Network-7.png" alt="">
+                <img class="chain-logo" src="assets/ousg/Network-8.png" alt="">
+                <img class="chain-logo" src="assets/ousg/Network-1.png" alt="">
+                <img class="chain-logo" src="assets/ousg/Network-5.png" alt="">
+                <img class="chain-logo" src="assets/ousg/Network-6.png" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pause / Play button -->
+        <button id="pause-btn" class="pause-btn" aria-label="Pause autoplay">
+          <svg id="pause-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <rect x="3"  y="2" width="3.5" height="12" rx="1" fill="#000"/>
+            <rect x="9.5" y="2" width="3.5" height="12" rx="1" fill="#000"/>
+          </svg>
+          <svg id="play-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:none;">
+            <path d="M4 2L14 8L4 14V2Z" fill="#000"/>
+          </svg>
+        </button>
+
+      </nav>
+
+      <!-- Content Panel -->
+      <div class="content-panel">
+        <div class="content-inner">
+
+          <!-- TVL Tile -->
+          <div class="tile tile-tvl anim-item">
+            <div class="tile-tvl-left">
+              <div class="stat-label">Current TVL</div>
+              <div class="stat-value">$362.7M</div>
+            </div>
+            <div class="tile-tvl-right">
+              <div class="graph-tooltip">$362.7M</div>
+              <div class="chart-wrapper">
+                <svg id="tvl-svg" viewBox="0 0 532 244" style="width:100%;height:244px;display:block;">
+                  <!-- Grid lines -->
+                  <g class="grid-lines">
+                    <line x1="0" y1="5"   x2="532" y2="5"   stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                    <line x1="0" y1="41"  x2="532" y2="41"  stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                    <line x1="0" y1="81"  x2="532" y2="81"  stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                    <line x1="0" y1="122" x2="532" y2="122" stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                    <line x1="0" y1="163" x2="532" y2="163" stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                    <line x1="0" y1="203" x2="532" y2="203" stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                    <line x1="0" y1="236" x2="532" y2="236" stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
+                  </g>
+                  <!-- Dots (built by JS) -->
+                  <g id="chart-dots"></g>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats Row: Global Markets (slide 0) -->
+          <div class="stats-row active" data-slide="0">
+
+            <!-- Assets Tile -->
+            <div class="tile tile-assets anim-item">
+              <div class="stat-label" style="color: var(--green-600);">Number of Assets</div>
+              <div class="stat-value">200+</div>
+              <div class="token-grid">
+                <div class="token-row">
+                  <img class="token-icon anim-item" src="assets/gm-NOW-token-stock-color.png"  alt="NOW">
+                  <img class="token-icon anim-item" src="assets/gm-SBUX-token-stock-color.png" alt="SBUX">
+                  <img class="token-icon anim-item" src="assets/gm-MRK-token-stock-color.png"  alt="MRK">
+                  <img class="token-icon anim-item" src="assets/gm-WM-token-stock-color.png"   alt="WM">
+                  <img class="token-icon anim-item" src="assets/gm-DE-token-stock-color.png"   alt="DE">
+                  <img class="token-icon anim-item" src="assets/gm-PLD-token-stock-color.png"  alt="PLD">
+                  <img class="token-icon anim-item" src="assets/gm-TD-token-stock-color.png"   alt="TD">
+                </div>
+                <div class="token-row">
+                  <img class="token-icon anim-item" src="assets/gm-PBR-token-stock-color.png"  alt="PBR">
+                  <img class="token-icon anim-item" src="assets/gm-GEV-token-stock-color.png"  alt="GEV">
+                  <img class="token-icon anim-item" src="assets/gm-SPOT-token-stock-color.png" alt="SPOT">
+                  <img class="token-icon anim-item" src="assets/gm-NVDA-token-stock-color.png" alt="NVDA">
+                  <img class="token-icon anim-item" src="assets/gm-SHOP-token-stock-color.png" alt="SHOP">
+                  <img class="token-icon anim-item" src="assets/gm-AMZN-token-stock-color.png" alt="AMZN">
+                  <img class="token-icon anim-item" src="assets/gm-RIOT-token-stock-color.png" alt="RIOT">
+                </div>
+                <div class="token-row">
+                  <img class="token-icon anim-item" src="assets/gm-FI-token-stock-color.png"   alt="FI">
+                  <img class="token-icon anim-item" src="assets/gm-BABA-token-stock-color.png" alt="BABA">
+                  <img class="token-icon anim-item" src="assets/gm-HD-token-stock-color.png"   alt="HD">
+                  <img class="token-icon anim-item" src="assets/gm-BHP-token-stock-color.png"  alt="BHP">
+                  <img class="token-icon anim-item" src="assets/gm-HCA-token-stock-color.png"  alt="HCA">
+                  <img class="token-icon anim-item" src="assets/gm-TXN-token-stock-color.png"  alt="TXN">
+                  <img class="token-icon anim-item" src="assets/gm-NFLX-token-stock-color.png" alt="NFLX">
+                </div>
+                <div class="token-row">
+                  <img class="token-icon anim-item" src="assets/gm-RACE-token-stock-color.png" alt="RACE">
+                  <img class="token-icon anim-item" src="assets/gm-GOOG-token-stock-color.png" alt="GOOG">
+                  <img class="token-icon anim-item" src="assets/gm-SPGI-token-stock-color.png" alt="SPGI">
+                  <img class="token-icon anim-item" src="assets/gm-XOM-token-stock-color.png"  alt="XOM">
+                  <img class="token-icon anim-item" src="assets/gm-JNJ-token-stock-color.png"  alt="JNJ">
+                  <img class="token-icon anim-item" src="assets/gm-DASH-token-stock-color.png" alt="DASH">
+                  <img class="token-icon anim-item" src="assets/gm-ABNB-token-stock-color.png" alt="ABNB">
+                </div>
+              </div>
+            </div>
+
+            <!-- Holders Tile -->
+            <div class="tile tile-holders anim-item">
+              <div>
+                <div class="stat-label">Unique Holders</div>
+                <div class="stat-value">~15,000</div>
+              </div>
+              <div class="bar-chart" id="bar-chart">
+                <div class="bar-col">
+                  <div class="bar" data-h="72" style="height:0;background:var(--blue-50);border-radius:6px;"></div>
+                </div>
+                <div class="bar-col">
+                  <div class="bar" data-h="114" style="height:0;background:var(--blue-100);border-radius:8px;"></div>
+                </div>
+                <div class="bar-col">
+                  <div class="bar" data-h="164" style="height:0;background:var(--blue-200);border-radius:10px;"></div>
+                </div>
+                <div class="bar-col has-label">
+                  <div class="bar-label-badge">~15,000</div>
+                  <div class="bar" data-h="220" style="height:0;background:var(--blue-300);border-radius:12px;"></div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /stats-row slide-0 -->
+
+          <!-- Stats Row: USDY (slide 1) -->
+          <div class="stats-row" data-slide="1">
+
+            <!-- APY Tile -->
+            <div class="tile tile-apy anim-item">
+              <div class="stat-label" style="color:#004830;">APY</div>
+              <div class="stat-value">3.86%</div>
+              <p class="apy-subtitle">*Benchmarked to the 3-month U.S. T-Bill</p>
+              <div class="apy-chart-area">
+                <svg viewBox="0 0 380 160" style="width:100%;height:100%;display:block;" preserveAspectRatio="none">
+                  <!-- US T-Bill dashed line (lower, gray) -->
+                  <polyline points="0,130 40,128 80,125 120,122 160,118 200,114 240,110 280,107 320,104 360,101 380,99"
+                    fill="none" stroke="#DEDEDE" stroke-width="2" stroke-dasharray="5 4"/>
+                  <!-- Ondo APY solid green line -->
+                  <polyline points="0,145 40,138 80,128 120,112 160,98 200,82 240,68 280,56 320,44 360,34 380,28"
+                    fill="none" stroke="#1DA66A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <!-- Badge -->
+                  <rect x="296" y="12" width="84" height="24" rx="3" fill="none" stroke="#004830" stroke-width="1"/>
+                  <text x="304" y="28" font-family="'A2 Record Gothic Mono','Courier New',monospace" font-size="10" fill="#004830">3.86% APY</text>
+                </svg>
+              </div>
+              <div class="apy-legend">
+                <div class="legend-item">
+                  <span class="legend-dot" style="background:#1DA66A;"></span>
+                  Ondo's APY
+                </div>
+                <div class="legend-item">
+                  <span class="legend-dash" style="border-color:#DEDEDE;"></span>
+                  US Treasury Bill's APY
+                </div>
+              </div>
+            </div>
+
+            <!-- Price Tile -->
+            <div class="tile tile-price anim-item">
+              <div>
+                <div class="stat-label">Price</div>
+                <div class="stat-value">$113.2673</div>
+                <div class="price-change">+$0.0115 today</div>
+              </div>
+              <div class="pill-chart" id="pill-chart-usdy">
+                <!-- 21 pill bars, heights vary, green palette -->
+                <div class="pill-bar anim-item" data-ph="40"  style="height:0;background:#ebf0e7;"></div>
+                <div class="pill-bar anim-item" data-ph="55"  style="height:0;background:#ebf0e7;"></div>
+                <div class="pill-bar anim-item" data-ph="48"  style="height:0;background:#d5e5cf;"></div>
+                <div class="pill-bar anim-item" data-ph="62"  style="height:0;background:#d5e5cf;"></div>
+                <div class="pill-bar anim-item" data-ph="52"  style="height:0;background:#d5e5cf;"></div>
+                <div class="pill-bar anim-item" data-ph="70"  style="height:0;background:#d5e5cf;"></div>
+                <div class="pill-bar anim-item" data-ph="65"  style="height:0;background:#c0d9b8;"></div>
+                <div class="pill-bar anim-item" data-ph="80"  style="height:0;background:#c0d9b8;"></div>
+                <div class="pill-bar anim-item" data-ph="75"  style="height:0;background:#a5cc9e;"></div>
+                <div class="pill-bar anim-item" data-ph="90"  style="height:0;background:#a5cc9e;"></div>
+                <div class="pill-bar anim-item" data-ph="85"  style="height:0;background:#8abe83;"></div>
+                <div class="pill-bar anim-item" data-ph="100" style="height:0;background:#8abe83;"></div>
+                <div class="pill-bar anim-item" data-ph="110" style="height:0;background:#6db16a;"></div>
+                <div class="pill-bar anim-item" data-ph="105" style="height:0;background:#6db16a;"></div>
+                <div class="pill-bar anim-item" data-ph="118" style="height:0;background:#5bc396;"></div>
+                <div class="pill-bar anim-item" data-ph="125" style="height:0;background:#5bc396;"></div>
+                <div class="pill-bar anim-item" data-ph="132" style="height:0;background:#40b580;"></div>
+                <div class="pill-bar anim-item" data-ph="140" style="height:0;background:#40b580;"></div>
+                <div class="pill-bar anim-item" data-ph="150" style="height:0;background:#2aaa6e;"></div>
+                <div class="pill-bar anim-item" data-ph="160" style="height:0;background:#1da66a;"></div>
+                <div class="pill-bar anim-item" data-ph="172" style="height:0;background:#1da66a;"></div>
+              </div>
+            </div>
+
+          </div><!-- /stats-row slide-1 -->
+
+          <!-- Stats Row: OUSG (slide 2) -->
+          <div class="stats-row" data-slide="2">
+
+            <!-- APY Tile -->
+            <div class="tile tile-apy anim-item">
+              <div class="stat-label" style="color:#1C3966;">APY</div>
+              <div class="stat-value">3.75%</div>
+              <p class="apy-subtitle">*Benchmarked to the 3-month U.S. T-Bill</p>
+              <div class="apy-chart-area">
+                <svg viewBox="0 0 380 160" style="width:100%;height:100%;display:block;" preserveAspectRatio="none">
+                  <!-- US T-Bill dashed line (lower, gray) -->
+                  <polyline points="0,130 40,128 80,125 120,122 160,118 200,114 240,110 280,107 320,104 360,101 380,99"
+                    fill="none" stroke="#DEDEDE" stroke-width="2" stroke-dasharray="5 4"/>
+                  <!-- Ondo APY solid blue line -->
+                  <polyline points="0,145 40,138 80,128 120,112 160,98 200,82 240,68 280,56 320,44 360,34 380,28"
+                    fill="none" stroke="#5A86CC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <!-- Badge -->
+                  <rect x="296" y="12" width="84" height="24" rx="3" fill="none" stroke="#1C3966" stroke-width="1"/>
+                  <text x="304" y="28" font-family="'A2 Record Gothic Mono','Courier New',monospace" font-size="10" fill="#1C3966">3.75% APY</text>
+                </svg>
+              </div>
+              <div class="apy-legend">
+                <div class="legend-item">
+                  <span class="legend-dot" style="background:#5A86CC;"></span>
+                  Ondo's APY
+                </div>
+                <div class="legend-item">
+                  <span class="legend-dash" style="border-color:#DEDEDE;"></span>
+                  US Treasury Bill's APY
+                </div>
+              </div>
+            </div>
+
+            <!-- Price Tile -->
+            <div class="tile tile-price anim-item">
+              <div>
+                <div class="stat-label">Price</div>
+                <div class="stat-value">$1.1207</div>
+                <div class="price-change" style="color:#5A86CC;">+$0.0115 today</div>
+              </div>
+              <div class="pill-chart" id="pill-chart-ousg">
+                <!-- 21 pill bars, blue palette -->
+                <div class="pill-bar anim-item" data-ph="40"  style="height:0;background:#e0ecff;"></div>
+                <div class="pill-bar anim-item" data-ph="55"  style="height:0;background:#e0ecff;"></div>
+                <div class="pill-bar anim-item" data-ph="48"  style="height:0;background:#d0e2ff;"></div>
+                <div class="pill-bar anim-item" data-ph="62"  style="height:0;background:#d0e2ff;"></div>
+                <div class="pill-bar anim-item" data-ph="52"  style="height:0;background:#c0d8fa;"></div>
+                <div class="pill-bar anim-item" data-ph="70"  style="height:0;background:#c0d8fa;"></div>
+                <div class="pill-bar anim-item" data-ph="65"  style="height:0;background:#b9d2fa;"></div>
+                <div class="pill-bar anim-item" data-ph="80"  style="height:0;background:#b9d2fa;"></div>
+                <div class="pill-bar anim-item" data-ph="75"  style="height:0;background:#a8c6f5;"></div>
+                <div class="pill-bar anim-item" data-ph="90"  style="height:0;background:#a8c6f5;"></div>
+                <div class="pill-bar anim-item" data-ph="85"  style="height:0;background:#97baef;"></div>
+                <div class="pill-bar anim-item" data-ph="100" style="height:0;background:#97baef;"></div>
+                <div class="pill-bar anim-item" data-ph="110" style="height:0;background:#8cb1ed;"></div>
+                <div class="pill-bar anim-item" data-ph="105" style="height:0;background:#8cb1ed;"></div>
+                <div class="pill-bar anim-item" data-ph="118" style="height:0;background:#7aa3e0;"></div>
+                <div class="pill-bar anim-item" data-ph="125" style="height:0;background:#7aa3e0;"></div>
+                <div class="pill-bar anim-item" data-ph="132" style="height:0;background:#6a95d5;"></div>
+                <div class="pill-bar anim-item" data-ph="140" style="height:0;background:#6a95d5;"></div>
+                <div class="pill-bar anim-item" data-ph="150" style="height:0;background:#5a86cc;"></div>
+                <div class="pill-bar anim-item" data-ph="160" style="height:0;background:#5a86cc;"></div>
+                <div class="pill-bar anim-item" data-ph="172" style="height:0;background:#4a77bb;"></div>
+              </div>
+            </div>
+
+          </div><!-- /stats-row slide-2 -->
+        </div><!-- /content-inner -->
+      </div><!-- /content-panel -->
+
+    </div><!-- /carousel-container -->
+  </div><!-- /carousel-outer -->
+</section>
+
+<script>
+(function () {
+  const DURATION = 8000;
+
+  const DOT_DATA = [
+    [10.5,236],[25.5,228],[40.5,212],[55.5,201],[70.5,191],
+    [85.5,177],[100.5,177],[115.5,177],[130.5,177],[145.5,178],
+    [160.5,167],[175.5,149],[190.5,149],[205.5,138],[220.5,143],
+    [235.5,133],[250.5,124],[265.5,111],[280.5,111],[295.5,108],
+    [310.5,108],[325.5,100],[340.5,91],[355.5,100],[370.5,100],
+    [385.5,91],[400.5,78],[415.5,61],[430.5,52],[445.7,52],
+    [460.5,47],[475.9,34],[490.5,20],[505.8,12],[520.7,4.5]
+  ];
+
+  // ── Per-slide config ────────────────────────────────────────────────
+  const SLIDE_CONFIG = [
+    { dotColor: '#b770fa', tvl: '$362.7M', tagColor: '#450e78', contentBg: '#e0ecff' },
+    { dotColor: '#1DA66A', tvl: '$783.57M', tagColor: '#004830', contentBg: '#D5E5CF' },
+    { dotColor: '#5A86CC', tvl: '$216.01M', tagColor: '#1C3966', contentBg: '#e0ecff' },
+  ];
+
+  const navItems    = Array.from(document.querySelectorAll('.nav-item'));
+  const progFills   = Array.from(document.querySelectorAll('.progress-fill'));
+  const statsRows   = Array.from(document.querySelectorAll('.stats-row'));
+  const dotsGroup   = document.getElementById('chart-dots');
+  const gridLines   = document.querySelector('.grid-lines');
+  const contentPanel = document.querySelector('.content-panel');
+  const tvlValue    = document.querySelector('.tile-tvl-left .stat-value');
+  const graphTooltip = document.querySelector('.graph-tooltip');
+
+  let current = 0;
+  let autoTimer = null;
+
+  // ── Build SVG dots ──────────────────────────────────────────────────
+  DOT_DATA.forEach(([cx, cy]) => {
+    const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    r.setAttribute('x', cx - 4.5);
+    r.setAttribute('y', cy - 4.5);
+    r.setAttribute('width', 9);
+    r.setAttribute('height', 9);
+    r.setAttribute('rx', 2.25);
+    r.setAttribute('fill', '#b770fa');
+    r.classList.add('chart-dot');
+    dotsGroup.appendChild(r);
+  });
+
+  const dots = Array.from(document.querySelectorAll('.chart-dot'));
+
+  // ── Apply per-slide config ───────────────────────────────────────────
+  function applySlideConfig(index) {
+    const cfg = SLIDE_CONFIG[index];
+    dots.forEach(d => d.setAttribute('fill', cfg.dotColor));
+    tvlValue.textContent     = cfg.tvl;
+    graphTooltip.textContent = cfg.tvl;
+    graphTooltip.style.borderColor = cfg.tagColor;
+    graphTooltip.style.color       = cfg.tagColor;
+    contentPanel.style.background  = cfg.contentBg;
+  }
+
+  // ── Reset helpers ───────────────────────────────────────────────────
+  function resetEl(el) {
+    el.style.transition = 'none';
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.classList.remove('in');
+  }
+
+  function resetDot(d) {
+    d.style.transition = 'none';
+    d.style.opacity = '0';
+    d.style.transform = 'scale(0)';
+  }
+
+  // ── Animate content ─────────────────────────────────────────────────
+  function animateIn() {
+    const activeRow = statsRows.find(r => r.classList.contains('active'));
+
+    // Collect elements from the active stats-row only
+    const rowAnimEls = activeRow ? Array.from(activeRow.querySelectorAll('.anim-item')) : [];
+    const tokenIcons = activeRow ? Array.from(activeRow.querySelectorAll('.token-icon')) : [];
+    const bars       = activeRow ? Array.from(activeRow.querySelectorAll('.bar-chart .bar')) : [];
+    const pillBars   = activeRow ? Array.from(activeRow.querySelectorAll('.pill-bar')) : [];
+
+    // Also animate the TVL tile (always present)
+    const tvlTile = document.querySelector('.tile-tvl');
+
+    // Reset TVL tile
+    resetEl(tvlTile);
+
+    // Reset stats-row anim items
+    rowAnimEls.filter(el => !el.classList.contains('token-icon')).forEach(resetEl);
+    tokenIcons.forEach(resetEl);
+    bars.forEach(b => { b.style.transition = 'none'; b.style.height = '0'; });
+    pillBars.forEach(p => { p.style.transition = 'none'; p.style.height = '0'; });
+    dots.forEach(resetDot);
+    gridLines.classList.remove('gl-in');
+
+    // Force reflow
+    void document.body.offsetHeight;
+
+    // TVL tile
+    setTimeout(() => {
+      tvlTile.style.transition = 'opacity 0.55s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1)';
+      tvlTile.style.opacity = '1';
+      tvlTile.style.transform = 'translateY(0)';
+    }, 60);
+
+    // Stats row tiles (non-icon anim-items)
+    const tiles = rowAnimEls.filter(el => !el.classList.contains('token-icon'));
+    tiles.forEach((el, i) => {
+      setTimeout(() => {
+        el.style.transition = 'opacity 0.55s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1)';
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      }, 160 + i * 100);
+    });
+
+    // Grid lines
+    setTimeout(() => gridLines.classList.add('gl-in'), 200);
+
+    // Dots stagger
+    dots.forEach((d, i) => {
+      setTimeout(() => {
+        d.style.transition = 'opacity 0.2s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1)';
+        d.style.opacity = '1';
+        d.style.transform = 'scale(1)';
+      }, 500 + i * 20);
+    });
+
+    // Token icons stagger (slide 0)
+    tokenIcons.forEach((icon, i) => {
+      setTimeout(() => {
+        icon.style.transition = 'opacity 0.3s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1)';
+        icon.style.opacity = '1';
+        icon.style.transform = 'translateY(0) scale(1)';
+      }, 360 + i * 22);
+    });
+
+    // Bar chart grow (slide 0)
+    bars.forEach((bar, i) => {
+      setTimeout(() => {
+        bar.style.transition = 'height 0.7s cubic-bezier(0.34,1.56,0.64,1)';
+        bar.style.height = bar.dataset.h + 'px';
+      }, 420 + i * 90);
+    });
+
+    // Pill bars grow (slides 1 & 2)
+    pillBars.forEach((pill, i) => {
+      setTimeout(() => {
+        pill.style.transition = 'height 0.55s cubic-bezier(0.34,1.56,0.64,1)';
+        pill.style.height = pill.dataset.ph + 'px';
+      }, 380 + i * 30);
+    });
+  }
+
+  // ── Progress state ──────────────────────────────────────────────────
+  let progressStart    = null;
+  let progressRemaining = DURATION;
+  let isHoverPaused    = false;
+  let isManualPaused   = false;
+
+  const pauseBtn   = document.getElementById('pause-btn');
+  const pauseIcon  = document.getElementById('pause-icon');
+  const playIcon   = document.getElementById('play-icon');
+
+  function isFrozen() { return isHoverPaused || isManualPaused; }
+
+  function freezeBar() {
+    clearTimeout(autoTimer);
+    const elapsed = Date.now() - (progressStart || Date.now());
+    progressRemaining = Math.max(0, DURATION - elapsed);
+    const fill = progFills[current];
+    const frozenW = getComputedStyle(fill).width;
+    fill.style.transition = 'none';
+    fill.style.width = frozenW;
+  }
+
+  function unfreezeBar() {
+    progressStart = Date.now() - (DURATION - progressRemaining);
+    const fill = progFills[current];
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      fill.style.transition = `width ${progressRemaining}ms linear`;
+      fill.style.width = '100%';
+    }));
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(() => goToSlide((current + 1) % navItems.length), progressRemaining);
+  }
+
+  function startProgress(index) {
+    const fill = progFills[index];
+    fill.style.transition = 'none';
+    fill.style.width = '0%';
+    progressRemaining = DURATION;
+    isHoverPaused = false;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (isFrozen()) return; // manual pause — don't start bar
+      progressStart = Date.now();
+      fill.style.transition = `width ${DURATION}ms linear`;
+      fill.style.width = '100%';
+      clearTimeout(autoTimer);
+      autoTimer = setTimeout(() => goToSlide((index + 1) % navItems.length), DURATION);
+    }));
+  }
+
+  // ── Hover pause/resume — only on the active item ────────────────────
+  navItems.forEach((item, i) => {
+    item.addEventListener('mouseenter', () => {
+      if (i !== current) return;
+      if (isHoverPaused || isFrozen()) return;
+      isHoverPaused = true;
+      freezeBar();
+    });
+    item.addEventListener('mouseleave', () => {
+      if (!isHoverPaused) return;
+      isHoverPaused = false;
+      if (!isFrozen()) unfreezeBar();
+    });
+  });
+
+  // ── Manual pause/play button ─────────────────────────────────────────
+  function updatePauseBtn() {
+    pauseIcon.style.display = isManualPaused ? 'none'  : 'block';
+    playIcon.style.display  = isManualPaused ? 'block' : 'none';
+  }
+
+  pauseBtn.addEventListener('click', () => {
+    isManualPaused = !isManualPaused;
+    if (isManualPaused) {
+      freezeBar();
+    } else {
+      if (!isFrozen()) unfreezeBar();
+    }
+    updatePauseBtn();
+  });
+
+  // ── Go to slide ──────────────────────────────────────────────────────
+  function goToSlide(index) {
+    isHoverPaused = false;
+    navItems[current].classList.remove('active');
+    progFills[current].style.transition = 'none';
+    progFills[current].style.width = '0%';
+    current = index;
+    navItems[current].classList.add('active');
+    // Swap active stats-row
+    statsRows.forEach(r => r.classList.remove('active'));
+    statsRows[current].classList.add('active');
+    applySlideConfig(current);
+    startProgress(current);
+    animateIn();
+  }
+
+  navItems.forEach((item, i) => {
+    item.addEventListener('click', () => { if (i !== current) goToSlide(i); });
+  });
+
+  // ── Init ─────────────────────────────────────────────────────────────
+  applySlideConfig(0);
+  startProgress(0);
+  requestAnimationFrame(() => requestAnimationFrame(() => animateIn()));
+})();
+</script>
+</body>
+</html>
