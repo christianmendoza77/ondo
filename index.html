@@ -758,7 +758,7 @@
                 <p class="apy-subtitle">*Benchmarked to the 3-month U.S. T-Bill</p>
               </div>
               <div class="apy-chart-area">
-                <div style="position:absolute;top:0;right:0;border:1px solid #007A4B;border-radius:3px;padding:5px 8px;font-family:'A2 Record Gothic Mono','Courier New',monospace;font-size:10px;line-height:1.32;color:#007A4B;white-space:nowrap;background:#fff;z-index:1;">3.86% APY</div>
+                <div class="apy-badge" style="position:absolute;top:0;right:0;border:1px solid #007A4B;border-radius:3px;padding:5px 8px;font-family:'A2 Record Gothic Mono','Courier New',monospace;font-size:10px;line-height:1.32;color:#007A4B;white-space:nowrap;background:#fff;z-index:1;">3.86% APY</div>
                 <svg viewBox="0 0 380 160" style="width:100%;height:100%;display:block;" preserveAspectRatio="none">
                   <!-- Grid lines -->
                   <line x1="0" y1="5"   x2="380" y2="5"   stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
@@ -834,7 +834,7 @@
                 <p class="apy-subtitle">*Benchmarked to the 3-month U.S. T-Bill</p>
               </div>
               <div class="apy-chart-area">
-                <div style="position:absolute;top:0;right:0;border:1px solid #365F9F;border-radius:3px;padding:5px 8px;font-family:'A2 Record Gothic Mono','Courier New',monospace;font-size:10px;line-height:1.32;color:#365F9F;white-space:nowrap;background:#fff;z-index:1;">3.75% APY</div>
+                <div class="apy-badge" style="position:absolute;top:0;right:0;border:1px solid #365F9F;border-radius:3px;padding:5px 8px;font-family:'A2 Record Gothic Mono','Courier New',monospace;font-size:10px;line-height:1.32;color:#365F9F;white-space:nowrap;background:#fff;z-index:1;">3.75% APY</div>
                 <svg viewBox="0 0 380 160" style="width:100%;height:100%;display:block;" preserveAspectRatio="none">
                   <!-- Grid lines -->
                   <line x1="0" y1="5"   x2="380" y2="5"   stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
@@ -1014,7 +1014,9 @@
             contentEls.push(d);
           }
         });
-        // Also animate the legend
+        // Also animate the APY badge and legend
+        const badge = tile.querySelector('.apy-badge');
+        if (badge) contentEls.push(badge);
         const legend = tile.querySelector('.apy-legend');
         if (legend) contentEls.push(legend);
       });
