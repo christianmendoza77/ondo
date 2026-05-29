@@ -71,10 +71,10 @@
   }
 
   .carousel-container {
-    width: 1512px;
+    max-width: 1512px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
+    gap: 80px;
     align-items: flex-start;
   }
 
@@ -161,6 +161,11 @@
     flex-direction: column;
   }
 
+  /* Bottom border on last nav item */
+  .nav-item:last-of-type {
+    border-bottom: 1px solid var(--gray-200);
+  }
+
   /* Pause/Play button */
   .pause-btn {
     width: 40px;
@@ -172,7 +177,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: auto;
+    margin-top: 24px;
     transition: background 0.2s ease;
     flex-shrink: 0;
     padding: 0;
@@ -247,8 +252,8 @@
 
   /* ── Content Panel ── */
   .content-panel {
-    width: 1000px;
-    flex-shrink: 0;
+    flex: 1;
+    min-width: 0;
     background: var(--blue-50);
     border-radius: 36px;
     padding: 32px;
