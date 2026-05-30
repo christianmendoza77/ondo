@@ -287,7 +287,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    justify-content: space-between;
+    gap: 20px;
     height: 100%;
     flex: 1;
     min-width: 0;
@@ -313,7 +313,7 @@
     background: #fff;
     border: 1px solid var(--purple-500);
     border-radius: 3px;
-    padding: 6px 8px;
+    padding: 4px;
     font-family: 'A2 Record Gothic Mono', 'Courier New', monospace;
     font-size: 12px;
     line-height: 1.32;
@@ -665,7 +665,7 @@
             <div class="tile-tvl-right">
               <div class="graph-tooltip">$362.7M</div>
               <div class="chart-wrapper">
-                <svg id="tvl-svg" viewBox="0 0 532 244" style="width:100%;height:244px;display:block;">
+                <svg id="tvl-svg" viewBox="0 0 532 244" preserveAspectRatio="none" style="width:100%;height:228px;display:block;">
                   <!-- Grid lines -->
                   <g class="grid-lines">
                     <line x1="0" y1="5"   x2="532" y2="5"   stroke="#DEDEDE" stroke-width="1" stroke-dasharray="4 4"/>
@@ -961,6 +961,30 @@
 
   const dots = Array.from(document.querySelectorAll('.chart-dot'));
 
+  // ── Dot size correction (preserveAspectRatio="none" causes non-uniform scale) ──
+  const tvlSvg  = document.getElementById('tvl-svg');
+  const VB_W = 532, VB_H = 244, SVG_H_PX = 228, DOT_PX = 9;
+
+  function updateDotSizes() {
+    const svgW = tvlSvg.getBoundingClientRect().width;
+    if (!svgW) return;
+    const xScale = svgW / VB_W;
+    const yScale = SVG_H_PX / VB_H;
+    const dw  = DOT_PX / xScale;
+    const dh  = DOT_PX / yScale;
+    const drx = Math.min(dw, dh) * 0.25;
+    dots.forEach((d, i) => {
+      const [cx, cy] = DOT_DATA[i];
+      d.setAttribute('x',      cx - dw / 2);
+      d.setAttribute('y',      cy - dh / 2);
+      d.setAttribute('width',  dw);
+      d.setAttribute('height', dh);
+      d.setAttribute('rx',     drx);
+    });
+  }
+
+  new ResizeObserver(updateDotSizes).observe(tvlSvg);
+
   // ── Apply per-slide config ───────────────────────────────────────────
   function applySlideConfig(index) {
     const cfg = SLIDE_CONFIG[index];
@@ -1212,6 +1236,7 @@
   });
 
   // ── Init ─────────────────────────────────────────────────────────────
+  updateDotSizes();
   applySlideConfig(0);
   startProgress(0);
   requestAnimationFrame(() => requestAnimationFrame(() => animateIn()));
