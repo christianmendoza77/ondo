@@ -72,6 +72,7 @@
 
   .carousel-container {
     max-width: 1512px;
+    width: 100%;
     margin: 0 auto;
     display: flex;
     gap: 80px;
@@ -115,14 +116,14 @@
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    padding: 32px 0;
+    padding: 28px 0;
   }
 
   .nav-title {
-    font-size: 36px;
+    font-size: 28px;
     font-weight: 500;
     line-height: 1.05;
-    letter-spacing: -0.72px;
+    letter-spacing: -0.56px;
     flex: 1;
     color: var(--gray-500);
     transition: color 0.2s ease;
@@ -206,7 +207,7 @@
     line-height: 1.32;
     letter-spacing: -0.16px;
     color: var(--gray-500);
-    margin-bottom: 80px;
+    margin-bottom: 56px;
     padding-bottom: 0;
   }
 
@@ -256,28 +257,28 @@
     min-width: 0;
     background: var(--blue-50);
     border-radius: 36px;
-    padding: 24px;
+    padding: 12px;
     overflow: hidden;
   }
 
   .content-inner {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
   }
 
   /* ── Tiles ── */
   .tile {
     background: #fff;
     border-radius: 24px;
-    padding: 24px;
+    padding: 20px;
   }
 
   .tile-tvl {
-    height: 336px;
+    height: 312px;
     display: flex;
     align-items: flex-start;
-    justify-content: space-between;
+    gap: 60px;
   }
 
   .tile-tvl-left { flex-shrink: 0; }
@@ -288,7 +289,8 @@
     align-items: flex-end;
     justify-content: space-between;
     height: 100%;
-    width: 532px;
+    flex: 1;
+    min-width: 0;
   }
 
   .stat-label {
@@ -300,7 +302,7 @@
 
   .stat-value {
     font-family: 'ABC Arizona Text', Georgia, serif;
-    font-size: 36px;
+    font-size: 28px;
     font-weight: 400;
     line-height: 1.05;
     letter-spacing: -0.72px;
@@ -328,8 +330,8 @@
   /* ── Stats Row ── */
   .stats-row {
     display: flex;
-    gap: 8px;
-    height: 388px;
+    gap: 12px;
+    height: 364px;
   }
 
   .tile-assets {
@@ -453,7 +455,7 @@
     flex: 1;
     min-height: 0;
     position: relative;
-    margin-top: 12px;
+    margin-top: 24px;
   }
 
   .apy-legend {
@@ -542,6 +544,7 @@
 </head>
 <body>
 
+
 <section>
   <!-- Header -->
   <div class="products-header">
@@ -552,7 +555,7 @@
 
   <!-- Carousel -->
   <div class="carousel-outer">
-    <div class="carousel-container" style="align-items:stretch;">
+    <div class="carousel-container" style="align-items:flex-start;">
 
       <!-- Side Nav -->
       <nav class="side-nav">
@@ -695,7 +698,7 @@
                   <img class="token-icon anim-item" src="assets/gm-WM-token-stock-color.png"   alt="WM">
                   <img class="token-icon anim-item" src="assets/gm-DE-token-stock-color.png"   alt="DE">
                   <img class="token-icon anim-item" src="assets/gm-PLD-token-stock-color.png"  alt="PLD">
-                  <img class="token-icon anim-item" src="assets/gm-TD-token-stock-color.png"   alt="TD">
+                  <img class="token-icon anim-item" src="assets/gm-TD-token-stock-color.png"   alt="TD" style="display:none;">
                 </div>
                 <div class="token-row">
                   <img class="token-icon anim-item" src="assets/gm-PBR-token-stock-color.png"  alt="PBR">
@@ -704,7 +707,7 @@
                   <img class="token-icon anim-item" src="assets/gm-NVDA-token-stock-color.png" alt="NVDA">
                   <img class="token-icon anim-item" src="assets/gm-SHOP-token-stock-color.png" alt="SHOP">
                   <img class="token-icon anim-item" src="assets/gm-AMZN-token-stock-color.png" alt="AMZN">
-                  <img class="token-icon anim-item" src="assets/gm-RIOT-token-stock-color.png" alt="RIOT">
+                  <img class="token-icon anim-item" src="assets/gm-RIOT-token-stock-color.png" alt="RIOT" style="display:none;">
                 </div>
                 <div class="token-row">
                   <img class="token-icon anim-item" src="assets/gm-FI-token-stock-color.png"   alt="FI">
@@ -713,7 +716,7 @@
                   <img class="token-icon anim-item" src="assets/gm-BHP-token-stock-color.png"  alt="BHP">
                   <img class="token-icon anim-item" src="assets/gm-HCA-token-stock-color.png"  alt="HCA">
                   <img class="token-icon anim-item" src="assets/gm-TXN-token-stock-color.png"  alt="TXN">
-                  <img class="token-icon anim-item" src="assets/gm-NFLX-token-stock-color.png" alt="NFLX">
+                  <img class="token-icon anim-item" src="assets/gm-NFLX-token-stock-color.png" alt="NFLX" style="display:none;">
                 </div>
                 <div class="token-row">
                   <img class="token-icon anim-item" src="assets/gm-RACE-token-stock-color.png" alt="RACE">
@@ -722,7 +725,7 @@
                   <img class="token-icon anim-item" src="assets/gm-XOM-token-stock-color.png"  alt="XOM">
                   <img class="token-icon anim-item" src="assets/gm-JNJ-token-stock-color.png"  alt="JNJ">
                   <img class="token-icon anim-item" src="assets/gm-DASH-token-stock-color.png" alt="DASH">
-                  <img class="token-icon anim-item" src="assets/gm-ABNB-token-stock-color.png" alt="ABNB">
+                  <img class="token-icon anim-item" src="assets/gm-ABNB-token-stock-color.png" alt="ABNB" style="display:none;">
                 </div>
               </div>
             </div>
