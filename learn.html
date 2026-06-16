@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ondo Learn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #fff;
+      font-family: 'Gellix', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      color: #000;
+      overflow-x: hidden;
+    }
+
+    .f-ondo { font-family: 'Ondo Sans', 'Neue Haas Grotesk Display Pro', 'Helvetica Neue', Arial, sans-serif; }
+    .f-arizona { font-family: 'ABC Arizona Text', Georgia, 'Times New Roman', serif; }
+
+    ::-webkit-scrollbar { display: none; }
+    * { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* ── Ticker ──────────────────────────────── */
+    @keyframes ticker-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-1860px); }
+    }
+    .ticker-track {
+      display: flex;
+      animation: ticker-scroll 32s linear infinite;
+      will-change: transform;
+    }
+    .ticker-outer:hover .ticker-track {
+      animation-play-state: paused;
+    }
+
+    /* ── Nav ─────────────────────────────────── */
+    .nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 36px;
+      padding: 0 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: #000;
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .nav-item:hover { background: rgba(29,29,29,0.05); }
+
+    /* ── Guide card ──────────────────────────── */
+    .guide-card {
+      display: flex;
+      flex-direction: column;
+      border-radius: 24px;
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+    .guide-card:hover { transform: translateY(-3px); }
+
+    .card-image {
+      width: 100%;
+      aspect-ratio: 1.668;
+      object-fit: cover;
+      display: block;
+      border-radius: 24px 24px 0 0;
+    }
+
+    .card-body {
+      background: #f4f4f4;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 224px;
+      border-radius: 0 0 24px 24px;
+    }
+
+    .card-title {
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.56px;
+      color: #000;
+    }
+
+    .card-desc {
+      font-family: 'ABC Arizona Text', Georgia, serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.32;
+      letter-spacing: -0.16px;
+      color: #626262;
+      margin-top: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #626262;
+      letter-spacing: -0.14px;
+    }
+
+    .card-meta-icon {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ── Filter chips ────────────────────────── */
+    .filter-chip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      height: 44px;
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.16px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.12s;
+      white-space: nowrap;
+    }
+    .filter-chip.active { background: #f0f0f0; color: #000; }
+    .filter-chip:not(.active) { color: #626262; }
+    .filter-chip:not(.active):hover { background: rgba(29,29,29,0.05); }
+
+    /* ── Misc ────────────────────────────────── */
+    .subscribe-input::placeholder { color: rgba(240,240,240,0.7); }
+    .subscribe-input:focus { outline: none; }
+
+    /* ── Footer responsive ───────────────────── */
+    @media (max-width: 768px) {
+      footer { padding: 32px 24px 0 !important; min-height: unset !important; }
+      .footer-cols { flex-wrap: wrap !important; gap: 32px 40px !important; }
+      .footer-cols > div { flex: 0 0 auto !important; max-width: none !important; }
+      .footer-bar { flex-direction: column !important; align-items: flex-start !important; gap: 20px !important; }
+      .footer-bottom { gap: 40px !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Fixed Navigation ─────────────────────────────────────────────── -->
+<nav style="
+  position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 807px; height: 60px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0px 9px 80px rgba(24,24,24,0.07), 0px 2px 17.9px rgba(24,24,24,0.05), 0px 0.6px 5.3px rgba(24,24,24,0.03);
+  display: flex; align-items: center;
+  padding: 0 28px;
+  z-index: 1000;
+  overflow: hidden;
+">
+  <!-- Logo -->
+  <div style="width: 93px; flex-shrink: 0;">
+    <img src="https://www.figma.com/api/mcp/asset/b121fa01-ba51-4c7d-b140-ca6bec25e4dc"
+         alt="Ondo" style="width: 93px; height: 28px; object-fit: contain; display: block;">
+  </div>
+
+  <!-- Nav items -->
+  <div style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 24px; height: 36px;">
+    <a href="#" class="nav-item">Products</a>
+    <a href="#" class="nav-item">Resources</a>
+    <a href="#" class="nav-item">Ecosystem</a>
+    <a href="#" class="nav-item">About</a>
+  </div>
+
+  <!-- Right: Launch App -->
+  <div style="width: 176px; display: flex; justify-content: flex-end; flex-shrink: 0;">
+    <a href="#" style="
+      display: flex; align-items: center; justify-content: center;
+      height: 36px; padding: 0 12px;
+      background: #1d1d1d; border-radius: 8px;
+      font-size: 14px; font-weight: 500; color: #fff;
+      text-decoration: none; white-space: nowrap;
+    ">Launch App</a>
+  </div>
+</nav>
+
+
+<!-- ── Hero ─────────────────────────────────────────────────────────── -->
+<section style="background: #fff; position: relative; overflow: clip;">
+
+  <!-- Title + subtitle -->
+  <div style="padding: 168px 44px 32px; display: flex; flex-direction: column; align-items: center; gap: 24px;">
+    <h1 class="f-ondo" style="
+      font-size: 72px; font-weight: 500; line-height: 1.05;
+      letter-spacing: -2.16px; text-align: center;
+      color: #000; max-width: 1000px; width: 100%;
+    ">Ondo Learn</h1>
+    <p class="f-arizona" style="
+      font-size: 20px; font-weight: 400; line-height: 1.32;
+      letter-spacing: -0.2px; text-align: center;
+      color: #313131; max-width: 478px; width: 100%;
+    ">Explore tokenization through lessons that break down the infrastructure behind modern financial markets.</p>
+  </div>
+
+  <!-- Ticker -->
+  <div class="ticker-outer" style="padding: 40px 0 88px; overflow: hidden;">
+    <div class="ticker-track">
+
+      <!-- Set 1 -->
+      <div style="display: flex; gap: 64px; margin-right: 64px; flex-shrink: 0;">
+        <!-- Tile 1: Tokenized RWAs -->
+        <div style="width: 308px; height: 404px; border-radius: 24px; overflow: hidden; position: relative; flex-shrink: 0; padding: 28px;">
+          <img src="https://www.figma.com/api/mcp/asset/06d2d85f-94ad-48a0-9331-b66367776600"
+               alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 24px; pointer-events: none;">
+          <p style="position: relative; font-size: 24px; font-weight: 500; line-height: 1.05; letter-spacing: -0.24px; color: #fff; z-index: 1;">Tokenized RWAs</p>
+        </div>
+        <!-- Tile 2: DeFi -->
+        <div style="width: 308px; height: 404px; border-radius: 24px; overflow: hidden; position: relative; flex-shrink: 0; padding: 28px;">
+          <img src="https://www.figma.com/api/mcp/asset/d8820622-651c-440d-9cf0-cb758a1d5856"
+               alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 24px; pointer-events: none;">
+          <p style="position: relative; font-size: 24px; font-weight: 500; line-height: 1.05; letter-spacing: -0.24px; color: #fff; z-index: 1;">DeFi</p>
+        </div>
+        <!-- Tile 3: Yieldcoins -->
+        <div style="width: 308px; height: 404px; border-radius: 24px; overflow: hidden; position: relative; flex-shrink: 0; padding: 28px;">
+          <img src="https://www.figma.com/api/mcp/asset/24f68108-f33a-4df0-8d7c-313b88ff53e1"
+               alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 24px; pointer-events: none;">
+          <p style="position: relative; font-size: 24px; font-weight: 500; line-height: 1.05; letter-spacing: -0.24px; color: #fff; z-index: 1;">Yieldcoins</p>
+        </div>
+        <!-- Tile 4: Smart contracts -->
+        <div style="width: 308px; height: 404px; border-radius: 24px; overflow: hidden; position: relative; flex-shrink: 0; padding: 28px;">
+          <img src="https://www.figma.com/api/mcp/asset/c1486bbb-4a4e-43df-bd8c-29b241f6f54b"
+               alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 24px; pointer-events: none;">
+          <p style="position: relative; font-size: 24px; font-weight: 500; line-height: 1.05; letter-spacing: -0.24px; color: #fff; z-index: 1;">Smart contracts</p>
+        </div>
+        <!-- Tile 5: Stablecoins -->
+        <div style="width: 308px; height: 404px; border-radius: 24px; overflow: hidden; position: relative; flex-shrink: 0; padding: 28px;">
+          <img src="https://www.figma.com/api/mcp/asset/65d9177c-5e46-4204-b9c3-a84438226250"
+               alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 24px; pointer-events: none;">
+          <p style="position: relative; font-size: 24px; font-weight: 500; line-height: 1.05; letter-spacing: -0.24px; color: #fff; z-index: 1;">Stablecoins</p>
+        </div>
+      </div>
+
+      <!-- Set 2 (duplicate for seamless loop) -->
+      <div style="display: flex; gap: 64px; margin-right: 64px; flex-shrink: 0;">
+        <div style="width: 308px; height: 404px; border-radius: 24px; overflow: hidden; position: relative; flex-shrink: 0; padding: 28px;">
+          <img src="https://www.figma.com/api/mcp/asset/06d2d85f-94ad-48a0-9331-b66367776600"
+               alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 24px; pointer-events: none;">
+          <p style="position: relative; font-size: 24px; font-weight: 500; line-height: 1.05; letter-spacing: -0.24px; color: #fff; z-index: 1;">Tokenized RWAs</p>
+        </div>
+        <div style="width: 308px; height: 404px; border-radius: 24px; overflow: hidden; position: relative; flex-shrink: 0; padding: 28px;">
+          <img src="https://www.figma.com/api/mcp/asset/d8820622-651c-440d-9cf0-cb758a1d5856"
+               alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 24px; pointer-events: none;">
+          <p style="position: relative; font-size: 24px; font-weight: 500; line-height: 1.05; letter-spacing: -0.24px; color: #fff; z-index: 1;">DeFi</p>
+        </div>
+        <div style="width: 308px; height: 404px; border-radius: 24px; overflow: hidden; position: relative; flex-shrink: 0; padding: 28px;">
+          <img src="https://www.figma.com/api/mcp/asset/24f68108-f33a-4df0-8d7c-313b88ff53e1"
+               alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 24px; pointer-events: none;">
+          <p style="position: relative; font-size: 24px; font-weight: 500; line-height: 1.05; letter-spacing: -0.24px; color: #fff; z-index: 1;">Yieldcoins</p>
+        </div>
+        <div style="width: 308px; height: 404px; border-radius: 24px; overflow: hidden; position: relative; flex-shrink: 0; padding: 28px;">
+          <img src="https://www.figma.com/api/mcp/asset/c1486bbb-4a4e-43df-bd8c-29b241f6f54b"
+               alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 24px; pointer-events: none;">
+          <p style="position: relative; font-size: 24px; font-weight: 500; line-height: 1.05; letter-spacing: -0.24px; color: #fff; z-index: 1;">Smart contracts</p>
+        </div>
+        <div style="width: 308px; height: 404px; border-radius: 24px; overflow: hidden; position: relative; flex-shrink: 0; padding: 28px;">
+          <img src="https://www.figma.com/api/mcp/asset/65d9177c-5e46-4204-b9c3-a84438226250"
+               alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 24px; pointer-events: none;">
+          <p style="position: relative; font-size: 24px; font-weight: 500; line-height: 1.05; letter-spacing: -0.24px; color: #fff; z-index: 1;">Stablecoins</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ── Main content ──────────────────────────────────────────────────── -->
+<main style="padding: 40px 44px 120px; display: flex; flex-direction: column; gap: 88px; max-width: 1600px; margin: 0 auto;">
+
+  <!-- Search + filter section -->
+  <div style="display: flex; flex-direction: column; gap: 32px;">
+    <!-- Divider -->
+    <div style="height: 1px; background: #e0e0e0; width: 100%;"></div>
+
+    <!-- Search + chips -->
+    <div style="display: flex; gap: 40px; align-items: flex-start;">
+      <!-- Search input -->
+      <div style="flex: 1; min-width: 0; height: 44px;">
+        <div style="
+          background: rgba(29,29,29,0.05);
+          height: 44px; border-radius: 8px;
+          display: flex; align-items: center; gap: 8px; padding: 0 12px;
+        ">
+          <img src="https://www.figma.com/api/mcp/asset/bb7778cd-e6b3-4e67-9ddb-6ff84cf5ea6e"
+               alt="" style="width: 16px; height: 16px; object-fit: contain; flex-shrink: 0; opacity: 0.6;">
+          <input id="search-input" type="text" placeholder="Search"
+            style="
+              flex: 1; background: transparent; border: none; outline: none;
+              font-size: 14px; font-weight: 500; color: rgba(29,29,29,0.7);
+              font-family: inherit;
+            ">
+        </div>
+      </div>
+
+      <!-- Filter chips -->
+      <div style="display: flex; align-items: center; flex-shrink: 0;">
+        <div class="filter-chip active" data-filter="all" onclick="setFilter(this,'all')">All Posts</div>
+        <div class="filter-chip" data-filter="essentials" onclick="setFilter(this,'essentials')">The Essentials</div>
+        <div class="filter-chip" data-filter="deeper" onclick="setFilter(this,'deeper')">Going Deeper</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ── The Essentials ────────────────────────────────────────────── -->
+  <div id="section-essentials" style="display: flex; flex-direction: column; gap: 56px;">
+    <!-- Section title -->
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+      <p style="font-size: 36px; font-weight: 500; line-height: 1.05; letter-spacing: -1.08px; color: #000;">The Essentials</p>
+      <p style="font-size: 20px; font-weight: 500; line-height: 1.32; letter-spacing: -0.2px; color: #626262;">New to onchain finance? Not for long — start with these guides and explainers</p>
+    </div>
+
+    <!-- Cards grid -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px 24px;" id="essentials-grid">
+
+      <!-- Card 1: Stablecoins -->
+      <div class="guide-card">
+        <img class="card-image" src="https://www.figma.com/api/mcp/asset/39522d5f-98f8-43e3-880a-08e2550b3ce6" alt="Stablecoins">
+        <div class="card-body">
+          <div>
+            <p class="card-title">Stablecoins</p>
+            <p class="card-desc">Digital tokens designed to maintain a stable value, most commonly pegged to the U.S. dollar. Learn how they unlock financial access.</p>
+          </div>
+          <div class="card-meta">
+            <div class="card-meta-icon">
+              <img src="https://www.figma.com/api/mcp/asset/b736d860-8204-47f4-99c5-e6e56d4e1518" alt="" style="width: 16px; height: 16px; object-fit: contain;">
+              <span>6 min read</span>
+            </div>
+            <span>•</span>
+            <span>May 4, 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Yieldcoins -->
+      <div class="guide-card">
+        <img class="card-image" src="https://www.figma.com/api/mcp/asset/f47dc94f-edc8-4593-83f9-f4c336b17969" alt="Yieldcoins">
+        <div class="card-body">
+          <div>
+            <p class="card-title">Yieldcoins</p>
+            <p class="card-desc">Yield-bearing digital tokens backed by high-quality income-generating assets such as U.S. Treasuries. Learn about this new generation of assets.</p>
+          </div>
+          <div class="card-meta">
+            <div class="card-meta-icon">
+              <img src="https://www.figma.com/api/mcp/asset/b736d860-8204-47f4-99c5-e6e56d4e1518" alt="" style="width: 16px; height: 16px; object-fit: contain;">
+              <span>6 min read</span>
+            </div>
+            <span>•</span>
+            <span>May 4, 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Tokenized Stocks & ETFs -->
+      <div class="guide-card">
+        <img class="card-image" src="https://www.figma.com/api/mcp/asset/2cf5cf5f-aa62-4fec-982b-69ea276788f4" alt="Tokenized Stocks & ETFs">
+        <div class="card-body">
+          <div>
+            <p class="card-title">Tokenized Stocks &amp; ETFs</p>
+            <p class="card-desc">Blockchain-based representations of publicly traded securities such as stocks and ETFs. Learn how these assets bring traditional markets onchain.</p>
+          </div>
+          <div class="card-meta">
+            <div class="card-meta-icon">
+              <img src="https://www.figma.com/api/mcp/asset/b736d860-8204-47f4-99c5-e6e56d4e1518" alt="" style="width: 16px; height: 16px; object-fit: contain;">
+              <span>6 min read</span>
+            </div>
+            <span>•</span>
+            <span>May 4, 2026</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div style="height: 1px; background: #dedede;"></div>
+
+  <!-- ── Going Deeper ───────────────────────────────────────────────── -->
+  <div id="section-deeper" style="display: flex; flex-direction: column; gap: 56px;">
+    <!-- Section title -->
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+      <p style="font-size: 36px; font-weight: 500; line-height: 1.05; letter-spacing: -1.08px; color: #000;">Going Deeper</p>
+      <p style="font-size: 20px; font-weight: 500; line-height: 1.32; letter-spacing: -0.2px; color: #626262;">Learn the infrastructure, protocols, and tools powering the onchain economy</p>
+    </div>
+
+    <!-- Cards grid -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px 24px;" id="deeper-grid">
+
+      <!-- Row 1 -->
+      <div class="guide-card">
+        <img class="card-image" src="https://www.figma.com/api/mcp/asset/6602f70a-1a9a-4d23-b4b8-7292bcdb6b4b" alt="Decentralized Finance">
+        <div class="card-body">
+          <div>
+            <p class="card-title">Decentralized Finance</p>
+            <p class="card-desc">Blockchain-based financial ecosystem that operates without traditional intermediaries. Learn how it's opening access to financial services.</p>
+          </div>
+          <div class="card-meta">
+            <div class="card-meta-icon">
+              <img src="https://www.figma.com/api/mcp/asset/b736d860-8204-47f4-99c5-e6e56d4e1518" alt="" style="width: 16px; height: 16px; object-fit: contain;">
+              <span>6 min read</span>
+            </div>
+            <span>•</span>
+            <span>May 4, 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-card">
+        <img class="card-image" src="https://www.figma.com/api/mcp/asset/12cbaa27-654f-4eae-a00f-3a6a9d003c89" alt="Smart Contracts">
+        <div class="card-body">
+          <div>
+            <p class="card-title">Smart Contracts</p>
+            <p class="card-desc">Self-executing programs on a blockchain that enforce agreements automatically when conditions are met. Discover how they eliminate intermediaries and drive efficiency.</p>
+          </div>
+          <div class="card-meta">
+            <div class="card-meta-icon">
+              <img src="https://www.figma.com/api/mcp/asset/b736d860-8204-47f4-99c5-e6e56d4e1518" alt="" style="width: 16px; height: 16px; object-fit: contain;">
+              <span>6 min read</span>
+            </div>
+            <span>•</span>
+            <span>May 4, 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-card">
+        <img class="card-image" src="https://www.figma.com/api/mcp/asset/119dffff-f4f1-453c-b448-30eea38e71cd" alt="Decentralized Exchange">
+        <div class="card-body">
+          <div>
+            <p class="card-title">Decentralized Exchange</p>
+            <p class="card-desc">Blockchain-based platforms that enable peer-to-peer trading of cryptocurrencies and tokenized assets. Learn how they empower users globally.</p>
+          </div>
+          <div class="card-meta">
+            <div class="card-meta-icon">
+              <img src="https://www.figma.com/api/mcp/asset/b736d860-8204-47f4-99c5-e6e56d4e1518" alt="" style="width: 16px; height: 16px; object-fit: contain;">
+              <span>6 min read</span>
+            </div>
+            <span>•</span>
+            <span>May 4, 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="guide-card">
+        <img class="card-image" src="https://www.figma.com/api/mcp/asset/84809547-ac1f-4106-8491-fd9e7ffe4cf5" alt="Decentralized Lending & Borrowing">
+        <div class="card-body">
+          <div>
+            <p class="card-title">Decentralized Lending<br>&amp; Borrowing</p>
+            <p class="card-desc">Blockchain-based platforms where users can lend and borrow digital assets through smart contracts. Learn how they're opening access to credit.</p>
+          </div>
+          <div class="card-meta">
+            <div class="card-meta-icon">
+              <img src="https://www.figma.com/api/mcp/asset/b736d860-8204-47f4-99c5-e6e56d4e1518" alt="" style="width: 16px; height: 16px; object-fit: contain;">
+              <span>6 min read</span>
+            </div>
+            <span>•</span>
+            <span>May 4, 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-card">
+        <img class="card-image" src="https://www.figma.com/api/mcp/asset/2c136b19-813b-4675-a78f-61cc08ebd1d8" alt="Tokenized Treasuries">
+        <div class="card-body">
+          <div>
+            <p class="card-title">Tokenized Treasuries</p>
+            <p class="card-desc">Blockchain-based representations of U.S. government debt instruments. Learn how they bring high-quality, real-world yield onchain.</p>
+          </div>
+          <div class="card-meta">
+            <div class="card-meta-icon">
+              <img src="https://www.figma.com/api/mcp/asset/b736d860-8204-47f4-99c5-e6e56d4e1518" alt="" style="width: 16px; height: 16px; object-fit: contain;">
+              <span>6 min read</span>
+            </div>
+            <span>•</span>
+            <span>May 4, 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-card">
+        <img class="card-image" src="https://www.figma.com/api/mcp/asset/51374ee2-c0b1-44f1-8391-da7ce86cdc1c" alt="Cross-Chain Bridging">
+        <div class="card-body">
+          <div>
+            <p class="card-title">Cross-Chain Bridging</p>
+            <p class="card-desc">Protocols that enable the transfer of tokens and data between separate blockchain networks. Learn about the infrastructure connecting the multi-chain ecosystem.</p>
+          </div>
+          <div class="card-meta">
+            <div class="card-meta-icon">
+              <img src="https://www.figma.com/api/mcp/asset/b736d860-8204-47f4-99c5-e6e56d4e1518" alt="" style="width: 16px; height: 16px; object-fit: contain;">
+              <span>6 min read</span>
+            </div>
+            <span>•</span>
+            <span>May 4, 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 3 -->
+      <div class="guide-card">
+        <img class="card-image" src="https://www.figma.com/api/mcp/asset/57b90f27-3140-4208-a9b1-557064abcbc2" alt="Web3 Wallets">
+        <div class="card-body">
+          <div>
+            <p class="card-title">Web3 Wallets</p>
+            <p class="card-desc">Tools that enable users to store, manage, and interact with blockchain-based assets and applications. Learn how they put direct control of digital assets in users' hands.</p>
+          </div>
+          <div class="card-meta">
+            <div class="card-meta-icon">
+              <img src="https://www.figma.com/api/mcp/asset/b736d860-8204-47f4-99c5-e6e56d4e1518" alt="" style="width: 16px; height: 16px; object-fit: contain;">
+              <span>6 min read</span>
+            </div>
+            <span>•</span>
+            <span>May 4, 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-card">
+        <img class="card-image" src="https://www.figma.com/api/mcp/asset/b1fddcc4-0fc5-4609-b2d8-0353fece5f5a" alt="Tokenized Real-World Assets">
+        <div class="card-body">
+          <div>
+            <p class="card-title">Tokenized Real-World Assets</p>
+            <p class="card-desc">Blockchain-based tokens representing exposure to traditional financial assets such as stocks, ETFs, and Treasuries. Learn how bringing these assets onchain is reshaping capital markets.</p>
+          </div>
+          <div class="card-meta">
+            <div class="card-meta-icon">
+              <img src="https://www.figma.com/api/mcp/asset/b736d860-8204-47f4-99c5-e6e56d4e1518" alt="" style="width: 16px; height: 16px; object-fit: contain;">
+              <span>6 min read</span>
+            </div>
+            <span>•</span>
+            <span>May 4, 2026</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+
+<!-- ── Subscribe / Contact ───────────────────────────────────────────── -->
+<section style="position: relative; overflow: hidden; padding: 0 44px;">
+  <!-- Background image + overlay -->
+  <img src="https://www.figma.com/api/mcp/asset/8ce593b7-ef4e-4d15-b68a-502b9bf36ec4"
+       aria-hidden="true"
+       style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+  <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.8); pointer-events: none;"></div>
+
+  <!-- Content -->
+  <div style="position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 48px; padding: 96px 0 124px; max-width: 1600px; margin: 0 auto;">
+    <!-- Title -->
+    <div style="display: flex; flex-direction: column; gap: 16px; text-align: center; width: 100%;">
+      <p style="font-size: 48px; font-weight: 500; line-height: 1.05; letter-spacing: -1.44px; color: #fff;">Subscribe to Ondo Learn</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #dedede;">Stay updated on the latest Ondo product updates and case studies.</p>
+    </div>
+
+    <!-- Form -->
+    <div style="max-width: 720px; width: 100%; padding: 8px 36px; display: flex; flex-direction: column; gap: 16px;">
+      <!-- Input + button -->
+      <div style="display: flex; gap: 24px; align-items: center; filter: drop-shadow(0px 4px 2px rgba(0,0,0,0.25));">
+        <div style="flex: 1; min-width: 0; backdrop-filter: blur(16px);">
+          <div style="background: rgba(240,240,240,0.2); height: 44px; border-radius: 10px; display: flex; align-items: center; padding: 0 16px;">
+            <input class="subscribe-input" type="email" placeholder="Email"
+              style="flex: 1; background: transparent; border: none; outline: none; font-size: 16px; font-weight: 500; color: #f0f0f0; font-family: inherit;">
+          </div>
+        </div>
+        <button style="
+          background: #f0f0f0; height: 44px; padding: 0 16px;
+          border: none; border-radius: 6px; cursor: pointer;
+          font-size: 16px; font-weight: 500; color: #000; font-family: inherit;
+          white-space: nowrap; flex-shrink: 0;
+        ">Subscribe</button>
+      </div>
+
+      <!-- Privacy text -->
+      <p style="font-size: 12px; font-weight: 500; line-height: 1.32; letter-spacing: -0.12px; color: #b1b1b1;">
+        By providing your contact information, you agree to receive communications from us that are consistent with our
+        <a href="https://docs.ondo.finance/legal/privacy-policy" target="_blank" style="color: #b1b1b1; text-decoration: underline;">Privacy Policy</a>.
+        This site is protected by reCAPTCHA and the Google
+        <a href="https://policies.google.com/privacy" target="_blank" style="color: #b1b1b1; text-decoration: underline;">Privacy Policy</a>
+        and
+        <a href="https://policies.google.com/terms" target="_blank" style="color: #b1b1b1; text-decoration: underline;">Terms of Service</a>
+        apply.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── Footer ────────────────────────────────────────────────────────── -->
+<footer style="background: #000; padding: 44px 44px 0; display: flex; flex-direction: column; justify-content: space-between; min-height: 695px; max-width: 1600px; margin: 0 auto; position: relative; overflow: hidden;">
+
+  <!-- Directory columns -->
+  <div class="footer-cols" style="display: flex; gap: 20px;">
+    <!-- Invest -->
+    <div style="flex: 1; max-width: 140px; display: flex; flex-direction: column; gap: 4px;">
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #fff; white-space: nowrap;">Invest</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">USDY</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">OUSG</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Bridge</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Convert</p>
+    </div>
+    <!-- Partners -->
+    <div style="flex: 1; max-width: 140px; display: flex; flex-direction: column; gap: 4px;">
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #fff; white-space: nowrap;">Partners</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Ecosystem</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Foundation</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Flux Finance</p>
+    </div>
+    <!-- Explore -->
+    <div style="flex: 1; max-width: 140px; display: flex; flex-direction: column; gap: 4px;">
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #fff; white-space: nowrap;">Explore</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Insights</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Docs</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Trust &amp; Security</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Bug Bounty</p>
+    </div>
+    <!-- Company -->
+    <div style="flex: 1; max-width: 140px; display: flex; flex-direction: column; gap: 4px;">
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #fff; white-space: nowrap;">Company</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Team</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Careers</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Media Kit</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Contact Us</p>
+    </div>
+  </div>
+
+  <!-- Bottom section -->
+  <div class="footer-bottom" style="display: flex; flex-direction: column; gap: 64px; align-items: center;">
+    <!-- Large Ondo Finance wordmark -->
+    <div style="width: 100%;">
+      <img src="https://www.figma.com/api/mcp/asset/01e09ea2-d0af-4053-9e87-ae3994f8b2ea"
+           alt="Ondo Finance"
+           style="width: 100%; height: auto; display: block;">
+    </div>
+
+    <!-- Links bar -->
+    <div class="footer-bar" style="border-top: 1px solid #313131; display: flex; align-items: center; justify-content: space-between; padding: 16px 0; width: 100%;">
+      <!-- Left links -->
+      <div style="display: flex; gap: 32px; align-items: center;">
+        <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #fff; white-space: nowrap;">Ondo © 2023</p>
+        <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap; cursor: pointer;">Terms of Service</p>
+        <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap; cursor: pointer;">Privacy Policy</p>
+        <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap; cursor: pointer;">Cookie Preferences</p>
+      </div>
+
+      <!-- Social icons -->
+      <div style="display: flex; gap: 16px; align-items: center;">
+        <div style="width: 24px; height: 24px; overflow: hidden; position: relative; cursor: pointer; flex-shrink: 0;">
+          <img src="https://www.figma.com/api/mcp/asset/3c24cfa0-afde-48ee-a1e3-8e694fbd221a"
+               alt="Social" style="position: absolute; inset: 16.67%; width: calc(100% - 33.34%); height: calc(100% - 33.34%); object-fit: contain;">
+        </div>
+        <div style="width: 24px; height: 24px; overflow: hidden; position: relative; cursor: pointer; flex-shrink: 0;">
+          <img src="https://www.figma.com/api/mcp/asset/3246cd05-65fe-4c69-88e9-83ca8765e88b"
+               alt="Social" style="position: absolute; inset: 8.33%; width: calc(100% - 16.66%); height: calc(100% - 16.66%); object-fit: contain;">
+        </div>
+        <div style="width: 24px; height: 24px; overflow: hidden; position: relative; cursor: pointer; flex-shrink: 0;">
+          <img src="https://www.figma.com/api/mcp/asset/ef3c004e-3a3f-4b24-86ae-48b4fa8bd0a9"
+               alt="Social" style="position: absolute; inset: 15.5% 8.33%; width: calc(100% - 16.66%); height: calc(100% - 31%); object-fit: contain;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</footer>
+
+
+<!-- ── JS: filter chips + search ──────────────────────────────────────── -->
+<script>
+  function setFilter(el, filter) {
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+
+    const es = document.getElementById('section-essentials');
+    const ds = document.getElementById('section-deeper');
+    const divider = document.querySelector('main > div[style*="height: 1px"]');
+
+    if (filter === 'all') {
+      es.style.display = 'flex';
+      ds.style.display = 'flex';
+      if (divider) divider.style.display = 'block';
+    } else if (filter === 'essentials') {
+      es.style.display = 'flex';
+      ds.style.display = 'none';
+      if (divider) divider.style.display = 'none';
+    } else if (filter === 'deeper') {
+      es.style.display = 'none';
+      ds.style.display = 'flex';
+      if (divider) divider.style.display = 'none';
+    }
+  }
+
+  // Search: show/hide cards based on title match
+  document.getElementById('search-input').addEventListener('input', function() {
+    const q = this.value.toLowerCase().trim();
+    document.querySelectorAll('.guide-card').forEach(card => {
+      const title = card.querySelector('.card-title').textContent.toLowerCase();
+      card.style.display = (!q || title.includes(q)) ? 'flex' : 'none';
+    });
+  });
+</script>
+
+</body>
+</html>
