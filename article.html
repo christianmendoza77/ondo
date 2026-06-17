@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Contracts — Ondo Learn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #fff;
+      font-family: 'Gellix', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      color: #000;
+      overflow-x: hidden;
+    }
+
+    .f-arizona { font-family: 'ABC Arizona Text', Georgia, 'Times New Roman', serif; }
+
+    ::-webkit-scrollbar { display: none; }
+    * { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* ── Nav ─────────────────────────────────── */
+    .nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 36px;
+      padding: 0 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #000;
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .nav-item:hover { background: rgba(29,29,29,0.05); }
+
+    /* ── Breadcrumb ──────────────────────────── */
+    .breadcrumb a:hover { color: #000 !important; }
+
+    /* ── Sidebar ─────────────────────────────── */
+    .sidebar-link {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.32;
+      letter-spacing: -0.16px;
+      color: #b1b1b1;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.15s;
+      white-space: nowrap;
+    }
+    .sidebar-link.active { color: #000; }
+    .sidebar-link:hover { color: #313131; }
+
+    /* ── Horizontal reading cards ────────────── */
+    .horiz-card {
+      display: flex;
+      height: 200px;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(29,29,29,0.1);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .horiz-card:hover {
+      box-shadow: 0px 0.6px 5.32px hsla(0,0%,9%,0.03), 0px 2.01px 17.87px hsla(0,0%,9%,0.05), 0px 9px 80px hsla(0,0%,9%,0.07);
+    }
+
+    /* ── Footer ─────────────────────────────── */
+    .footer-cols { display: flex; gap: 20px; }
+    .footer-bar { border-top: 1px solid #313131; display: flex; align-items: center; justify-content: space-between; padding: 16px 0; width: 100%; }
+    .footer-bottom { display: flex; flex-direction: column; gap: 0; align-items: center; }
+
+    @media (max-width: 768px) {
+      footer { padding: 32px 24px 0 !important; min-height: unset !important; }
+      .footer-cols { flex-wrap: wrap !important; gap: 32px 40px !important; }
+      .footer-cols > div { flex: 0 0 auto !important; max-width: none !important; }
+      .footer-bar { flex-direction: column !important; align-items: flex-start !important; gap: 20px !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Fixed Navigation ──────────────────────────────────────────────── -->
+<nav style="
+  position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 807px; height: 60px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0px 9px 80px rgba(24,24,24,0.07), 0px 2px 17.9px rgba(24,24,24,0.05), 0px 0.6px 5.3px rgba(24,24,24,0.03);
+  display: flex; align-items: center;
+  padding: 0 28px;
+  z-index: 1000;
+  overflow: hidden;
+">
+  <div style="width: 93px; flex-shrink: 0;">
+    <img src="https://www.figma.com/api/mcp/asset/b121fa01-ba51-4c7d-b140-ca6bec25e4dc"
+         alt="Ondo" style="width: 93px; height: 28px; object-fit: contain; display: block;">
+  </div>
+  <div style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 24px; height: 36px;">
+    <a href="#" class="nav-item">Products</a>
+    <a href="#" class="nav-item">Resources</a>
+    <a href="#" class="nav-item">Ecosystem</a>
+    <a href="#" class="nav-item">About</a>
+  </div>
+  <div style="width: 176px; display: flex; justify-content: flex-end; flex-shrink: 0;">
+    <a href="#" style="
+      display: flex; align-items: center; justify-content: center;
+      height: 36px; padding: 0 12px;
+      background: #1d1d1d; border-radius: 8px;
+      font-size: 14px; font-weight: 500; color: #fff;
+      text-decoration: none; white-space: nowrap;
+    ">Launch App</a>
+  </div>
+</nav>
+
+
+<!-- ── Main ─────────────────────────────────────────────────────────── -->
+<main style="padding: 128px 44px 160px; display: flex; gap: 96px; max-width: 1512px; margin: 0 auto;">
+
+  <!-- ── Sidebar ──────────────────────────────────────────────────── -->
+  <aside style="width: 360px; flex-shrink: 0; margin-top: 48px;">
+    <div style="position: sticky; top: 88px; display: flex; flex-direction: column; gap: 40px;">
+      <p style="font-size: 14px; font-weight: 500; line-height: 1.32; letter-spacing: -0.14px; color: #626262;">In this article</p>
+
+      <div style="display: flex; gap: 24px; align-items: flex-start;">
+        <!-- Progress bar -->
+        <div id="progress-bar" style="position: relative; width: 3px; flex-shrink: 0; align-self: stretch;">
+          <div style="position: absolute; inset: 0; background: #dedede; border-radius: 80px;"></div>
+          <div id="progress-dot" style="position: absolute; top: 0; left: 0; width: 3px; height: 36px; background: #000; border-radius: 80px; transition: top 0.2s ease;"></div>
+        </div>
+
+        <!-- Links -->
+        <div style="display: flex; flex-direction: column; gap: 24px; padding: 8px 0;">
+          <a class="sidebar-link active" href="#section-1">What is a Smart Contract?</a>
+          <a class="sidebar-link" href="#section-2">How Smart Contracts Work</a>
+          <a class="sidebar-link" href="#section-3">Common Types of Smart Contracts</a>
+          <a class="sidebar-link" href="#section-4">Real-World Applications</a>
+          <a class="sidebar-link" href="#section-5">Risks and Limitations</a>
+          <a class="sidebar-link" href="#section-6">The Future of Programmable Finance</a>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+
+  <!-- ── Article ──────────────────────────────────────────────────── -->
+  <article style="width: 736px; flex-shrink: 0; display: flex; flex-direction: column; gap: 56px; margin-top: 48px;">
+
+    <!-- Top: breadcrumb, title, meta, hero -->
+    <div style="display: flex; flex-direction: column; gap: 48px;">
+
+      <div style="display: flex; flex-direction: column; gap: 56px;">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb" style="display: flex; gap: 8px; align-items: center; font-size: 14px; font-weight: 500; line-height: 1.32; letter-spacing: -0.14px;">
+          <a href="learn.html" style="color: #b1b1b1; text-decoration: none;">Ondo Learn</a>
+          <span style="color: #b1b1b1;">/</span>
+          <a href="learn.html#section-essentials" style="color: #b1b1b1; text-decoration: none; transition: color 0.15s;">The Essentials</a>
+          <span style="color: #b1b1b1;">/</span>
+          <span style="color: #000;">Smart Contracts</span>
+        </div>
+        <!-- Title -->
+        <h1 style="font-size: 48px; font-weight: 500; line-height: 1.05; letter-spacing: -1.44px; color: #000; text-wrap: balance;">
+          Smart Contracts: The Engine Behind Every DeFi Protocol
+        </h1>
+      </div>
+
+      <!-- Meta + hero -->
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <!-- Meta row -->
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; gap: 24px; align-items: center;">
+            <span style="font-size: 14px; font-weight: 500; line-height: 1.32; letter-spacing: -0.14px; color: #626262;">Last Updated Date: May 21, 2026</span>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <img src="https://www.figma.com/api/mcp/asset/cf4c8c5a-5369-43dd-96c6-54da264cd084" alt="" style="width: 16px; height: 16px; object-fit: contain;">
+              <span style="font-size: 14px; font-weight: 500; line-height: 1.32; letter-spacing: -0.14px; color: #626262;">6 min read</span>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <button style="display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px 0 10px; border: 1px solid rgba(29,29,29,0.1); border-radius: 4px; background: transparent; cursor: pointer; font-size: 14px; font-weight: 500; color: #000; font-family: inherit;">
+              <img src="https://www.figma.com/api/mcp/asset/b554b99e-40a1-4d2f-badd-d460ac56032d" alt="" style="width: 20px; height: 20px; object-fit: contain;">
+              Listen
+            </button>
+            <button style="display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px 0 10px; border: 1px solid rgba(29,29,29,0.1); border-radius: 4px; background: transparent; cursor: pointer; font-size: 14px; font-weight: 500; color: #000; font-family: inherit;">
+              <img src="https://www.figma.com/api/mcp/asset/a564bf91-755b-47ed-8a40-c0a28948a2cd" alt="" style="width: 20px; height: 20px; object-fit: contain;">
+              Share
+            </button>
+          </div>
+        </div>
+
+        <!-- Hero image -->
+        <div style="height: 400px; border-radius: 24px; overflow: hidden; position: relative;">
+          <img src="https://www.figma.com/api/mcp/asset/f0491bfe-31fe-4218-83ea-2e9f2baff10d" alt="Smart Contracts" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+          <div style="position: absolute; top: 24px; left: 24px; background: rgba(240,240,240,0.3); backdrop-filter: blur(8px); padding: 8px 12px; border-radius: 100px;">
+            <span style="font-size: 12px; font-weight: 400; line-height: 1.32; color: #fff; font-family: 'A2 Record Gothic Mono', 'Courier New', monospace;">The Basics</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div style="display: flex; flex-direction: column; gap: 64px;">
+
+      <!-- Key takeaways -->
+      <div style="background: rgba(240,240,240,0.4); border-radius: 24px; padding: 32px 24px; display: flex; flex-direction: column; gap: 20px;">
+        <div style="display: flex; gap: 12px; align-items: center; padding-left: 8px;">
+          <img src="https://www.figma.com/api/mcp/asset/e5dd252e-b7b0-444c-b5a0-4933a0c7aca8" alt="" style="width: 16px; height: 16px; object-fit: contain; flex-shrink: 0;">
+          <span style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #000;">Key Takeaways</span>
+        </div>
+        <ul style="list-style: disc; padding-left: 24px; display: flex; flex-direction: column; gap: 8px; font-size: 16px; font-weight: 500; line-height: 1.5; letter-spacing: -0.2px; color: #313131;">
+          <li>Smart contracts are self-executing programs that run on a blockchain when predetermined conditions are met — no intermediary required.</li>
+          <li>They power virtually every onchain financial product, from stablecoins and DEXes to tokenized securities and lending markets.</li>
+          <li>Their value comes from being deterministic, auditable, and composable — but those same properties amplify risk when code is buggy.</li>
+        </ul>
+      </div>
+
+      <!-- Intro -->
+      <div style="font-family: 'ABC Arizona Text', Georgia, serif; font-size: 20px; font-weight: 400; line-height: 1.45; letter-spacing: -0.2px; color: #313131;">
+        <p>Smart contracts are arguably the most consequential innovation to emerge from blockchain technology — and yet, for most people new to crypto, they remain abstract. The phrase itself is a misnomer: smart contracts are neither particularly "smart" in any AI sense, nor are they "contracts" in the legal sense most people understand.</p>
+        <p style="margin-top: 16px;">What they are, instead, is something far more interesting: self-executing code that lives on a public blockchain and runs exactly as written, every time, without anyone's permission. That single property — deterministic execution without an intermediary — is what makes the entire DeFi economy possible.</p>
+      </div>
+
+      <!-- Section 1 -->
+      <div id="section-1" style="display: flex; flex-direction: column; gap: 18px;">
+        <h2 style="font-size: 28px; font-weight: 500; line-height: 1.05; letter-spacing: -0.56px; color: #000;">What Are Smart Contracts?</h2>
+        <div style="font-family: 'ABC Arizona Text', Georgia, serif; font-size: 20px; font-weight: 400; line-height: 1.45; letter-spacing: -0.2px; color: #313131;">
+          <p>A smart contract is a program stored on a blockchain that runs when predetermined conditions are met. Unlike traditional software, which executes on a server you have to trust, a smart contract executes on every node in the network simultaneously and reaches consensus on the outcome.</p>
+          <p style="margin-top: 16px;">The concept predates Bitcoin. Computer scientist Nick Szabo proposed it in 1994, using a vending machine as an analogy: insert the right coin, get the soda. The machine doesn't know you, doesn't trust you, and doesn't need to — the rules are encoded in its mechanism.</p>
+        </div>
+      </div>
+
+      <!-- Quote -->
+      <div style="border-left: 2px solid #000; padding: 12px 0 12px 40px; display: flex; flex-direction: column; gap: 24px;">
+        <p class="f-arizona" style="font-size: 20px; font-weight: 400; line-height: 1.3; letter-spacing: -0.2px; color: #000;">"Code is law" became a slogan in the early Ethereum community for a reason: when a contract is deployed, its rules are absolute, and no central authority can override them.</p>
+        <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #626262;">— Vitalik Buterin, Ethereum co-founder</p>
+      </div>
+
+      <!-- Section 2 -->
+      <div id="section-2" style="display: flex; flex-direction: column; gap: 40px;">
+        <div style="display: flex; flex-direction: column; gap: 18px;">
+          <h2 style="font-size: 28px; font-weight: 500; line-height: 1.05; letter-spacing: -0.56px; color: #000;">How Do Smart Contracts Work?</h2>
+          <p style="font-family: 'ABC Arizona Text', Georgia, serif; font-size: 20px; font-weight: 400; line-height: 1.45; letter-spacing: -0.2px; color: #313131;">At a technical level, a smart contract is a piece of bytecode living at a specific address on a blockchain. Users — or other contracts — interact with it by sending transactions that call its functions. The blockchain's virtual machine (the EVM on Ethereum, the SVM on Solana) executes the code and updates the state accordingly.</p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 18px;">
+          <h3 style="font-size: 24px; font-weight: 500; line-height: 1.05; letter-spacing: -0.24px; color: #000;">The Three Guarantees</h3>
+          <div style="font-family: 'ABC Arizona Text', Georgia, serif; font-size: 20px; font-weight: 400; line-height: 1.45; letter-spacing: -0.2px; color: #313131;">
+            <p>Three properties make smart contracts useful:</p>
+            <ul style="list-style: disc; padding-left: 30px; margin-top: 16px; display: flex; flex-direction: column; gap: 16px;">
+              <li>Deterministic — given the same inputs, the contract always produces the same outputs. No randomness, no ambiguity.</li>
+              <li>Auditable — the bytecode is public. Anyone can read it, simulate it, and verify what it will do before interacting.</li>
+              <li>Composable — contracts can call other contracts. This is why DeFi is sometimes called "money legos": entire products are assembled from existing primitives.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Inline image -->
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="height: 400px; border-radius: 24px; overflow: hidden; position: relative;">
+          <img src="https://www.figma.com/api/mcp/asset/f0491bfe-31fe-4218-83ea-2e9f2baff10d" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+        </div>
+        <p style="font-size: 16px; font-weight: 500; line-height: 1.45; letter-spacing: -0.16px; color: #626262;">Fig. 1 — A user transaction triggers contract execution; the resulting state change is recorded onchain and is visible to all network participants.</p>
+      </div>
+
+      <!-- Section 6 -->
+      <div id="section-6" style="display: flex; flex-direction: column; gap: 18px;">
+        <h2 style="font-size: 28px; font-weight: 500; line-height: 1.05; letter-spacing: -0.56px; color: #000;">The Future of Programmable Finance</h2>
+        <div style="font-family: 'ABC Arizona Text', Georgia, serif; font-size: 20px; font-weight: 400; line-height: 1.45; letter-spacing: -0.2px; color: #313131;">
+          <p>Smart contracts are entering a new phase. Three shifts are particularly important:</p>
+          <ul style="list-style: disc; padding-left: 30px; margin-top: 16px; display: flex; flex-direction: column; gap: 16px;">
+            <li>Formal verification — mathematical proofs that a contract behaves as specified, especially for high-value financial primitives.</li>
+            <li>Account abstraction — turning user wallets themselves into smart contracts, enabling features like social recovery and gas sponsorship.</li>
+            <li>Cross-chain execution — contracts that natively span multiple blockchains, removing the bridging step.</li>
+          </ul>
+          <p style="margin-top: 16px;">For institutions building onchain, the question is no longer whether smart contracts are robust enough — it's how to compose them safely with the rest of their financial stack.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Divider -->
+    <div style="padding: 56px 0 56px;">
+      <div style="height: 1px; background: #dedede;"></div>
+    </div>
+
+    <!-- Further Reading -->
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+      <p style="font-size: 20px; font-weight: 500; line-height: 1.32; letter-spacing: -0.2px; color: #626262;">Further Reading</p>
+
+      <!-- Card 1 -->
+      <div class="horiz-card">
+        <div style="width: 264px; flex-shrink: 0; position: relative;">
+          <img src="https://www.figma.com/api/mcp/asset/3cb4b52c-219b-4136-9e3f-f3e0b5c27581" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+        </div>
+        <div style="flex: 1; min-width: 0; background: #fff; padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <p style="font-size: 24px; font-weight: 500; line-height: 1.05; letter-spacing: -0.24px; color: #000;">Decentralized Exchange</p>
+            <p class="f-arizona" style="font-size: 16px; line-height: 1.32; letter-spacing: -0.16px; color: #626262;">Learn how decentralized exchanges enable users to trade assets onchain.</p>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <img src="https://www.figma.com/api/mcp/asset/a472d3a2-a06e-4b1d-b589-40e571cfc9c6" alt="" style="width: 16px; height: 16px; object-fit: contain;">
+            <span style="font-size: 14px; font-weight: 500; line-height: 1.32; letter-spacing: -0.14px; color: #626262;">6 min read</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="horiz-card">
+        <div style="width: 264px; flex-shrink: 0; position: relative;">
+          <img src="https://www.figma.com/api/mcp/asset/b641e4c5-65a9-4289-8c14-67f6a2e49707" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+        </div>
+        <div style="flex: 1; min-width: 0; background: #fff; padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <p style="font-size: 24px; font-weight: 500; line-height: 1.05; letter-spacing: -0.24px; color: #000;">Decentralized Lending<br>&amp; Borrowing</p>
+            <p class="f-arizona" style="font-size: 16px; line-height: 1.32; letter-spacing: -0.16px; color: #626262;">Learn how lending and borrowing protocols provide open access to credit.</p>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <img src="https://www.figma.com/api/mcp/asset/a472d3a2-a06e-4b1d-b589-40e571cfc9c6" alt="" style="width: 16px; height: 16px; object-fit: contain;">
+            <span style="font-size: 14px; font-weight: 500; line-height: 1.32; letter-spacing: -0.14px; color: #626262;">6 min read</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="horiz-card">
+        <div style="width: 264px; flex-shrink: 0; position: relative;">
+          <img src="https://www.figma.com/api/mcp/asset/f9b9f500-448c-4421-bf23-563876c0c585" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+        </div>
+        <div style="flex: 1; min-width: 0; background: #fff; padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <p style="font-size: 24px; font-weight: 500; line-height: 1.05; letter-spacing: -0.24px; color: #000;">Tokenized Treasuries</p>
+            <p class="f-arizona" style="font-size: 16px; line-height: 1.32; letter-spacing: -0.16px; color: #626262;">Learn how tokenized U.S. Treasuries bring high-quality yield onchain.</p>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <img src="https://www.figma.com/api/mcp/asset/a472d3a2-a06e-4b1d-b589-40e571cfc9c6" alt="" style="width: 16px; height: 16px; object-fit: contain;">
+            <span style="font-size: 14px; font-weight: 500; line-height: 1.32; letter-spacing: -0.14px; color: #626262;">6 min read</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </article>
+</main>
+
+
+<!-- ── Footer ────────────────────────────────────────────────────────── -->
+<footer style="background: #000; position: relative; overflow: hidden;">
+<div style="max-width: 1512px; margin: 0 auto; padding: 44px 44px 0; display: flex; flex-direction: column; justify-content: space-between; min-height: 695px;">
+
+  <div class="footer-cols" style="display: flex; gap: 20px;">
+    <div style="flex: 1; max-width: 140px; display: flex; flex-direction: column; gap: 4px;">
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #fff; white-space: nowrap;">Invest</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">USDY</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">OUSG</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Bridge</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Convert</p>
+    </div>
+    <div style="flex: 1; max-width: 140px; display: flex; flex-direction: column; gap: 4px;">
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #fff; white-space: nowrap;">Partners</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Ecosystem</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Foundation</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Flux Finance</p>
+    </div>
+    <div style="flex: 1; max-width: 140px; display: flex; flex-direction: column; gap: 4px;">
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #fff; white-space: nowrap;">Explore</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Insights</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Docs</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Trust &amp; Security</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Bug Bounty</p>
+    </div>
+    <div style="flex: 1; max-width: 140px; display: flex; flex-direction: column; gap: 4px;">
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #fff; white-space: nowrap;">Company</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Team</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Careers</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Media Kit</p>
+      <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap;">Contact Us</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom" style="display: flex; flex-direction: column; gap: 0; align-items: center;">
+    <div style="width: 100%; margin-bottom: 40px;">
+      <img src="https://www.figma.com/api/mcp/asset/01e09ea2-d0af-4053-9e87-ae3994f8b2ea"
+           alt="Ondo Finance"
+           style="width: 100%; height: auto; aspect-ratio: 1512 / 185; object-fit: contain; object-position: bottom; display: block;">
+    </div>
+    <div class="footer-bar" style="border-top: 1px solid #313131; display: flex; align-items: center; justify-content: space-between; padding: 16px 0; width: 100%;">
+      <div style="display: flex; gap: 32px; align-items: center;">
+        <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #fff; white-space: nowrap;">Ondo © 2023</p>
+        <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap; cursor: pointer;">Terms of Service</p>
+        <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap; cursor: pointer;">Privacy Policy</p>
+        <p style="font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; color: #b1b1b1; white-space: nowrap; cursor: pointer;">Cookie Preferences</p>
+      </div>
+      <div style="display: flex; gap: 16px; align-items: center;">
+        <div style="width: 24px; height: 24px; overflow: hidden; position: relative; cursor: pointer; flex-shrink: 0;">
+          <img src="https://www.figma.com/api/mcp/asset/3c24cfa0-afde-48ee-a1e3-8e694fbd221a" alt="Social" style="position: absolute; inset: 16.67%; width: calc(100% - 33.34%); height: calc(100% - 33.34%); object-fit: contain;">
+        </div>
+        <div style="width: 24px; height: 24px; overflow: hidden; position: relative; cursor: pointer; flex-shrink: 0;">
+          <img src="https://www.figma.com/api/mcp/asset/3246cd05-65fe-4c69-88e9-83ca8765e88b" alt="Social" style="position: absolute; inset: 8.33%; width: calc(100% - 16.66%); height: calc(100% - 16.66%); object-fit: contain;">
+        </div>
+        <div style="width: 24px; height: 24px; overflow: hidden; position: relative; cursor: pointer; flex-shrink: 0;">
+          <img src="https://www.figma.com/api/mcp/asset/ef3c004e-3a3f-4b24-86ae-48b4fa8bd0a9" alt="Social" style="position: absolute; inset: 15.5% 8.33%; width: calc(100% - 16.66%); height: calc(100% - 31%); object-fit: contain;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</footer>
+
+
+<!-- ── JS: sidebar scroll tracking ──────────────────────────────────── -->
+<script>
+  const links = document.querySelectorAll('.sidebar-link');
+  const sections = ['section-1', 'section-2', 'section-6'].map(id => document.getElementById(id)).filter(Boolean);
+  const dot = document.getElementById('progress-dot');
+  const bar = document.getElementById('progress-bar');
+
+  function updateSidebar() {
+    let active = 0;
+    sections.forEach((sec, i) => {
+      if (window.scrollY >= sec.offsetTop - 160) active = i;
+    });
+
+    links.forEach(l => l.classList.remove('active'));
+    links[active]?.classList.add('active');
+
+    if (dot && bar) {
+      const linkEls = bar.parentElement.querySelectorAll('.sidebar-link');
+      const activeEl = linkEls[active];
+      if (activeEl) {
+        const barRect = bar.getBoundingClientRect();
+        const linkRect = activeEl.getBoundingClientRect();
+        dot.style.top = (linkRect.top - barRect.top + 8) + 'px';
+      }
+    }
+  }
+
+  window.addEventListener('scroll', updateSidebar);
+  updateSidebar();
+</script>
+
+</body>
+</html>
