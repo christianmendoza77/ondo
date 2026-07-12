@@ -18,7 +18,7 @@
     --purple-300: #b770fa;
     --purple-500: #450e78;
     --green-600: #002b20;
-    --slide-duration: 6s;
+    --slide-duration: 10s;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -245,26 +245,6 @@
   .nav-item:last-of-type {
     border-bottom: 1px solid var(--gray-200);
   }
-
-  /* Pause/Play button */
-  .pause-btn {
-    width: 40px;
-    height: 40px;
-    border: none;
-    border-radius: 80px;
-    background: #f0f0f0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 24px;
-    transition: background 0.2s ease;
-    flex-shrink: 0;
-    padding: 0;
-  }
-
-  .pause-btn:hover { background: #dedede; }
-  .pause-btn svg { display: block; }
 
   /* Collapsible content */
   .nav-expanded {
@@ -736,17 +716,6 @@
           </div>
         </div>
 
-        <!-- Pause / Play button -->
-        <button id="pause-btn" class="pause-btn" aria-label="Pause autoplay">
-          <svg id="pause-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <rect x="3"  y="2" width="3.5" height="12" rx="1" fill="#000"/>
-            <rect x="9.5" y="2" width="3.5" height="12" rx="1" fill="#000"/>
-          </svg>
-          <svg id="play-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:none;">
-            <path d="M4 2L14 8L4 14V2Z" fill="#000"/>
-          </svg>
-        </button>
-
       </nav>
 
       <!-- Content Panel -->
@@ -1012,7 +981,7 @@
 
 <script>
 (function () {
-  const DURATION = 7000;
+  const DURATION = 10000;
 
   const DOT_DATA = [
     [10.5,236],[25.5,228],[40.5,212],[55.5,201],[70.5,191],
@@ -1232,48 +1201,12 @@
     }
   }
 
-  // ── Progress state ──────────────────────────────────────────────────
-  let progressStart    = null;
-  let progressRemaining = DURATION;
-  let isHoverPaused    = false;
-  let isManualPaused   = false;
-
-  const pauseBtn   = document.getElementById('pause-btn');
-  const pauseIcon  = document.getElementById('pause-icon');
-  const playIcon   = document.getElementById('play-icon');
-
-  function isFrozen() { return isHoverPaused || isManualPaused; }
-
-  function freezeBar() {
-    clearTimeout(autoTimer);
-    const elapsed = Date.now() - (progressStart || Date.now());
-    progressRemaining = Math.max(0, DURATION - elapsed);
-    const fill = progFills[current];
-    const frozenW = getComputedStyle(fill).width;
-    fill.style.transition = 'none';
-    fill.style.width = frozenW;
-  }
-
-  function unfreezeBar() {
-    progressStart = Date.now() - (DURATION - progressRemaining);
-    const fill = progFills[current];
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      fill.style.transition = `width ${progressRemaining}ms linear`;
-      fill.style.width = '100%';
-    }));
-    clearTimeout(autoTimer);
-    autoTimer = setTimeout(() => goToSlide((current + 1) % navItems.length), progressRemaining);
-  }
-
+  // ── Progress bar ────────────────────────────────────────────────────
   function startProgress(index) {
     const fill = progFills[index];
     fill.style.transition = 'none';
     fill.style.width = '0%';
-    progressRemaining = DURATION;
-    isHoverPaused = false;
     requestAnimationFrame(() => requestAnimationFrame(() => {
-      if (isFrozen()) return; // manual pause — don't start bar
-      progressStart = Date.now();
       fill.style.transition = `width ${DURATION}ms linear`;
       fill.style.width = '100%';
       clearTimeout(autoTimer);
@@ -1281,40 +1214,8 @@
     }));
   }
 
-  // ── Hover pause/resume — only on the active item ────────────────────
-  navItems.forEach((item, i) => {
-    item.addEventListener('mouseenter', () => {
-      if (i !== current) return;
-      if (isHoverPaused || isFrozen()) return;
-      isHoverPaused = true;
-      freezeBar();
-    });
-    item.addEventListener('mouseleave', () => {
-      if (!isHoverPaused) return;
-      isHoverPaused = false;
-      if (!isFrozen()) unfreezeBar();
-    });
-  });
-
-  // ── Manual pause/play button ─────────────────────────────────────────
-  function updatePauseBtn() {
-    pauseIcon.style.display = isManualPaused ? 'none'  : 'block';
-    playIcon.style.display  = isManualPaused ? 'block' : 'none';
-  }
-
-  pauseBtn.addEventListener('click', () => {
-    isManualPaused = !isManualPaused;
-    if (isManualPaused) {
-      freezeBar();
-    } else {
-      if (!isFrozen()) unfreezeBar();
-    }
-    updatePauseBtn();
-  });
-
   // ── Go to slide ──────────────────────────────────────────────────────
   function goToSlide(index) {
-    isHoverPaused = false;
     navItems[current].classList.remove('active');
     progFills[current].style.transition = 'none';
     progFills[current].style.width = '0%';

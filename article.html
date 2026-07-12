@@ -68,7 +68,7 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .horiz-card:hover {
-      box-shadow: 0px 0.6px 5.32px hsla(0,0%,9%,0.03), 0px 2.01px 17.87px hsla(0,0%,9%,0.05), 0px 9px 80px hsla(0,0%,9%,0.07);
+      box-shadow: 2.24px 6.9px 8.76px 0px hsla(0, 0%, 0%, 0.03);
     }
 
     /* ── Footer ─────────────────────────────── */
@@ -155,14 +155,22 @@
     <!-- Top: breadcrumb, title, meta, hero -->
     <div style="display: flex; flex-direction: column; gap: 40px;">
 
-      <div style="display: flex; flex-direction: column; gap: 48px;">
-        <!-- Breadcrumb -->
-        <div class="breadcrumb" style="display: flex; gap: 8px; align-items: center; font-size: 14px; font-weight: 500; line-height: 1.32; letter-spacing: -0.14px;">
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div style="display: flex; flex-direction: column; gap: 40px;">
+          <!-- Arrow -->
+          <a href="learn.html" style="display: inline-flex; align-items: center; justify-content: center; padding: 8px; margin: -8px; align-self: flex-start;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4.9211 12.75H22V11.25H4.93924L10.7211 5.45993L9.65972 4.40002L2.06014 12.0104L9.6601 19.6103L10.7208 18.5497L4.9211 12.75Z" fill="#313131"/>
+            </svg>
+          </a>
+          <!-- Breadcrumb -->
+          <div class="breadcrumb" style="display: flex; gap: 8px; align-items: center; font-size: 14px; font-weight: 500; line-height: 1.32; letter-spacing: -0.14px;">
           <a href="learn.html" style="color: #b1b1b1; text-decoration: none;">Ondo Learn</a>
           <span style="color: #b1b1b1;">/</span>
           <a href="learn.html#section-essentials" style="color: #b1b1b1; text-decoration: none; transition: color 0.15s;">The Essentials</a>
           <span style="color: #b1b1b1;">/</span>
           <span style="color: #000;">Smart Contracts</span>
+          </div>
         </div>
         <!-- Title -->
         <h1 style="font-size: 48px; font-weight: 500; line-height: 1.05; letter-spacing: -1.44px; color: #000; text-wrap: balance;">
