@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team 2 – Ondo Finance</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  ::-webkit-scrollbar { display: none; }
+  * { -ms-overflow-style: none; scrollbar-width: none; }
+
+  body {
+    font-family: 'Gellix', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #fff;
+    color: #000;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Nav ── */
+  .site-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    padding: 12px 40px;
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    background: #000;
+    border-radius: 12px;
+    height: 58px;
+    padding: 10px 28px;
+    width: 792px;
+    max-width: 100%;
+    box-shadow: 0px 9px 80px rgba(24,24,24,0.07), 0px 2.01px 17.869px rgba(24,24,24,0.05), 0px 0.599px 5.32px rgba(24,24,24,0.03);
+  }
+
+  .nav-logo { flex: 1 0 0; display: flex; align-items: center; }
+  .nav-logo img { width: 93px; height: 28px; object-fit: contain; display: block; }
+
+  .nav-links { display: flex; gap: 24px; align-items: center; justify-content: center; }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .nav-auth { flex: 1 0 0; display: flex; justify-content: flex-end; }
+
+  .nav-launch-btn {
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 8px;
+    background: #f0f0f0;
+    color: #000;
+    border: none;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  /* ── Page ── */
+  .page {
+    padding-top: 82px; /* nav offset */
+  }
+
+  /* ── Careers section ── */
+  .careers {
+    background: #fff;
+    padding: 0 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .careers-inner {
+    width: 100%;
+    max-width: 1512px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 64px;
+    padding: 80px 0;
+  }
+
+  /* Title */
+  .careers-title {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    align-items: center;
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .careers-eyebrow {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #000;
+  }
+
+  .careers-heading {
+    font-size: 56px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -1.68px;
+    color: #000;
+    text-wrap: balance;
+  }
+
+  /* Job board */
+  .job-board {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  /* Search row */
+  .search-row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .search-dropdown {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 240px;
+    height: 44px;
+    background: rgba(29,29,29,0.05);
+    border-radius: 8px;
+    padding: 0 16px;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.14px;
+    color: #000;
+    flex-shrink: 0;
+    text-align: left;
+    justify-content: space-between;
+  }
+
+  .search-dropdown:hover { background: rgba(29,29,29,0.08); }
+  .search-dropdown.active { background: rgba(29,29,29,0.10); }
+
+  /* Dropdown panel */
+  .dropdown-wrap { position: relative; flex-shrink: 0; }
+
+  .dropdown-panel {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 1.8px 1.8px 16.8px 1.2px rgba(0,0,0,0.06);
+    padding: 12px;
+    min-width: 240px;
+    z-index: 200;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .dropdown-panel.open { display: flex; }
+
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.16px;
+    color: #313131;
+    user-select: none;
+    transition: background 0.1s;
+  }
+
+  .dropdown-item:hover { background: rgba(29,29,29,0.05); }
+
+  .cb {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #313131;
+    border-radius: 4px;
+    background: rgba(29,29,29,0.05);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.1s;
+  }
+
+  .dropdown-item:hover .cb { background: rgba(29,29,29,0.10); }
+
+  .cb.checked { background: rgba(29,29,29,0.15); }
+
+  .cb.checked::after {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 6px;
+    border-left: 1.5px solid #000;
+    border-bottom: 1.5px solid #000;
+    transform: rotate(-45deg) translate(0px, -1px);
+  }
+
+  .search-input-wrap {
+    flex: 1;
+    height: 44px;
+    background: rgba(29,29,29,0.05);
+    border-radius: 8px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-input-wrap input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+  }
+
+  .search-input-wrap input::placeholder {
+    color: rgba(29,29,29,0.4);
+  }
+
+  /* FAQ Table */
+  .faq-table {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  /* Dept section */
+  .dept {
+    border-bottom: 1px solid #818181;
+  }
+
+
+  .dept-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px 0;
+    cursor: pointer;
+    width: 100%;
+    background: none;
+    border: none;
+    font-family: inherit;
+    text-align: left;
+    transition: padding-bottom 0.35s ease;
+  }
+
+  .dept-name {
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.56px;
+    color: #000;
+  }
+
+  .dept-chevron {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s ease;
+  }
+
+  /* Expanded: chevron points up (default svg points down, rotate 180) */
+  .dept.open .dept-chevron { transform: rotate(180deg); }
+
+  /* Job list */
+  .dept-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+
+  .dept.open .dept-header {
+    padding-bottom: 16px;
+  }
+
+  .dept-body-inner {
+    padding-bottom: 32px;
+  }
+
+  .job-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 13px 0;
+    cursor: pointer;
+  }
+
+  .job-row:hover .job-title { text-decoration: underline; }
+
+  .job-text { display: flex; flex-direction: column; gap: 2px; }
+
+  .job-title {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #000;
+  }
+
+  .job-meta {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.14px;
+    color: #626262;
+  }
+
+  .job-arrow { display: none; }
+
+  /* Team photo */
+  .team-photo {
+    width: 100%;
+    aspect-ratio: 1512 / 800;
+    border-radius: 24px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .team-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<header class="site-header">
+  <nav class="site-nav">
+    <div class="nav-logo">
+      <img src="assets/ondo-logo.svg" alt="Ondo">
+    </div>
+    <div class="nav-links">
+      <a class="nav-link" href="#">Products</a>
+      <a class="nav-link" href="#">Resources</a>
+      <a class="nav-link" href="#">Ecosystem</a>
+      <a class="nav-link" href="#">About</a>
+    </div>
+    <div class="nav-auth">
+      <button class="nav-launch-btn">Launch App</button>
+    </div>
+  </nav>
+</header>
+
+<!-- ── Page ── -->
+<div class="page">
+  <div class="careers">
+    <div class="careers-inner">
+
+      <!-- Title -->
+      <div class="careers-title">
+        <span class="careers-eyebrow">Careers at Ondo</span>
+        <h1 class="careers-heading">Come Join Our Decentralized<br>But Tight-Knit Team</h1>
+      </div>
+
+      <!-- Job board -->
+      <div class="job-board">
+
+        <!-- Search row -->
+        <div class="search-row">
+          <!-- Teams filter -->
+          <div class="dropdown-wrap" id="dd-teams">
+            <button class="search-dropdown" onclick="toggleDropdown('dd-teams')">
+              <span class="dd-label">All teams</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L12 15L18 9" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="dropdown-panel">
+              <div class="dropdown-item"><span class="cb"></span><span>Design</span></div>
+              <div class="dropdown-item"><span class="cb"></span><span>Legal</span></div>
+              <div class="dropdown-item"><span class="cb"></span><span>Marketing</span></div>
+              <div class="dropdown-item"><span class="cb"></span><span>Operations</span></div>
+              <div class="dropdown-item"><span class="cb"></span><span>Product</span></div>
+              <div class="dropdown-item"><span class="cb"></span><span>Security</span></div>
+              <div class="dropdown-item"><span class="cb"></span><span>Software Engineering</span></div>
+            </div>
+          </div>
+          <!-- Location filter -->
+          <div class="dropdown-wrap" id="dd-location">
+            <button class="search-dropdown" onclick="toggleDropdown('dd-location')">
+              <span class="dd-label">Locations</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L12 15L18 9" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="dropdown-panel">
+              <div class="dropdown-item"><span class="cb"></span><span>Remote (US)</span></div>
+            </div>
+          </div>
+          <!-- Search input -->
+          <div class="search-input-wrap">
+            <input type="text" placeholder="Search open positions" oninput="applyFilters()">
+          </div>
+        </div>
+
+        <!-- FAQ Table -->
+        <div class="faq-table">
+
+          <!-- Design -->
+          <div class="dept" id="dept-design">
+            <button class="dept-header" onclick="toggleDept('dept-design')">
+              <span class="dept-name">Design</span>
+              <span class="dept-chevron">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+            <div class="dept-body">
+              <div class="dept-body-inner">
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Controller, Investment Operations</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Executive Assistant, Managing Director</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Head of Risk</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Legal -->
+          <div class="dept" id="dept-legal">
+            <button class="dept-header" onclick="toggleDept('dept-legal')">
+              <span class="dept-name">Legal</span>
+              <span class="dept-chevron">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+            <div class="dept-body">
+              <div class="dept-body-inner">
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Controller, Investment Operations</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Executive Assistant, Managing Director</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Head of Risk</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Marketing -->
+          <div class="dept" id="dept-marketing">
+            <button class="dept-header" onclick="toggleDept('dept-marketing')">
+              <span class="dept-name">Marketing</span>
+              <span class="dept-chevron">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+            <div class="dept-body">
+              <div class="dept-body-inner">
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">AI Content Specialist</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Growth Marketing Lead</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Social Media Manager</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Brand Designer</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Content Strategist</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Events & Community Lead</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Head of Communications</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Operations -->
+          <div class="dept" id="dept-operations">
+            <button class="dept-header" onclick="toggleDept('dept-operations')">
+              <span class="dept-name">Operations</span>
+              <span class="dept-chevron">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+            <div class="dept-body">
+              <div class="dept-body-inner">
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Controller, Investment Operations</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Executive Assistant, Managing Director</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Head of Risk</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product -->
+          <div class="dept" id="dept-product">
+            <button class="dept-header" onclick="toggleDept('dept-product')">
+              <span class="dept-name">Product</span>
+              <span class="dept-chevron">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+            <div class="dept-body">
+              <div class="dept-body-inner">
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Controller, Investment Operations</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Executive Assistant, Managing Director</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Head of Risk</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Security -->
+          <div class="dept" id="dept-security">
+            <button class="dept-header" onclick="toggleDept('dept-security')">
+              <span class="dept-name">Security</span>
+              <span class="dept-chevron">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+            <div class="dept-body">
+              <div class="dept-body-inner">
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Controller, Investment Operations</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Executive Assistant, Managing Director</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Head of Risk</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Software Engineering -->
+          <div class="dept" id="dept-eng">
+            <button class="dept-header" onclick="toggleDept('dept-eng')">
+              <span class="dept-name">Software Engineering</span>
+              <span class="dept-chevron">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+            <div class="dept-body">
+              <div class="dept-body-inner">
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Controller, Investment Operations</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Executive Assistant, Managing Director</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+                <div class="job-row">
+                  <div class="job-text">
+                    <span class="job-title">Head of Risk</span>
+                    <span class="job-meta">Remote (US)  •  Full-Time</span>
+                  </div>
+                  <span class="job-arrow"><img src="assets/icon-arrow-job.svg" width="36" height="36" alt=""></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /faq-table -->
+      </div><!-- /job-board -->
+
+      <!-- Team photo -->
+      <div class="team-photo">
+        <img src="assets/team-photo.png" alt="Ondo team">
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Accordion ──
+function openDept(dept) {
+  if (dept.classList.contains('open')) return;
+  const body = dept.querySelector('.dept-body');
+  dept.classList.add('open');
+  body.style.maxHeight = body.scrollHeight + 'px';
+  body.addEventListener('transitionend', () => {
+    if (dept.classList.contains('open')) body.style.maxHeight = 'none';
+  }, { once: true });
+}
+
+function closeDept(dept) {
+  if (!dept.classList.contains('open')) return;
+  const body = dept.querySelector('.dept-body');
+  body.style.maxHeight = body.scrollHeight + 'px';
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    body.style.maxHeight = '0';
+  }));
+  dept.classList.remove('open');
+}
+
+function toggleDept(id) {
+  const dept = document.getElementById(id);
+  dept.classList.contains('open') ? closeDept(dept) : openDept(dept);
+}
+
+// ── Dropdowns ──
+function toggleDropdown(id) {
+  const wrap = document.getElementById(id);
+  const panel = wrap.querySelector('.dropdown-panel');
+  const btn = wrap.querySelector('.search-dropdown');
+  const isOpen = panel.classList.contains('open');
+  closeAllDropdowns();
+  if (!isOpen) {
+    panel.classList.add('open');
+    btn.classList.add('active');
+  }
+}
+
+function closeAllDropdowns() {
+  document.querySelectorAll('.dropdown-panel.open').forEach(p => {
+    p.classList.remove('open');
+    p.closest('.dropdown-wrap').querySelector('.search-dropdown').classList.remove('active');
+  });
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.dropdown-wrap')) closeAllDropdowns();
+});
+
+document.querySelectorAll('.dropdown-item').forEach(item => {
+  item.addEventListener('click', (e) => {
+    e.stopPropagation();
+    item.querySelector('.cb').classList.toggle('checked');
+    updateDropdownLabel(item.closest('.dropdown-wrap'));
+    applyFilters();
+  });
+});
+
+function updateDropdownLabel(wrap) {
+  const selected = [...wrap.querySelectorAll('.cb.checked')].map(cb => cb.nextElementSibling.textContent);
+  const label = wrap.querySelector('.dd-label');
+  const defaultLabel = wrap.id === 'dd-teams' ? 'All teams' : 'Locations';
+  if (selected.length === 0) {
+    label.textContent = defaultLabel;
+  } else if (selected.length <= 2) {
+    label.textContent = selected.join(', ');
+  } else {
+    label.textContent = selected.length + (wrap.id === 'dd-teams' ? ' teams' : ' locations');
+  }
+}
+
+// ── Filtering ──
+function applyFilters() {
+  const query = document.querySelector('.search-input-wrap input').value.toLowerCase().trim();
+  const selectedTeams = [...document.querySelectorAll('#dd-teams .cb.checked')].map(cb =>
+    cb.nextElementSibling.textContent.toLowerCase()
+  );
+  const selectedLocations = [...document.querySelectorAll('#dd-location .cb.checked')].map(cb =>
+    cb.nextElementSibling.textContent.toLowerCase()
+  );
+  const hasFilters = query || selectedTeams.length > 0 || selectedLocations.length > 0;
+
+  document.querySelectorAll('.dept').forEach(dept => {
+    const deptName = dept.querySelector('.dept-name').textContent.toLowerCase();
+    const matchesDept = selectedTeams.length === 0 || selectedTeams.includes(deptName);
+    let deptHasVisible = false;
+
+    dept.querySelectorAll('.job-row').forEach(row => {
+      const title = row.querySelector('.job-title').textContent.toLowerCase();
+      const meta = row.querySelector('.job-meta').textContent.toLowerCase();
+      const matchesQuery = !query || title.includes(query);
+      const matchesLocation = selectedLocations.length === 0 || selectedLocations.some(l => meta.includes(l));
+      const visible = matchesDept && matchesQuery && matchesLocation;
+      row.style.display = visible ? '' : 'none';
+      if (visible) deptHasVisible = true;
+    });
+
+    if (!deptHasVisible) {
+      dept.style.display = 'none';
+      closeDept(dept);
+    } else {
+      dept.style.display = '';
+      hasFilters ? openDept(dept) : closeDept(dept);
+    }
+  });
+}
+</script>
+</body>
+</html>
