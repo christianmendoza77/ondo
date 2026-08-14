@@ -6,6 +6,7 @@
 <title>Team 2 – Ondo Finance</title>
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <style>
+  html { scroll-behavior: smooth; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   ::-webkit-scrollbar { display: none; }
   * { -ms-overflow-style: none; scrollbar-width: none; }
@@ -76,7 +77,85 @@
 
   /* ── Page ── */
   .page {
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background: #121212;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 44px 160px;
     padding-top: 82px; /* nav offset */
+  }
+
+  .hero-inner {
+    width: 100%;
+    max-width: 1512px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    padding: 120px 0;
+    text-align: center;
+  }
+
+  .hero-heading {
+    font-size: 72px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -2.16px;
+    color: #fff;
+    text-wrap: balance;
+  }
+
+  .hero-body {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.2px;
+    color: #b1b1b1;
+    max-width: 744px;
+  }
+
+  .hero-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    background: #f0f0f0;
+    border-radius: 8px;
+    padding: 0 16px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+
+  .hero-btn:hover { background: #dcdcdc; }
+
+  .hero-image {
+    width: 100%;
+    border-radius: 24px;
+    overflow: hidden;
+    aspect-ratio: 1512 / 1008;
+  }
+
+  .hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   /* ── Careers section ── */
@@ -99,14 +178,47 @@
   }
 
   /* Title */
+  /* Title card */
   .careers-title {
+    position: relative;
+    width: 100%;
+    height: 440px;
+    border-radius: 24px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .careers-title-bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .careers-title-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .careers-title-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(29,29,29,0.55);
+  }
+
+  .careers-title-content {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 16px;
     align-items: center;
-    max-width: 800px;
-    width: 100%;
     text-align: center;
+    max-width: 800px;
+    padding: 0 40px;
   }
 
   .careers-eyebrow {
@@ -114,7 +226,7 @@
     font-weight: 500;
     line-height: 1.32;
     letter-spacing: -0.16px;
-    color: #000;
+    color: #fff;
   }
 
   .careers-heading {
@@ -122,7 +234,7 @@
     font-weight: 500;
     line-height: 1.05;
     letter-spacing: -1.68px;
-    color: #000;
+    color: #fff;
     text-wrap: balance;
   }
 
@@ -246,6 +358,8 @@
     border: none;
     outline: none;
     background: transparent;
+    -webkit-appearance: none;
+    appearance: none;
     font-family: inherit;
     font-size: 16px;
     font-weight: 500;
@@ -265,7 +379,7 @@
 
   /* Dept section */
   .dept {
-    border-bottom: 1px solid #818181;
+    border-bottom: 1px solid #b1b1b1;
   }
 
 
@@ -273,7 +387,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 40px 0;
+    padding: 32px 0;
     cursor: pointer;
     width: 100%;
     background: none;
@@ -312,7 +426,7 @@
   }
 
   .dept.open .dept-header {
-    padding-bottom: 16px;
+    padding-bottom: 24px;
   }
 
   .dept-body-inner {
@@ -327,7 +441,7 @@
     cursor: pointer;
   }
 
-  .job-row:hover .job-title { text-decoration: underline; }
+  .job-row:hover .job-title { color: #626262; }
 
   .job-text { display: flex; flex-direction: column; gap: 2px; }
 
@@ -364,6 +478,431 @@
     object-fit: cover;
     display: block;
   }
+
+  /* ── Partners ── */
+  .partners {
+    background: #000;
+    padding: 120px 44px 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .partners-inner {
+    width: 100%;
+    max-width: 1512px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .partners-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+  }
+
+  .partners-eyebrow {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #fff;
+  }
+
+  .partners-heading {
+    font-size: 56px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -1.68px;
+    color: #fff;
+    text-wrap: balance;
+  }
+
+  .partners-body {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.2px;
+    color: #b1b1b1;
+    max-width: 744px;
+  }
+
+  .partners-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    background: #f0f0f0;
+    border-radius: 8px;
+    padding: 0 16px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+
+  .partners-btn:hover { background: #dcdcdc; }
+
+  .partners-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    margin-top: 120px;
+    width: 100%;
+  }
+
+  .partner-tile {
+    background: #1d1d1d;
+    border-radius: 16px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .partner-tile img {
+    height: 40px;
+    width: auto;
+    max-width: 100%;
+    display: block;
+    object-fit: contain;
+  }
+
+  /* ── Leadership ── */
+  .leadership {
+    background: #fff;
+    padding: 160px 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .leadership-inner {
+    width: 100%;
+    max-width: 1512px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .leadership-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+  }
+
+  .leadership-eyebrow {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #000;
+  }
+
+  .leadership-heading {
+    font-size: 56px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -1.68px;
+    color: #000;
+    text-wrap: balance;
+    max-width: 560px;
+  }
+
+  .leadership-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 24px;
+    row-gap: 80px;
+    margin-top: 120px;
+    width: 100%;
+  }
+
+  .leader-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .leader-photo {
+    width: 100%;
+    aspect-ratio: 9 / 10;
+    border-radius: 24px;
+    overflow: hidden;
+  }
+
+  .leader-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .leader-info {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .leader-name {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.18px;
+    color: #000;
+  }
+
+  .leader-title {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: rgba(0,0,0,0.6);
+  }
+
+  .leader-social {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+  }
+
+  .leader-social a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .leader-social img {
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+
+  /* ── Footer ── */
+  .site-footer {
+    background: #000;
+    width: 100%;
+  }
+
+  .footer-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 44px 44px 30px;
+  }
+
+  .footer-inner {
+    width: 100%;
+    max-width: 1512px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer-nav {
+    display: flex;
+    gap: 0;
+  }
+
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+    width: 140px;
+    flex-shrink: 0;
+  }
+
+  .footer-col + .footer-col {
+    width: 160px;
+    padding-left: 20px;
+  }
+
+  .footer-col-heading {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #fff;
+    padding: 2px 0;
+    margin-bottom: 0;
+  }
+
+  .footer-link {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: -0.16px;
+    color: #b1b1b1;
+    text-decoration: none;
+  }
+
+  .footer-link:hover { color: #fff; }
+
+  .footer-link img { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .footer-wordmark {
+    margin-top: 120px;
+    width: 100%;
+  }
+
+  .footer-wordmark img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .footer-bottom {
+    border-top: 1px solid #313131;
+    background: #000;
+  }
+
+  .footer-bottom-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1512px;
+    margin: 0 auto;
+    padding: 22px 44px;
+  }
+
+  .footer-legal {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .footer-copy {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.14px;
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  .footer-legal-link {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.14px;
+    color: #b1b1b1;
+    text-decoration: none;
+    padding-left: 32px;
+    white-space: nowrap;
+  }
+
+  .footer-legal-link:hover { color: #fff; }
+
+  .footer-social {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .footer-social a { display: flex; align-items: center; }
+  .footer-social img { width: 24px; height: 24px; }
+
+  /* ════ Responsive ════ */
+
+  @media (max-width: 1024px) {
+    .hero { padding-left: 32px; padding-right: 32px; }
+    .leadership { padding-left: 32px; padding-right: 32px; }
+    .partners { padding-left: 32px; padding-right: 32px; }
+    .careers { padding-left: 32px; padding-right: 32px; }
+    .footer-main { padding-left: 32px; padding-right: 32px; }
+    .footer-bottom-inner { padding-left: 32px; padding-right: 32px; }
+    .partners-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  .nav-hamburger {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 8px;
+  }
+  .nav-hamburger svg { display: block; }
+
+  @media (max-width: 768px) {
+    /* Nav — full-width black bar, no pill */
+    .site-header { padding: 0; }
+    .site-nav {
+      width: 100%;
+      max-width: 100%;
+      border-radius: 0;
+      height: auto;
+      padding: 12px 20px;
+      box-shadow: none;
+    }
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+
+    /* Hero */
+    .hero { padding: 70px 16px 80px; }
+    .hero-text { padding: 48px 0; gap: 24px; }
+    .hero-heading { font-size: 40px; letter-spacing: -1.2px; }
+    .hero-body { font-size: 16px; max-width: 100%; }
+
+    /* Leadership */
+    .leadership { padding: 80px 16px; }
+    .leadership-heading { font-size: 36px; letter-spacing: -0.72px; max-width: 100%; }
+    .leadership-grid { grid-template-columns: repeat(2, 1fr); column-gap: 16px; row-gap: 48px; margin-top: 60px; }
+    .leader-name { font-size: 16px; }
+    .leader-title { font-size: 14px; }
+
+    /* Partners */
+    .partners { padding: 80px 16px; }
+    .partners-heading { font-size: 36px; letter-spacing: -0.72px; }
+    .partners-body { font-size: 16px; max-width: 100%; }
+    .partners-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 60px; }
+    .partner-tile { height: 80px; padding: 16px; }
+    .partner-tile img { height: 24px; }
+
+    /* Careers */
+    .careers { padding: 0 16px; }
+    .careers-inner { gap: 40px; padding: 80px 0; }
+    .careers-title { height: 248px; }
+    .careers-heading { font-size: 32px; letter-spacing: -0.64px; }
+    .search-row { flex-direction: column; align-items: stretch; gap: 12px; }
+    .search-dropdown { width: 100%; }
+    .search-input-wrap { width: 100%; flex: none; }
+    .dept-name { font-size: 20px; letter-spacing: -0.2px; }
+    .dept-header { padding: 24px 0; }
+    .dept.open .dept-header { padding-bottom: 16px; }
+
+    /* Footer */
+    .footer-main { padding: 40px 16px 24px; }
+    .footer-nav { flex-wrap: wrap; }
+    .footer-col { width: 50% !important; padding-left: 0 !important; margin-bottom: 32px; }
+    .footer-wordmark { margin-top: 48px; }
+    .footer-bottom-inner { padding: 20px 16px; flex-direction: column; align-items: flex-start; gap: 12px; }
+    .footer-legal { flex-wrap: wrap; gap: 8px; }
+    .footer-legal-link { padding-left: 0; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-heading { font-size: 32px; letter-spacing: -0.96px; }
+    .leadership-grid { column-gap: 12px; }
+    .partners-grid { grid-template-columns: repeat(2, 1fr); }
+  }
 </style>
 </head>
 <body>
@@ -382,23 +921,250 @@
     </div>
     <div class="nav-auth">
       <button class="nav-launch-btn">Launch App</button>
+      <button class="nav-hamburger" aria-label="Open menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 6H20M4 12H20M4 18H20" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
     </div>
   </nav>
 </header>
 
 <!-- ── Page ── -->
 <div class="page">
-  <div class="careers">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <h1 class="hero-heading">We Are Building the<br>Future of Finance</h1>
+        <p class="hero-body">We believe that the world's financial assets will be tokenized on public blockchains. Ondo combines cutting-edge tokenization technology with the best practices from traditional finance: investor protections, regulatory compliance, transparent reporting, robust product structuring, and high-touch client service.</p>
+        <a href="#careers-section" class="hero-btn">See open roles</a>
+      </div>
+      <div class="hero-image">
+        <img src="assets/hero-team.png" alt="Ondo team">
+      </div>
+    </div>
+  </div>
+
+  <!-- Leadership -->
+  <section class="leadership">
+    <div class="leadership-inner">
+      <div class="leadership-header">
+        <span class="leadership-eyebrow">Our Leadership</span>
+        <h2 class="leadership-heading">We Are the Right Team for the Job</h2>
+      </div>
+      <div class="leadership-grid">
+
+        <div class="leader-card">
+          <div class="leader-photo"><img src="assets/leader-01.png" alt="Nathan Allman"></div>
+          <div class="leader-info">
+            <span class="leader-name">Nathan Allman</span>
+            <span class="leader-title">Founder</span>
+            <div class="leader-social">
+              <a href="#"><img src="assets/icon-li-badge.svg" alt="LinkedIn"></a>
+              <a href="#"><img src="assets/icon-x-badge.svg" alt="X"></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="leader-card">
+          <div class="leader-photo"><img src="assets/leader-02.png" alt="Ian De Bode"></div>
+          <div class="leader-info">
+            <span class="leader-name">Ian De Bode</span>
+            <span class="leader-title">Chief Executive Officer</span>
+            <div class="leader-social">
+              <a href="#"><img src="assets/icon-li-badge.svg" alt="LinkedIn"></a>
+              <a href="#"><img src="assets/icon-x-badge.svg" alt="X"></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="leader-card">
+          <div class="leader-photo"><img src="assets/leader-03.png" alt="Patrick McHenry"></div>
+          <div class="leader-info">
+            <span class="leader-name">Patrick McHenry</span>
+            <span class="leader-title">Vice Chairman</span>
+            <div class="leader-social">
+              <a href="#"><img src="assets/icon-x-badge.svg" alt="X"></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="leader-card">
+          <div class="leader-photo"><img src="assets/leader-04.png" alt="Mark Janoff"></div>
+          <div class="leader-info">
+            <span class="leader-name">Mark Janoff</span>
+            <span class="leader-title">General Counsel</span>
+            <div class="leader-social">
+              <a href="#"><img src="assets/icon-li-badge.svg" alt="LinkedIn"></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="leader-card">
+          <div class="leader-photo"><img src="assets/leader-05.png" alt="Brendan Florez"></div>
+          <div class="leader-info">
+            <span class="leader-name">Brendan Florez</span>
+            <span class="leader-title">Managing Director, Client Relations and Strategic Operations</span>
+            <div class="leader-social">
+              <a href="#"><img src="assets/icon-li-badge.svg" alt="LinkedIn"></a>
+              <a href="#"><img src="assets/icon-x-badge.svg" alt="X"></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="leader-card">
+          <div class="leader-photo"><img src="assets/leader-06.png" alt="Matthieu de Vergnes"></div>
+          <div class="leader-info">
+            <span class="leader-name">Matthieu de Vergnes</span>
+            <span class="leader-title">Managing Director, Global Head of Institutional</span>
+            <div class="leader-social">
+              <a href="#"><img src="assets/icon-li-badge.svg" alt="LinkedIn"></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="leader-card">
+          <div class="leader-photo"><img src="assets/leader-07.png" alt="John Hoffman"></div>
+          <div class="leader-info">
+            <span class="leader-name">John Hoffman</span>
+            <span class="leader-title">Managing Director, Head of Product Portfolios</span>
+            <div class="leader-social">
+              <a href="#"><img src="assets/icon-li-badge.svg" alt="LinkedIn"></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="leader-card">
+          <div class="leader-photo"><img src="assets/leader-08.png" alt="Katie Wheeler"></div>
+          <div class="leader-info">
+            <span class="leader-name">Katie Wheeler</span>
+            <span class="leader-title">Managing Director, Global Partnerships</span>
+            <div class="leader-social">
+              <a href="#"><img src="assets/icon-li-badge.svg" alt="LinkedIn"></a>
+              <a href="#"><img src="assets/icon-x-badge.svg" alt="X"></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="leader-card">
+          <div class="leader-photo"><img src="assets/leader-09.png" alt="Min Lin"></div>
+          <div class="leader-info">
+            <span class="leader-name">Min Lin</span>
+            <span class="leader-title">Managing Director, Head of Global Business Development</span>
+            <div class="leader-social">
+              <a href="#"><img src="assets/icon-li-badge.svg" alt="LinkedIn"></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="leader-card">
+          <div class="leader-photo"><img src="assets/leader-10.png" alt="Cameron Clifton"></div>
+          <div class="leader-info">
+            <span class="leader-name">Cameron Clifton</span>
+            <span class="leader-title">VP, Engineering</span>
+            <div class="leader-social">
+              <a href="#"><img src="assets/icon-li-badge.svg" alt="LinkedIn"></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="leader-card">
+          <div class="leader-photo"><img src="assets/leader-11.png" alt="Ben Grossman"></div>
+          <div class="leader-info">
+            <span class="leader-name">Ben Grossman</span>
+            <span class="leader-title">VP, Marketing</span>
+            <div class="leader-social">
+              <a href="#"><img src="assets/icon-li-badge.svg" alt="LinkedIn"></a>
+              <a href="#"><img src="assets/icon-x-badge.svg" alt="X"></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="leader-card">
+          <div class="leader-photo"><img src="assets/leader-12.png" alt="Yuxin Wu"></div>
+          <div class="leader-info">
+            <span class="leader-name">Yuxin Wu</span>
+            <span class="leader-title">VP, Product Design</span>
+            <div class="leader-social">
+              <a href="#"><img src="assets/icon-li-badge.svg" alt="LinkedIn"></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="leader-card">
+          <div class="leader-photo"><img src="assets/leader-13.png" alt="Justin Schmidt"></div>
+          <div class="leader-info">
+            <span class="leader-name">Justin Schmidt</span>
+            <span class="leader-title">Advisor</span>
+            <div class="leader-social">
+              <a href="#"><img src="assets/icon-li-badge.svg" alt="LinkedIn"></a>
+              <a href="#"><img src="assets/icon-x-badge.svg" alt="X"></a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Partners -->
+  <section class="partners">
+    <div class="partners-inner">
+      <div class="partners-header">
+        <span class="partners-eyebrow">Our Partners</span>
+        <h2 class="partners-heading">Network of Top-Tier Partners<br>and Service Providers</h2>
+        <p class="partners-body">The Ondo Ecosystem is the set of partners aligned with this mission, a network of strong partnerships with leading onchain providers across liquidity, custody, and other key onchain services. This directory helps us shine the spotlight on these exceptional partners and helps our clients find reputable players that can help them achieve their goals.</p>
+        <a href="#" class="partners-btn">Explore Ecosystem</a>
+      </div>
+      <div class="partners-grid">
+        <div class="partner-tile"><img src="assets/partner-noble.svg" alt="Noble"></div>
+        <div class="partner-tile"><img src="assets/partner-plume.svg" alt="Plume"></div>
+        <div class="partner-tile"><img src="assets/partner-sphere.svg" alt="Sphere Finance"></div>
+        <div class="partner-tile"><img src="assets/partner-stonex.svg" alt="StoneX"></div>
+        <div class="partner-tile"><img src="assets/partner-supra.svg" alt="SUPRA"></div>
+        <div class="partner-tile"><img src="assets/partner-switchboard.svg" alt="Switchboard"></div>
+        <div class="partner-tile"><img src="assets/partner-wisdomtree.svg" alt="WisdomTree"></div>
+        <div class="partner-tile"><img src="assets/partner-xrp-ledger.svg" alt="XRP Ledger"></div>
+        <div class="partner-tile"><img src="assets/partner-blackrock.svg" alt="BlackRock"></div>
+        <div class="partner-tile"><img src="assets/partner-ripple.svg" alt="Ripple"></div>
+        <div class="partner-tile"><img src="assets/partner-franklin-templeton.svg" alt="Franklin Templeton"></div>
+        <div class="partner-tile"><img src="assets/partner-sui.svg" alt="Sui"></div>
+        <div class="partner-tile"><img src="assets/partner-aptos.svg" alt="Aptos"></div>
+        <div class="partner-tile"><img src="assets/partner-jupiter.svg" alt="Jupiter"></div>
+        <div class="partner-tile"><img src="assets/partner-coinbase.svg" alt="Coinbase"></div>
+        <div class="partner-tile"><img src="assets/partner-phantom.svg" alt="Phantom"></div>
+        <div class="partner-tile"><img src="assets/partner-solana.svg" alt="Solana"></div>
+        <div class="partner-tile"><img src="assets/partner-polygon.svg" alt="Polygon"></div>
+        <div class="partner-tile"><img src="assets/partner-arbitrum.svg" alt="Arbitrum"></div>
+        <div class="partner-tile"><img src="assets/partner-chainlink.svg" alt="Chainlink"></div>
+        <div class="partner-tile"><img src="assets/partner-pyth.svg" alt="PYTH"></div>
+        <div class="partner-tile"><img src="assets/partner-fireblocks.svg" alt="Fireblocks"></div>
+        <div class="partner-tile"><img src="assets/partner-layerzero.svg" alt="LayerZero"></div>
+        <div class="partner-tile"><img src="assets/partner-metamask.svg" alt="MetaMask"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="careers" id="careers-section">
     <div class="careers-inner">
 
       <!-- Title -->
+      <!-- Title card -->
       <div class="careers-title">
-        <span class="careers-eyebrow">Careers at Ondo</span>
-        <h1 class="careers-heading">Come Join Our Decentralized<br>But Tight-Knit Team</h1>
+        <div class="careers-title-bg">
+          <img src="assets/careers-bg.png" alt="">
+          <div class="careers-title-overlay"></div>
+        </div>
+        <div class="careers-title-content">
+          <span class="careers-eyebrow">Careers at Ondo</span>
+          <h1 class="careers-heading">Come Join Our Decentralized<br>But Tight-Knit Team</h1>
+        </div>
       </div>
 
       <!-- Job board -->
-      <div class="job-board">
+      <div class="job-board" id="job-board">
 
         <!-- Search row -->
         <div class="search-row">
@@ -713,14 +1479,64 @@
         </div><!-- /faq-table -->
       </div><!-- /job-board -->
 
-      <!-- Team photo -->
-      <div class="team-photo">
-        <img src="assets/team-photo.png" alt="Ondo team">
-      </div>
 
     </div>
   </div>
 </div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-main">
+    <div class="footer-inner">
+      <div class="footer-nav">
+        <div class="footer-col">
+          <span class="footer-col-heading">Invest</span>
+          <a href="#" class="footer-link">USDY</a>
+          <a href="#" class="footer-link">OUSG</a>
+          <a href="#" class="footer-link">Bridge <img src="assets/icon-external.svg" alt=""></a>
+          <a href="#" class="footer-link">Convert <img src="assets/icon-external.svg" alt=""></a>
+          <a href="#" class="footer-link">Ondo Stocks</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-heading">Partners</span>
+          <a href="#" class="footer-link">Ecosystem</a>
+          <a href="#" class="footer-link">Foundation <img src="assets/icon-external.svg" alt=""></a>
+          <a href="#" class="footer-link">Flux Finance <img src="assets/icon-external.svg" alt=""></a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-heading">Explore</span>
+          <a href="#" class="footer-link">Insights</a>
+          <a href="#" class="footer-link">Docs <img src="assets/icon-external.svg" alt=""></a>
+          <a href="#" class="footer-link">Trust &amp; Security <img src="assets/icon-external.svg" alt=""></a>
+          <a href="#" class="footer-link">Bug Bounty <img src="assets/icon-external.svg" alt=""></a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-heading">Company</span>
+          <a href="#" class="footer-link">Team</a>
+          <a href="#" class="footer-link">Careers <img src="assets/icon-external.svg" alt=""></a>
+          <a href="#" class="footer-link">Media Kit <img src="assets/icon-external.svg" alt=""></a>
+          <a href="#" class="footer-link">Contact Us</a>
+        </div>
+      </div>
+      <div class="footer-wordmark">
+        <img src="assets/ondo-wordmark.svg" alt="Ondo Finance">
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-inner">
+      <div class="footer-legal">
+        <span class="footer-copy">Ondo © 2026</span>
+        <a href="#" class="footer-legal-link">Terms of Service</a>
+        <a href="#" class="footer-legal-link">Privacy Policy</a>
+      </div>
+      <div class="footer-social">
+        <a href="#"><img src="assets/icon-twitter.svg" alt="X / Twitter"></a>
+        <a href="#"><img src="assets/icon-github.svg" alt="GitHub"></a>
+      </div>
+    </div>
+  </div>
+</footer>
 
 <script>
 // ── Accordion ──
@@ -796,6 +1612,8 @@ function updateDropdownLabel(wrap) {
 }
 
 // ── Filtering ──
+let _filterHideTimer;
+
 function applyFilters() {
   const query = document.querySelector('.search-input-wrap input').value.toLowerCase().trim();
   const selectedTeams = [...document.querySelectorAll('#dd-teams .cb.checked')].map(cb =>
@@ -805,6 +1623,9 @@ function applyFilters() {
     cb.nextElementSibling.textContent.toLowerCase()
   );
   const hasFilters = query || selectedTeams.length > 0 || selectedLocations.length > 0;
+
+  clearTimeout(_filterHideTimer);
+  const toHide = [];
 
   document.querySelectorAll('.dept').forEach(dept => {
     const deptName = dept.querySelector('.dept-name').textContent.toLowerCase();
@@ -822,13 +1643,20 @@ function applyFilters() {
     });
 
     if (!deptHasVisible) {
-      dept.style.display = 'none';
       closeDept(dept);
+      if (hasFilters) toHide.push(dept);
     } else {
       dept.style.display = '';
       hasFilters ? openDept(dept) : closeDept(dept);
     }
   });
+
+  // Hide non-matching depts only after matching ones have finished opening
+  if (hasFilters && toHide.length) {
+    _filterHideTimer = setTimeout(() => {
+      toHide.forEach(dept => { dept.style.display = 'none'; });
+    }, 100);
+  }
 }
 </script>
 </body>
