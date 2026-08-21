@@ -117,6 +117,7 @@
     flex: 1;
     position: relative;
     overflow: hidden;
+    contain: paint;
   }
 
   .nexus-bg-group {
@@ -206,13 +207,13 @@
     flex-direction: column;
     gap: 56px;
     flex: 0 0 auto;
-    cursor: default;
   }
 
   .nexus-top {
     display: flex;
     flex-direction: column;
     gap: 24px;
+    cursor: default;
   }
 
   .nexus-eyebrow {
@@ -1030,12 +1031,12 @@
 
 <!-- ── Hero ── -->
 <section class="nexus-hero">
-  <div class="nexus-blob" aria-hidden="true"></div>
 
   <!-- Background: left panel (vacío) + right panel (tickers) -->
   <div class="nexus-bg" aria-hidden="true">
     <div class="nexus-bg-left"></div>
     <div class="nexus-bg-right">
+      <div class="nexus-blob" aria-hidden="true"></div>
       <div class="nexus-bg-group" id="tickerGroup"></div>
       <div class="nexus-bg-scrim-top"></div>
       <div class="nexus-bg-scrim-bottom"></div>
@@ -1460,20 +1461,26 @@ The communications herein may contain forward-looking statements, including, but
 
 // ── Scroll entrance animations ──
 (function () {
+  function releaseLayer(el) {
+    el.style.transform   = 'none';
+    el.style.transition  = 'none';
+    el.style.willChange  = 'auto';
+    el.classList.remove('anim-fade-up'); // removes class so Chrome drops the compositing layer
+  }
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
         const el = e.target;
         el.classList.add('is-visible');
-        // After transition ends, clear transform so element exits GPU layer
-        // and cursor:pointer works correctly on hover
         el.addEventListener('transitionend', function done(evt) {
           if (evt.propertyName === 'transform') {
-            el.style.transform = 'none';
-            el.style.transition = 'none';
+            releaseLayer(el);
             el.removeEventListener('transitionend', done);
           }
         });
+        // Fallback: force-release after 1.5 s even if transitionend never fires
+        setTimeout(() => releaseLayer(el), 1500);
         observer.unobserve(el);
       }
     });
