@@ -1348,7 +1348,9 @@ The communications herein may contain forward-looking statements, including, but
   const MAX_ANG    = 60;             // ±60° visible fan spread
   const INTERVAL   = 2000;          // ms between steps
   const TRANS_MS   = 700;           // rotation transition ms
-  const BEZIER     = 'cubic-bezier(0.42, 0, 0.13, 0.99)';
+  // Spring: stiffness 100, damping 20, mass 1 → ζ=1 (critically damped, no bounce)
+  // Curve sampled from x(t)=1−e^(−10t)(1+10t), normalized over 700 ms
+  const BEZIER     = 'linear(0,0.049 5%,0.156 10%,0.283 15%,0.408 20%,0.522 25%,0.620 30%,0.702 35%,0.769 40%,0.822 45%,0.864 50%,0.897 55%,0.922 60%,0.941 65%,0.956 70%,0.967 75%,0.976 80%,0.982 85%,0.987 90%,0.990 95%,1)';
   const ITEMS      = 2;             // items per row (second one off-screen, for continuity)
 
   const group = document.getElementById('tickerGroup');
