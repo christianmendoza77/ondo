@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus – Ondo Finance</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<style>
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  ::-webkit-scrollbar { display: none; }
+  * { -ms-overflow-style: none; scrollbar-width: none; }
+
+  body {
+    font-family: 'Gellix', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #000;
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Nav ── */
+  .site-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    padding: 12px 40px;
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 12px;
+    height: 58px;
+    padding: 10px 28px;
+    width: 792px;
+    max-width: 100%;
+    box-shadow: 0px 9px 80px rgba(24,24,24,0.07), 0px 2.01px 17.869px rgba(24,24,24,0.05), 0px 0.599px 5.32px rgba(24,24,24,0.03);
+  }
+
+  .nav-logo { flex: 1 0 0; display: flex; align-items: center; }
+  .nav-logo img { width: 93px; height: 28px; object-fit: contain; display: block; filter: invert(1); }
+
+  .nav-links { display: flex; gap: 24px; align-items: center; justify-content: center; }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .nav-auth { flex: 1 0 0; display: flex; justify-content: flex-end; }
+
+  .nav-launch-btn {
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 8px;
+    background: #1d1d1d;
+    color: #fff;
+    border: none;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .nav-hamburger {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 8px;
+  }
+  .nav-hamburger svg { display: block; }
+
+  /* ── Nexus Hero ── */
+  .nexus-hero {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100dvh; /* fix iOS Safari chrome offset */
+    background: #000;
+    display: flex;
+    align-items: center;
+    padding: 0 44px;
+    overflow: hidden;
+  }
+
+  /* ── Hero Background (left + right panels) ── */
+  .nexus-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    display: flex;
+  }
+
+  .nexus-bg-left {
+    flex: 0 0 46.25%; /* 740/1600 */
+  }
+
+  .nexus-bg-right {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nexus-bg-group {
+    position: absolute;
+    width: 2000px;
+    height: 1778px;
+    left: 0; /* focal point at group x=1000, off-screen to the right — nothing bleeds left */
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .nexus-bg-scrim-top {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 176px;
+    background: linear-gradient(to bottom, #000 0%, transparent 100%);
+    z-index: 2;
+  }
+
+  .nexus-bg-scrim-bottom {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 88px;
+    background: linear-gradient(to top, #000 0%, transparent 100%);
+    z-index: 2;
+  }
+
+  /* Blue blob — peeks 140px from the right edge */
+  .nexus-blob {
+    position: absolute;
+    width: 900px;
+    height: 900px;
+    border-radius: 50%;
+    background: rgba(0, 140, 255, 0.75);
+    filter: blur(500px);
+    top: 50%;
+    transform: translateY(-50%);
+    right: -900px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Ticker rows — radiate from left-center focal point, animated via JS */
+  .trow {
+    position: absolute;
+    left: 0;
+    top: calc(50% - 44px);
+    width: 2000px;
+    height: 88px;
+    display: flex;
+    align-items: center;
+    padding-left: 160px; /* offset items away from left edge */
+    gap: 700px;          /* push second item off-screen; only first is visible */
+    white-space: nowrap;
+    transform-origin: 1000px center; /* rotate around group center (off-screen right) */
+    pointer-events: none;
+  }
+
+  .ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+  }
+
+  .ticker-item img {
+    width: 84px;
+    height: 84px;
+    object-fit: contain;
+    flex-shrink: 0;
+    display: block;
+  }
+
+  .ticker-item span {
+    font-size: 84px;
+    font-weight: 500;
+    line-height: 1.05;
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  /* Left content */
+  .nexus-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+    flex: 0 0 auto;
+  }
+
+  .nexus-top {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .nexus-eyebrow {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    color: #fff;
+  }
+
+  .nexus-heading {
+    font-size: 72px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -2.16px;
+    color: #fff;
+  }
+
+  .nexus-heading-dim {
+    display: block;
+    color: #b1b1b1;
+  }
+
+  .nexus-body {
+    font-family: 'ABC Arizona Text', Georgia, serif;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.32;
+    letter-spacing: -0.2px;
+    color: #b1b1b1;
+    max-width: 368px;
+  }
+
+  /* CTAs */
+  .nexus-ctas {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .nexus-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    padding: 0 16px;
+    background: #fff;
+    color: #000;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+
+  .nexus-btn-primary:hover { background: #e0e0e0; }
+
+  .nexus-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    padding: 0 16px;
+    background: transparent;
+    color: #fff;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.35);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: border-color 0.15s;
+  }
+
+  .nexus-btn-secondary:hover { border-color: rgba(255,255,255,0.65); }
+
+  /* ── How Nexus Works ── */
+  .nexus-how {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 120px;
+    padding: 120px 44px 60px;
+    overflow: hidden;
+  }
+
+  .nexus-how-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .nexus-how-bg img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .nexus-how-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    background-image:
+      linear-gradient(to bottom, #000 0%, transparent 100%),
+      linear-gradient(to bottom, transparent 0%, #000 100%);
+    background-size: 100% 280px, 100% 100%;
+    background-position: top, top;
+    background-repeat: no-repeat, no-repeat;
+  }
+
+  .nexus-how-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    position: relative;
+    width: 100%;
+  }
+
+  .nexus-how-label {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  .nexus-how-titles {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .nexus-how-h2 {
+    font-size: 56px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -1.68px;
+    color: #fff;
+    max-width: 525px;
+  }
+
+  .nexus-how-body {
+    font-family: 'ABC Arizona Text', Georgia, serif;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.32;
+    letter-spacing: -0.2px;
+    color: rgba(240,240,240,0.8);
+    max-width: 548px;
+  }
+
+  .nexus-how-grid {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+    width: 100%;
+    position: relative;
+  }
+
+  /* Cards — base = dark glassmorphism, .is-active = white */
+  .nexus-how-card {
+    flex: 1;
+    min-width: 0;
+    height: 264px;
+    padding: 30px;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: rgba(29, 29, 29, 0.4);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: background 400ms cubic-bezier(0.45, 0, 0.2, 1), border-color 400ms cubic-bezier(0.45, 0, 0.2, 1), backdrop-filter 400ms cubic-bezier(0.45, 0, 0.2, 1);
+  }
+
+  .nexus-how-card.is-active {
+    background: #fff;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border-color: transparent;
+  }
+
+  .nexus-card-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  /* Step number badge */
+  .nexus-step-badge {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+  }
+
+  .nexus-step-badge span {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.12px;
+    white-space: nowrap;
+    z-index: 1;
+    color: #fff;
+    transition: color 400ms cubic-bezier(0.45, 0, 0.2, 1);
+  }
+
+  .nexus-how-card.is-active .nexus-step-badge span { color: #000; }
+
+  /* Progress ring SVG */
+  .nexus-ring-svg {
+    position: absolute;
+    left: 0; top: 0;
+    width: 32px; height: 32px;
+  }
+
+  .nexus-ring-track {
+    stroke: rgba(255, 255, 255, 0.2);
+    transition: stroke 400ms cubic-bezier(0.45, 0, 0.2, 1);
+  }
+
+  .nexus-ring-progress {
+    stroke: rgba(255, 255, 255, 0.8);
+    stroke-dasharray: 91.1;
+    stroke-dashoffset: 91.1;
+    transition: stroke 400ms cubic-bezier(0.45, 0, 0.2, 1);
+  }
+
+  .nexus-how-card.is-active .nexus-ring-track { stroke: rgba(0, 0, 0, 0.15); }
+  .nexus-how-card.is-active .nexus-ring-progress {
+    stroke: #000;
+    animation: ring-progress 5s linear forwards;
+  }
+
+  @keyframes ring-progress {
+    from { stroke-dashoffset: 91.1; }
+    to   { stroke-dashoffset: 0; }
+  }
+
+  .nexus-card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .nexus-card-title {
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.24px;
+    color: #fff;
+    transition: color 400ms cubic-bezier(0.45, 0, 0.2, 1);
+  }
+
+  .nexus-how-card.is-active .nexus-card-title { color: #000; }
+
+  /* Description animated reveal via grid trick */
+  .nexus-card-desc-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 400ms cubic-bezier(0.45, 0, 0.2, 1);
+  }
+
+  .nexus-how-card.is-active .nexus-card-desc-wrap {
+    grid-template-rows: 1fr;
+  }
+
+  .nexus-card-desc-wrap > .nexus-card-desc { overflow: hidden; min-height: 0; }
+
+  .nexus-card-desc {
+    font-family: 'ABC Arizona Text', Georgia, serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #313131;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .site-header { padding: 0; }
+    .site-nav {
+      width: 100%;
+      max-width: 100%;
+      border-radius: 0;
+      height: auto;
+      padding: 12px 20px;
+      box-shadow: none;
+    }
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+
+    .nexus-bg-right { display: none; }
+
+    .nexus-hero {
+      padding: 20px;
+      padding-top: 80px;
+      min-height: 100svh;
+    }
+    .nexus-heading { font-size: 44px; letter-spacing: -1.5px; }
+    .nexus-body { font-size: 17px; }
+    .nexus-ctas { flex-wrap: wrap; }
+
+    .nexus-how { padding: 80px 20px 40px; gap: 80px; }
+    .nexus-how-h2 { font-size: 36px; letter-spacing: -1px; }
+    .nexus-how-body { font-size: 17px; }
+    .nexus-how-grid { flex-direction: column; }
+    .nexus-how-card { flex: none; width: 100%; height: auto; min-height: 200px; }
+
+    .nexus-why { padding: 80px 20px; gap: 60px; }
+    .nexus-why-h2 { font-size: 36px; letter-spacing: -1px; }
+    .nexus-why-grid { flex-direction: column; }
+    .nexus-why-card { flex: none; width: 100%; }
+
+    .nexus-logos { padding: 80px 20px; gap: 60px; }
+    .nexus-logos-h2 { font-size: 36px; letter-spacing: -1px; }
+    .nexus-logos-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; height: auto; }
+    .nexus-logo-card { height: 100px; }
+  }
+
+  /* ── Why Choose Nexus ── */
+  .nexus-why {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 96px;
+    padding: 120px 44px;
+  }
+
+  .nexus-why-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    width: 769px;
+    max-width: 100%;
+  }
+
+  .nexus-why-eyebrow {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #000;
+  }
+
+  .nexus-why-h2 {
+    font-size: 56px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -1.68px;
+    color: #000;
+    text-align: center;
+    width: 100%;
+  }
+
+  .nexus-why-grid {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .nexus-why-card {
+    flex: 1;
+    min-width: 0;
+    background: #ebf0e7;
+    border-radius: 24px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nexus-why-card-inner {
+    display: flex;
+    flex-direction: column;
+    height: 204px;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .nexus-why-icon {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    display: block;
+    object-fit: contain;
+  }
+
+  .nexus-why-text {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .nexus-why-title {
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.24px;
+    color: #002b20;
+  }
+
+  /* ── Partner Logos ── */
+  .nexus-logos {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 96px;
+    padding: 120px 44px;
+  }
+
+  .nexus-logos-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+  }
+
+  .nexus-logos-eyebrow {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #000;
+  }
+
+  .nexus-logos-h2 {
+    font-size: 56px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -1.68px;
+    color: #000;
+  }
+
+  .nexus-logos-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 12px;
+    width: 100%;
+    height: 252px;
+  }
+
+  .nexus-logo-card {
+    background: #f0f0f0;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow: hidden;
+  }
+
+  .nexus-logo-card img {
+    height: 40px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* ── Closing CTA ── */
+  .nexus-cta-wrapper {
+    background: #fff;
+    padding: 44px;
+  }
+
+  .nexus-cta {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    padding: 88px 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nexus-cta-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .nexus-cta-bg img:nth-child(1),
+  .nexus-cta-bg img:nth-child(2) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .nexus-cta-bg-photo {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .nexus-cta-bg-photo img {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 406.48%;
+    top: -153.24%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .nexus-cta-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .nexus-cta-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    width: 602px;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .nexus-cta-text {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .nexus-cta-heading {
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -1.44px;
+  }
+
+  .nexus-cta-heading .line1 { color: #fff; display: block; }
+  .nexus-cta-heading .line2 { color: rgba(240, 240, 240, 0.7); display: block; }
+
+  .nexus-cta-body {
+    font-family: 'ABC Arizona Text', Georgia, serif;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.32;
+    letter-spacing: -0.2px;
+    color: #fff;
+  }
+
+  .nexus-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    padding: 0 16px;
+    background: #fff;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .nexus-cta-btn:hover { background: #f0f0f0; }
+
+  @media (max-width: 768px) {
+    .nexus-cta-wrapper { padding: 20px; }
+    .nexus-cta { padding: 60px 24px; }
+    .nexus-cta-heading { font-size: 36px; letter-spacing: -1px; }
+    .nexus-cta-body { font-size: 17px; white-space: normal; }
+  }
+
+  /* ── Footer ── */
+  .nexus-footer {
+    background: #000;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nexus-footer-main {
+    display: flex;
+    flex-direction: column;
+    gap: 112px;
+    padding: 44px;
+  }
+
+  /* Nav columns */
+  .nexus-footer-nav {
+    display: flex;
+    gap: 36px;
+    align-items: flex-start;
+  }
+
+  .nexus-footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .nexus-footer-col-title {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #fff;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .nexus-footer-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 0;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #b1b1b1;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .nexus-footer-link:hover { color: #fff; }
+
+  .nexus-footer-link img {
+    width: 16px;
+    height: 16px;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  /* Legal text */
+  .nexus-footer-legal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .nexus-footer-legal-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .nexus-footer-legal-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    margin: 0;
+  }
+
+  .nexus-footer-legal-text {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.12px;
+    color: #b1b1b1;
+    white-space: pre-wrap;
+  }
+
+  .nexus-footer-legal-text a {
+    color: #b1b1b1;
+    text-decoration: underline;
+  }
+
+  /* Big wordmark */
+  .nexus-footer-wordmark {
+    width: 100%;
+    aspect-ratio: 1512 / 183.7;
+    display: block;
+    object-fit: contain;
+  }
+
+  /* Bottom bar */
+  .nexus-footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 44px;
+    height: 76px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .nexus-footer-bottom-left {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .nexus-footer-copyright {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.14px;
+    color: #fff;
+  }
+
+  .nexus-footer-legal-link {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.14px;
+    color: #b1b1b1;
+    text-decoration: none;
+  }
+
+  .nexus-footer-legal-link:hover { color: #fff; }
+
+  .nexus-footer-socials {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .nexus-footer-social-link {
+    display: flex;
+    align-items: center;
+    opacity: 0.7;
+  }
+
+  .nexus-footer-social-link:hover { opacity: 1; }
+
+  .nexus-footer-social-link img {
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .nexus-footer-main { padding: 32px 20px; gap: 60px; }
+    .nexus-footer-nav { flex-wrap: wrap; gap: 24px; }
+    .nexus-footer-legal { grid-template-columns: 1fr; }
+    .nexus-footer-bottom { padding: 0 20px; flex-direction: column; height: auto; gap: 16px; padding: 20px; }
+  }
+
+  /* ── Scroll-triggered entrance animations ── */
+  .anim-fade-up {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s cubic-bezier(0.45, 0, 0.2, 1),
+                transform 0.7s cubic-bezier(0.45, 0, 0.2, 1);
+  }
+  .anim-fade-up.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Card stagger */
+  .anim-card:nth-child(2) { transition-delay: 80ms; }
+  .anim-card:nth-child(3) { transition-delay: 160ms; }
+  .anim-card:nth-child(4) { transition-delay: 240ms; }
+
+  .nexus-why-desc {
+    font-family: 'ABC Arizona Text', Georgia, serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #002b20;
+    opacity: 0.8;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<header class="site-header">
+  <nav class="site-nav">
+    <div class="nav-logo">
+      <img src="assets/ondo-logo.svg" alt="Ondo">
+    </div>
+    <div class="nav-links">
+      <a class="nav-link" href="#">Products</a>
+      <a class="nav-link" href="#">Resources</a>
+      <a class="nav-link" href="#">Ecosystem</a>
+      <a class="nav-link" href="#">About</a>
+    </div>
+    <div class="nav-auth">
+      <button class="nav-launch-btn">Launch App</button>
+      <button class="nav-hamburger" aria-label="Open menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 6H20M4 12H20M4 18H20" stroke="#000" stroke-width="1" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<!-- ── Hero ── -->
+<section class="nexus-hero">
+  <div class="nexus-blob" aria-hidden="true"></div>
+
+  <!-- Background: left panel (vacío) + right panel (tickers) -->
+  <div class="nexus-bg" aria-hidden="true">
+    <div class="nexus-bg-left"></div>
+    <div class="nexus-bg-right">
+      <div class="nexus-bg-group" id="tickerGroup"></div>
+      <div class="nexus-bg-scrim-top"></div>
+      <div class="nexus-bg-scrim-bottom"></div>
+    </div>
+  </div>
+
+  <!-- Left content -->
+  <div class="nexus-content">
+    <div class="nexus-top anim-fade-up">
+      <p class="nexus-eyebrow">Nexus</p>
+      <h1 class="nexus-heading">
+        Our Technology,
+        <span class="nexus-heading-dim">Your Tokens</span>
+      </h1>
+      <p class="nexus-body">Instant liquidity infrastructure for regulated issuers of tokenized funds.</p>
+    </div>
+    <div class="nexus-ctas anim-fade-up" style="transition-delay:150ms">
+      <a href="#" class="nexus-btn-primary">Talk to our team</a>
+      <a href="#" class="nexus-btn-secondary">See how it works</a>
+    </div>
+  </div>
+
+</section>
+
+<!-- ── How Nexus Works ── -->
+<section class="nexus-how">
+
+  <!-- Background photo + overlays -->
+  <div class="nexus-how-bg" aria-hidden="true">
+    <img src="assets/nexus-how-bg.png" alt="">
+    <div class="nexus-how-bg-overlay"></div>
+  </div>
+
+  <!-- Header -->
+  <div class="nexus-how-header">
+    <p class="nexus-how-label anim-fade-up">How Nexus works</p>
+    <div class="nexus-how-titles">
+      <h2 class="nexus-how-h2 anim-fade-up" style="transition-delay:80ms">Instant Redemptions, Without the Wait</h2>
+      <p class="nexus-how-body anim-fade-up" style="transition-delay:160ms">Nexus lets your tokenholders redeem into stablecoins in near-real time, while Ondo provides the liquidity behind the scenes.</p>
+    </div>
+  </div>
+
+  <!-- Cards -->
+  <div class="nexus-how-grid">
+
+    <!-- 01 -->
+    <div class="nexus-how-card" data-ci="0">
+      <div class="nexus-card-inner">
+        <div class="nexus-step-badge">
+          <svg class="nexus-ring-svg" viewBox="0 0 32 32" fill="none">
+            <circle class="nexus-ring-track" cx="16" cy="16" r="14.5" stroke-width="1"/>
+            <circle class="nexus-ring-progress" cx="16" cy="16" r="14.5" stroke-width="1"
+                    stroke-linecap="round" transform="rotate(-90 16 16)"/>
+          </svg>
+          <span>01</span>
+        </div>
+        <div class="nexus-card-text">
+          <p class="nexus-card-title">Request Redemption</p>
+          <div class="nexus-card-desc-wrap">
+            <p class="nexus-card-desc">Nexus provides instant liquidity and settles in stablecoins (e.g. USDC).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 -->
+    <div class="nexus-how-card" data-ci="1">
+      <div class="nexus-card-inner">
+        <div class="nexus-step-badge">
+          <svg class="nexus-ring-svg" viewBox="0 0 32 32" fill="none">
+            <circle class="nexus-ring-track" cx="16" cy="16" r="14.5" stroke-width="1"/>
+            <circle class="nexus-ring-progress" cx="16" cy="16" r="14.5" stroke-width="1"
+                    stroke-linecap="round" transform="rotate(-90 16 16)"/>
+          </svg>
+          <span>02</span>
+        </div>
+        <div class="nexus-card-text">
+          <p class="nexus-card-title">Provide Instant Liquidity</p>
+          <div class="nexus-card-desc-wrap">
+            <p class="nexus-card-desc">Nexus provides instant liquidity and settles in stablecoins (e.g. USDC).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 -->
+    <div class="nexus-how-card" data-ci="2">
+      <div class="nexus-card-inner">
+        <div class="nexus-step-badge">
+          <svg class="nexus-ring-svg" viewBox="0 0 32 32" fill="none">
+            <circle class="nexus-ring-track" cx="16" cy="16" r="14.5" stroke-width="1"/>
+            <circle class="nexus-ring-progress" cx="16" cy="16" r="14.5" stroke-width="1"
+                    stroke-linecap="round" transform="rotate(-90 16 16)"/>
+          </svg>
+          <span>03</span>
+        </div>
+        <div class="nexus-card-text">
+          <p class="nexus-card-title">Manage &amp; Rebalance</p>
+          <div class="nexus-card-desc-wrap">
+            <p class="nexus-card-desc">Ondo manages the resulting inventory and rebalances the liquidity buffer.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ── Why Choose Nexus ── -->
+<section class="nexus-why">
+
+  <div class="nexus-why-header">
+    <p class="nexus-why-eyebrow anim-fade-up">Why choose Nexus</p>
+    <h2 class="nexus-why-h2 anim-fade-up" style="transition-delay:80ms">Built for Regulated Issuers</h2>
+  </div>
+
+  <div class="nexus-why-grid">
+
+    <div class="nexus-why-card anim-fade-up anim-card">
+      <div class="nexus-why-card-inner">
+        <img class="nexus-why-icon" src="assets/nexus-icon-speed.svg" alt="">
+        <div class="nexus-why-text">
+          <p class="nexus-why-title">Speed</p>
+          <p class="nexus-why-desc">Near-instant, 24/7 stablecoin redemptions for your tokenholders.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="nexus-why-card anim-fade-up anim-card">
+      <div class="nexus-why-card-inner">
+        <img class="nexus-why-icon" src="assets/nexus-icon-trust.svg" alt="">
+        <div class="nexus-why-text">
+          <p class="nexus-why-title">Trust</p>
+          <p class="nexus-why-desc">Institutional-grade infrastructure with security, transparency, and compliance.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="nexus-why-card anim-fade-up anim-card">
+      <div class="nexus-why-card-inner">
+        <img class="nexus-why-icon" src="assets/nexus-icon-control.svg" alt="">
+        <div class="nexus-why-text">
+          <p class="nexus-why-title">Control</p>
+          <p class="nexus-why-desc">KYC/KYB, custody, disclosures, reporting, and operational guardrails.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="nexus-why-card anim-fade-up anim-card">
+      <div class="nexus-why-card-inner">
+        <img class="nexus-why-icon" src="assets/nexus-icon-scale.svg" alt="">
+        <div class="nexus-why-text">
+          <p class="nexus-why-title">Scale</p>
+          <p class="nexus-why-desc">A single path from token issuance to real tokenholder liquidity, without stitching together vendors.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ── Partner Logos ── -->
+<section class="nexus-logos">
+
+  <div class="nexus-logos-header">
+    <p class="nexus-logos-eyebrow anim-fade-up">Trusted by Institution Partners</p>
+    <h2 class="nexus-logos-h2 anim-fade-up" style="transition-delay:80ms">Network of Top-Tier Partners</h2>
+  </div>
+
+  <div class="nexus-logos-grid">
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:0ms"><img src="assets/nexus-logo-noble.svg" alt="Noble"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:50ms"><img src="assets/nexus-logo-plume.svg" alt="Plume"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:100ms"><img src="assets/nexus-logo-sphere.svg" alt="Sphere Finance"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:150ms"><img src="assets/nexus-logo-stonex.svg" alt="StoneX"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:200ms"><img src="assets/nexus-logo-supra.svg" alt="Supra"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:250ms"><img src="assets/nexus-logo-switchboard.svg" alt="Switchboard"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:300ms"><img src="assets/nexus-logo-wisdomtree.svg" alt="WisdomTree"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:350ms"><img src="assets/nexus-logo-xrpledger.svg" alt="XRP Ledger"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:400ms"><img src="assets/nexus-logo-blackrock.svg" alt="BlackRock"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:450ms"><img src="assets/nexus-logo-ripple.svg" alt="Ripple"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:500ms"><img src="assets/nexus-logo-franklin.svg" alt="Franklin Templeton"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:550ms"><img src="assets/nexus-logo-sui.svg" alt="Sui"></div>
+  </div>
+
+</section>
+
+<!-- ── Closing CTA ── -->
+<div class="nexus-cta-wrapper">
+  <div class="nexus-cta">
+
+    <div class="nexus-cta-bg" aria-hidden="true">
+      <img src="assets/nexus-cta-bg1.png" alt="">
+      <img src="assets/nexus-cta-bg2.png" alt="">
+      <div class="nexus-cta-bg-photo">
+        <img src="assets/nexus-cta-bg3.png" alt="">
+      </div>
+      <div class="nexus-cta-overlay"></div>
+    </div>
+
+    <div class="nexus-cta-content anim-fade-up">
+      <div class="nexus-cta-text">
+        <p class="nexus-cta-heading">
+          <span class="line1">Bring instant liquidity</span>
+          <span class="line2">to your tokenized fund</span>
+        </p>
+        <p class="nexus-cta-body">Talk to our team about integrating Nexus for your investors.</p>
+      </div>
+      <a href="#" class="nexus-cta-btn">Contact us</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Footer ── -->
+<footer class="nexus-footer">
+  <div class="nexus-footer-main">
+
+    <!-- Nav columns -->
+    <nav class="nexus-footer-nav">
+      <div class="nexus-footer-col">
+        <span class="nexus-footer-col-title">Invest</span>
+        <a href="#" class="nexus-footer-link">USDY</a>
+        <a href="#" class="nexus-footer-link">OUSG</a>
+        <a href="#" class="nexus-footer-link">Bridge</a>
+        <a href="#" class="nexus-footer-link">Convert</a>
+        <a href="#" class="nexus-footer-link">Global Markets</a>
+      </div>
+      <div class="nexus-footer-col">
+        <span class="nexus-footer-col-title">Partners</span>
+        <a href="#" class="nexus-footer-link">Ecosystem</a>
+        <a href="#" class="nexus-footer-link">Foundation <img src="assets/nexus-footer-external.svg" alt=""></a>
+        <a href="#" class="nexus-footer-link">Flux Finance <img src="assets/nexus-footer-external.svg" alt=""></a>
+      </div>
+      <div class="nexus-footer-col">
+        <span class="nexus-footer-col-title">Explore</span>
+        <a href="#" class="nexus-footer-link">Insights</a>
+        <a href="#" class="nexus-footer-link">Docs <img src="assets/nexus-footer-external.svg" alt=""></a>
+        <a href="#" class="nexus-footer-link">Trust &amp; Security <img src="assets/nexus-footer-external.svg" alt=""></a>
+        <a href="#" class="nexus-footer-link">Bug Bounty <img src="assets/nexus-footer-external.svg" alt=""></a>
+      </div>
+      <div class="nexus-footer-col">
+        <span class="nexus-footer-col-title">Company</span>
+        <a href="#" class="nexus-footer-link">Team</a>
+        <a href="#" class="nexus-footer-link">Careers <img src="assets/nexus-footer-external.svg" alt=""></a>
+        <a href="#" class="nexus-footer-link">Media Kit <img src="assets/nexus-footer-external.svg" alt=""></a>
+        <a href="#" class="nexus-footer-link">Contact Us</a>
+      </div>
+    </nav>
+
+    <!-- Legal text -->
+    <div class="nexus-footer-legal">
+      <div class="nexus-footer-legal-col">
+        <hr class="nexus-footer-legal-divider">
+        <p class="nexus-footer-legal-text">* The tokenized assets referenced herein (including Global Markets tokens including Ondo tokenized stocks and Ondo tokenized ETFs, USDY tokens and OUSG tokens) (the "Tokens") have not been registered under the US Securities Act of 1933, as amended ("Act") or the securities or financial instrument laws of any other jurisdiction. The Tokens may not be offered or sold in the United States or to US persons unless registered under the Act or an exemption from the registration requirements thereof is available. In certain jurisdictions, including the European Economic Area, the United Kingdom and Switzerland, the Tokens are offered and sold only to qualified investors or professional clients, as the case may be (or that jurisdiction's analogue thereof). Other jurisdiction-based prohibitions and restrictions apply. See docs.ondo.finance for details.
+
+Global Markets tokens provide their holders with economic exposure to the value of their underlying publicly traded assets, including the value of dividends (less applicable tax withholdings). However, the Tokens are not themselves stocks or ETFs, and they do not provide their holders with rights to hold or receive their respective underlying assets.
+
+The communications on this web page are only intended for actual or potential business relationships or technical integrations with respect to Tokens. Nothing herein constitutes any offer to sell, or any solicitation of an offer to buy, any assets (including any Tokens or assets that may be deployed to or accessible via Ondo Chain). Nothing herein constitutes investment, legal, tax or financial advice. Acquiring Tokens involves risks. A holder of Tokens may incur losses, including total loss of their purchase price. Past performance may not be (and for the Tokens will not be) an indication of future results. Investors are responsible for conducting their own research, investigation, verification, checks or consultation for professional or investment advice. Ondo Capital Management LLC (the "Adviser"), the investment adviser of the OUSG issuer (the "Fund") is a Registered Investment Adviser registered with the U.S. Securities and Exchange Commission ("SEC"). The Adviser's current written disclosure statement (Form ADV Part 2A) discussing its advisory services and fees is available upon request or at the SEC's Investment Adviser Public Disclosure website (www.adviserinfo.sec.gov). Registration as an investment adviser does not imply a certain level of skill or training. The Adviser shall not be responsible for any errors or omissions, or for the results obtained from the use of the information provided by the Adviser, the Fund or any of their respective affiliates, control persons, agents or representatives. The Token issuers, their affiliates, their respective shareholders and members, and their respective directors, officers, employees, consultants, agents and representatives (the "Ondo Persons") do not endorse, the Ondo Persons do not make any representation or warranty whatsoever (express or implied, including but not limited to any warranty of merchantability, fitness for a particular purpose, or non-infringement) regarding, and THE ONDO PERSONS SHALL NOT HAVE ANY LIABILITY WHATSOEVER WITH RESPECT TO ANYONE'S USE OF, any third-party products, services or technologies referenced herein.</p>
+      </div>
+      <div class="nexus-footer-legal-col">
+        <hr class="nexus-footer-legal-divider">
+        <p class="nexus-footer-legal-text">Additional terms and restrictions apply. See <a href="#">docs.ondo.finance/legal/terms-of-service</a>, <a href="#">docs.ondo.finance</a>, <a href="#">ondo.finance</a> and (as applicable) the Token offering documents for details.
+
+The communications herein may contain forward-looking statements, including, but not limited to, statements regarding future financial performance, business strategies, or expectations for the growth or development of Ondo Finance, any Token Issuer, or any of their respective affiliates (each, an "Applicable Entity"). These statements are based on management's current expectations, estimates, projections, and beliefs, and are subject to a number of risks, uncertainties, and assumptions that could cause actual results to differ materially from those anticipated. Forward-looking statements can be identified by the use of terminology such as "may," "will," "should," "expect," "intend," "plan," "anticipate," "believe," "estimate," "predict," "potential," "continue," or the negative of these terms or other similar expressions. Factors that could cause actual results to differ materially from those contemplated by the forward-looking statements include, but are not limited to, the following: economic, competitive, legal, governmental, and technological factors affecting the operations, markets, products, services, or prices of any Applicable Entity. No Applicable Entity undertakes any obligation to update or revise any forward-looking statements, whether as a result of new information, future events, or otherwise, except as required by law.
+
+¹ The proportion of unique blockchain addresses holding our token compared to the total number of addresses holding tokens across all competitors.
+
+² APY (Annual Percentage Yield) is accurate as of 2025-11-26. For USDY, APY is set monthly by Ondo in accordance with the USDY governing documents. For OUSG, APY is calculated by annualizing the increase in price over the past 30 days.
+
+³ Example rates only. Actual rates may vary over time.</p>
+      </div>
+    </div>
+
+    <!-- Big wordmark -->
+    <img class="nexus-footer-wordmark anim-fade-up" src="assets/nexus-footer-wordmark.svg" alt="Ondo Finance">
+
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="nexus-footer-bottom">
+    <div class="nexus-footer-bottom-left">
+      <span class="nexus-footer-copyright">Ondo © 2025</span>
+      <a href="#" class="nexus-footer-legal-link">Terms of Service</a>
+      <a href="#" class="nexus-footer-legal-link">Privacy Policy</a>
+    </div>
+    <div class="nexus-footer-socials">
+      <a href="#" class="nexus-footer-social-link"><img src="assets/nexus-footer-twitter.svg" alt="X / Twitter"></a>
+      <a href="#" class="nexus-footer-social-link"><img src="assets/nexus-footer-github.svg" alt="GitHub"></a>
+      <a href="#" class="nexus-footer-social-link"><img src="assets/nexus-footer-telegram.svg" alt="Telegram"></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const TOKENS = [
+    { name: 'RLUSD', icon: 'assets/nexus-rlusd.svg' },
+    { name: 'OUSG',  icon: 'assets/nexus-ousg.svg'  },
+    { name: 'ULTRA', icon: 'assets/nexus-ultra.svg' },
+    { name: 'BUIDL', icon: 'assets/nexus-buidl.svg' },
+    { name: 'PYUSD', icon: 'assets/nexus-pyusd.svg' },
+    { name: 'BENJI', icon: 'assets/nexus-benji.svg' },
+    { name: 'USDC',  icon: 'assets/nexus-usdc.svg'  },
+  ];
+  const N          = TOKENS.length;  // 7
+  const STEP       = 15;             // degrees per step
+  const MAX_ANG    = 60;             // ±60° visible fan spread
+  const INTERVAL   = 2000;          // ms between steps
+  const TRANS_MS   = 700;           // rotation transition ms
+  const BEZIER     = 'cubic-bezier(0.42, 0, 0.13, 0.99)';
+  const ITEMS      = 2;             // items per row (second one off-screen, for continuity)
+
+  const group = document.getElementById('tickerGroup');
+  const rows  = [];  // sorted by angle (ascending), each: { el, angle }
+  let   nextTIdx = 5; // first token for recycled rows (BENJI, after initial +60° PYUSD)
+
+  /* Build one row element */
+  function makeRow(tokenIdx, angle) {
+    const tok = TOKENS[tokenIdx % N];
+    const el  = document.createElement('div');
+    el.className = 'trow';
+    el.style.transform = `rotate(${angle}deg)`;
+    el.style.opacity   = angle === 0 ? '1' : '0.3';
+    for (let i = 0; i < ITEMS; i++) {
+      const item = document.createElement('div');
+      item.className = 'ticker-item';
+      item.innerHTML  = `<img src="${tok.icon}" alt=""><span>${tok.name}</span>`;
+      el.appendChild(item);
+    }
+    return el;
+  }
+
+  /* Swap a row's token in-place */
+  function updateToken(el, tokenIdx) {
+    const tok = TOKENS[tokenIdx % N];
+    el.querySelectorAll('.ticker-item').forEach(item => {
+      item.querySelector('img').src         = tok.icon;
+      item.querySelector('span').textContent = tok.name;
+    });
+  }
+
+  /* Init 9 rows: -60° to +60° in steps of 15° */
+  for (let a = -MAX_ANG; a <= MAX_ANG; a += STEP) {
+    // 0°→RLUSD(0), +15°→OUSG(1), +30°→ULTRA(2), +45°→BUIDL(3), +60°→PYUSD(4)
+    // -15°→USDC(6), -30°→BENJI(5), -45°→PYUSD(4), -60°→BUIDL(3)
+    const offset   = Math.round(a / STEP);
+    const tokenIdx = ((offset % N) + N) % N;
+    const el       = makeRow(tokenIdx, a);
+    group.appendChild(el);
+    rows.push({ el, angle: a });
+  }
+
+  /* Step: rotate everything -15°, recycle the off-screen row */
+  function step() {
+    // Move all rows by -STEP
+    rows.forEach(r => {
+      r.angle -= STEP;
+      r.el.style.transition = `transform ${TRANS_MS}ms ${BEZIER}, opacity 0.45s ease`;
+      r.el.style.transform  = `rotate(${r.angle}deg)`;
+      r.el.style.opacity    = r.angle === 0 ? '1' : '0.3';
+    });
+
+    // rows[0] just went to -75° (off-screen) → recycle after transition
+    const gone = rows.shift();
+    setTimeout(() => {
+      gone.el.style.transition = 'none';
+      gone.angle               = MAX_ANG;
+      gone.el.style.transform  = `rotate(${MAX_ANG}deg)`;
+      gone.el.style.opacity    = '0.3';
+      updateToken(gone.el, nextTIdx);
+      nextTIdx = (nextTIdx + 1) % N;
+      // re-enable transition after two frames
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        gone.el.style.transition = `transform ${TRANS_MS}ms ${BEZIER}, opacity 0.45s ease`;
+      }));
+      rows.push(gone);
+    }, TRANS_MS + 60);
+  }
+
+  setInterval(step, INTERVAL);
+})();
+
+// ── How Nexus Works — card cycler ──
+(function () {
+  const DURATION = 5000;
+  const cards = Array.from(document.querySelectorAll('.nexus-how-card'));
+  let active = 1; // start with card 02 (middle)
+
+  function activate(idx) {
+    cards.forEach(c => c.classList.remove('is-active'));
+    const card = cards[idx];
+    // Force animation restart on the progress ring
+    const ring = card.querySelector('.nexus-ring-progress');
+    ring.style.animation = 'none';
+    void ring.offsetWidth;
+    ring.style.animation = '';
+    card.classList.add('is-active');
+    active = idx;
+  }
+
+  let timer;
+
+  function startTimer() {
+    clearInterval(timer);
+    timer = setInterval(() => activate((active + 1) % cards.length), DURATION);
+  }
+
+  cards.forEach((card, idx) => {
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', () => {
+      if (idx === active) return;
+      activate(idx);
+      startTimer();
+    });
+  });
+
+  activate(active);
+  startTimer();
+})();
+
+// ── Scroll entrance animations ──
+(function () {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.anim-fade-up').forEach(el => observer.observe(el));
+  });
+})();
+</script>
+
+</body>
+</html>
