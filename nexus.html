@@ -171,7 +171,7 @@
     padding-left: 160px; /* offset items away from left edge */
     gap: 700px;          /* push second item off-screen; only first is visible */
     white-space: nowrap;
-    transform-origin: 1000px center; /* rotate around group center (off-screen right) */
+    transform-origin: 1115px center;
     pointer-events: none;
   }
 
@@ -206,6 +206,7 @@
     flex-direction: column;
     gap: 56px;
     flex: 0 0 auto;
+    cursor: default;
   }
 
   .nexus-top {
@@ -247,7 +248,7 @@
   /* CTAs */
   .nexus-ctas {
     display: flex;
-    gap: 12px;
+    gap: 24px;
     align-items: center;
   }
 
@@ -275,23 +276,21 @@
   .nexus-btn-secondary {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
     height: 44px;
-    padding: 0 16px;
+    padding: 0;
     background: transparent;
     color: #fff;
-    border-radius: 8px;
     font-family: inherit;
     font-size: 16px;
     font-weight: 500;
     text-decoration: none;
-    border: 1px solid rgba(255,255,255,0.35);
+    border: none;
     cursor: pointer;
     white-space: nowrap;
-    transition: border-color 0.15s;
+    user-select: none;
   }
 
-  .nexus-btn-secondary:hover { border-color: rgba(255,255,255,0.65); }
+  .nexus-btn-secondary:hover { opacity: 0.75; }
 
   /* ── How Nexus Works ── */
   .nexus-how {
@@ -1055,14 +1054,14 @@
     </div>
     <div class="nexus-ctas anim-fade-up" style="transition-delay:150ms">
       <a href="#" class="nexus-btn-primary">Talk to our team</a>
-      <a href="#" class="nexus-btn-secondary">See how it works</a>
+      <a href="#how-nexus-works" class="nexus-btn-secondary" style="cursor:pointer">See how it works</a>
     </div>
   </div>
 
 </section>
 
 <!-- ── How Nexus Works ── -->
-<section class="nexus-how">
+<section class="nexus-how" id="how-nexus-works">
 
   <!-- Background photo + overlays -->
   <div class="nexus-how-bg" aria-hidden="true">
@@ -1464,8 +1463,18 @@ The communications herein may contain forward-looking statements, including, but
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
-        e.target.classList.add('is-visible');
-        observer.unobserve(e.target);
+        const el = e.target;
+        el.classList.add('is-visible');
+        // After transition ends, clear transform so element exits GPU layer
+        // and cursor:pointer works correctly on hover
+        el.addEventListener('transitionend', function done(evt) {
+          if (evt.propertyName === 'transform') {
+            el.style.transform = 'none';
+            el.style.transition = 'none';
+            el.removeEventListener('transitionend', done);
+          }
+        });
+        observer.unobserve(el);
       }
     });
   }, { threshold: 0.12 });
