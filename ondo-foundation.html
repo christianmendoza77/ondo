@@ -965,20 +965,32 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 32px;
+    gap: 24px;
     padding: 32px 24px;
     text-align: center;
     border-right: 1px solid #dedede;
   }
   .pts-item--last { border-right: none; }
 
+  .pts-num-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
   .pts-num {
     font-family: 'ABC Arizona Text', Georgia, serif;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 400;
-    line-height: 1.05;
-    letter-spacing: -0.24px;
+    line-height: 1.32;
+    letter-spacing: -0.2px;
     color: #06070a;
+    text-align: center;
   }
 
   .pts-item-text {
@@ -1619,28 +1631,28 @@
     <!-- 4-column steps list -->
     <div class="pts-list">
       <div class="pts-item">
-        <p class="pts-num">01</p>
+        <div class="pts-num-badge"><p class="pts-num">01</p></div>
         <div class="pts-item-text">
           <p class="pts-item-title">Hold USDY</p>
           <p class="pts-item-desc">Earn points by holding eligible USDY</p>
         </div>
       </div>
       <div class="pts-item">
-        <p class="pts-num">02</p>
+        <div class="pts-num-badge"><p class="pts-num">02</p></div>
         <div class="pts-item-text">
           <p class="pts-item-title">Trade on Ondo Perps</p>
           <p class="pts-item-desc">Earn points through eligible trading activity.</p>
         </div>
       </div>
       <div class="pts-item">
-        <p class="pts-num">03</p>
+        <div class="pts-num-badge"><p class="pts-num">03</p></div>
         <div class="pts-item-text">
           <p class="pts-item-title">Hold tokenized assets</p>
           <p class="pts-item-desc">Earn points by holding eligible stocks and ETFs.</p>
         </div>
       </div>
       <div class="pts-item pts-item--last">
-        <p class="pts-num">04</p>
+        <div class="pts-num-badge"><p class="pts-num">04</p></div>
         <div class="pts-item-text">
           <p class="pts-item-title">Provide liquidity</p>
           <p class="pts-item-desc">Earn points through eligible liquidity pools.</p>
