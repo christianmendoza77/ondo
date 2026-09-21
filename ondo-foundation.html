@@ -267,7 +267,6 @@
     animation: ticker 24s linear infinite;
     will-change: transform;
   }
-  .ticker-track:hover { animation-play-state: paused; }
 
   @keyframes ticker {
     from { transform: translateX(0); }
@@ -443,8 +442,8 @@
 
   /* left: screenshot */
   .eco-panel-img {
-    flex: 0 0 803px;
-    max-width: 60%;
+    flex: 0 0 50%;
+    max-width: 50%;
     height: 560px;
     background: #06070a;
     border-right: 1px solid #323233;
@@ -464,11 +463,13 @@
 
   .eco-panel-screen {
     position: absolute;
-    top: 63px;
-    left: 53px;
-    width: 697px;
-    height: 435px;
-    max-width: calc(100% - 53px);
+    top: 87px;
+    left: 29px;
+    width: 618px;
+    height: 386px;
+    max-width: calc(100% - 29px);
+    border-radius: 12px;
+    overflow: hidden;
     opacity: 0;
     transition: opacity 0.6s cubic-bezier(0.45, 0, 0.2, 1);
   }
@@ -492,7 +493,7 @@
   .eco-panel-content {
     position: absolute;
     inset: 0;
-    padding: 40px;
+    padding: 48px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -524,14 +525,15 @@
     display: flex;
     flex-direction: column;
     gap: 40px;
+    width: 464px;
+    max-width: 100%;
   }
 
   .eco-panel-text {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 458px;
-    max-width: 100%;
+    width: 100%;
   }
 
   .eco-panel-h3 {
