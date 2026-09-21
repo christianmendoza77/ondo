@@ -448,7 +448,10 @@
     background: #06070a;
     border-right: 1px solid #323233;
     position: relative;
-    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 24px;
   }
 
   .eco-panel-grid {
@@ -461,15 +464,17 @@
     background-repeat: repeat;
   }
 
-  .eco-panel-screen {
-    position: absolute;
-    top: 87px;
-    left: 29px;
-    width: 618px;
-    height: 386px;
-    max-width: calc(100% - 29px);
+  .eco-panel-screens {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 618 / 386;
     border-radius: 12px;
     overflow: hidden;
+  }
+
+  .eco-panel-screen {
+    position: absolute;
+    inset: 0;
     opacity: 0;
     transition: opacity 0.6s cubic-bezier(0.45, 0, 0.2, 1);
   }
@@ -1340,14 +1345,16 @@
         <!-- image side: screens stack, fade between them -->
         <div class="eco-panel-img">
           <div class="eco-panel-grid"></div>
-          <div class="eco-panel-screen is-active">
-            <img src="assets/of-screen-perps.png" alt="Ondo Perps interface">
-          </div>
-          <div class="eco-panel-screen">
-            <img src="assets/of-screen-stocks.png" alt="Ondo Stocks interface">
-          </div>
-          <div class="eco-panel-screen">
-            <img src="assets/of-screen-usdy.png" alt="USDY interface">
+          <div class="eco-panel-screens">
+            <div class="eco-panel-screen is-active">
+              <img src="assets/of-screen-perps.png" alt="Ondo Perps interface">
+            </div>
+            <div class="eco-panel-screen">
+              <img src="assets/of-screen-stocks.png" alt="Ondo Stocks interface">
+            </div>
+            <div class="eco-panel-screen">
+              <img src="assets/of-screen-usdy.png" alt="USDY interface">
+            </div>
           </div>
         </div>
 
