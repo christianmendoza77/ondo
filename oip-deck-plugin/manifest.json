@@ -1,0 +1,7 @@
+{
+  "name": "OIP Deck Creator",
+  "id": "oip-deck-creator-2026",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figma"]
+}
