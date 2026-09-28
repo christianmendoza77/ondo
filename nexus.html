@@ -426,7 +426,7 @@
 
   .nexus-how-num {
     font-family: 'ABC Arizona Text', Georgia, serif;
-    font-size: 36px;
+    font-size: 28px;
     font-weight: 400;
     line-height: 1.05;
     letter-spacing: -0.72px;
@@ -510,20 +510,24 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 15% center; /* shifts the tower off the "Behind the scenes" label, behind the Ondo card */
+    object-position: center 59%; /* portrait photo: matches the Figma crop (plaza, columns, steps) */
     display: block;
+    transform: scaleX(-1); /* mirrored, as in Figma state 7 (keeps the high-res source) */
   }
 
-  /* Overlay stack taken from ondo.finance (subscribe section): three layers with real blend modes.
+  /* Overlay: #1D1D1D 10% overlay (contrast layer from ondo.finance) + black 60% multiply.
      They blend only with the photo, since .nx-panel-bg is its own stacking context (z-index: -1). */
   .nx-panel-shade {
     position: absolute;
     inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    mix-blend-mode: multiply;
   }
 
-  .nx-panel-shade--base     { background: rgba(0, 0, 0, 0.15); }
-  .nx-panel-shade--contrast { background: rgba(29, 29, 29, 0.2); mix-blend-mode: overlay; }
-  .nx-panel-shade--dim      { background: rgba(29, 29, 29, 0.4); mix-blend-mode: multiply; }
+  .nx-panel-shade--contrast {
+    background: rgba(29, 29, 29, 0.1);
+    mix-blend-mode: overlay;
+  }
 
   .nx-flow {
     display: flex;
@@ -542,7 +546,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(29, 29, 29, 0.4); /* Ondo live glass token */
+    background: rgba(29, 29, 29, 0.45); /* Ondo live glass token (fill 40% → 45%) */
     -webkit-backdrop-filter: blur(30px) saturate(140%);
     backdrop-filter: blur(30px) saturate(140%);
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
@@ -1443,10 +1447,9 @@
       <!-- Actor diagram: Holder → Nexus → Ondo (state set by JS) -->
       <div class="nx-panel" data-state="1" role="img" aria-label="Diagram: a holder sends fund tokens to Nexus, Nexus pays the holder USDC, and Ondo rebalances the liquidity buffer behind the scenes.">
         <div class="nx-panel-bg" aria-hidden="true">
-          <img src="assets/nexus-how-panel-v2.jpg" alt="">
-          <span class="nx-panel-shade nx-panel-shade--base"></span>
+          <img src="assets/nexus-how-panel-v3.jpg" alt="">
           <span class="nx-panel-shade nx-panel-shade--contrast"></span>
-          <span class="nx-panel-shade nx-panel-shade--dim"></span>
+          <span class="nx-panel-shade"></span>
         </div>
         <div class="nx-flow" aria-hidden="true">
           <div class="nx-node is-active" data-node="holder">Holder</div>
