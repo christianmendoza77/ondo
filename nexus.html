@@ -371,10 +371,10 @@
   /* Two columns: progress line | step blocks (no negative margins, so the sticky line releases with step 03) */
   .nexus-how-steps {
     position: relative;
-    flex: 0 0 402px; /* 2px line + 40px gap + 360px text box */
+    flex: 0 0 394px; /* 2px line + 32px gap + 360px text box */
     display: grid;
     grid-template-columns: 2px 1fr;
-    column-gap: 40px;
+    column-gap: 32px;
   }
 
   /* Progress line: pinned beside the step copy; JS sets --nx-progress (0 → 1).
@@ -429,7 +429,7 @@
     font-size: 28px;
     font-weight: 400;
     line-height: 1.05;
-    letter-spacing: -0.72px;
+    letter-spacing: -0.48px;
     color: #fff;
   }
 
