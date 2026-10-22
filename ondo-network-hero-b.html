@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ondo Network – Hero B – Ondo Finance</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<style>
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  ::-webkit-scrollbar { display: none; }
+  * { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Nebula tokens used on this page */
+  :root {
+    --green-600: #002b20;
+    --green-500: #004830;
+    --green-400: #007a4b;
+    --green-300: #1da66a;
+    --green-200: #5bc396;
+    --green-50:  #ebf0e7;
+    --bg-secondary: #1d1d1d;
+    --fg-tertiary: #b1b1b1;
+    --fg-muted: #626262;
+    --gray-400: #818181;
+    --gray-600: #454545;
+    --serif: 'ABC Arizona Text', Georgia, serif;
+  }
+
+  body {
+    font-family: 'Gellix', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #000;
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Shared type (Nebula Desktop styles) */
+  .nw-eyebrow { font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px; }
+  .nw-h2 { font-size: 56px; font-weight: 500; line-height: 1.05; letter-spacing: -1.68px; }
+  .nw-h2 span { display: block; }
+  .nw-body-l { font-family: var(--serif); font-size: 20px; font-weight: 400; line-height: 1.32; letter-spacing: -0.2px; }
+
+  .nw-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    padding: 0 16px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .nw-btn--light { background: #f0f0f0; color: #000; }
+  .nw-btn--light:hover { background: #e0e0e0; }
+  .nw-btn--white { background: #fff; color: #000; }
+  .nw-btn--white:hover { background: #f0f0f0; }
+  .nw-btn--outline { border: 1px solid rgba(240,240,240,0.3); color: #fff; }
+  .nw-btn--outline:hover { border-color: rgba(240,240,240,0.6); }
+  .nw-btn--dark { background: var(--bg-secondary); color: #fff; }
+  .nw-btn--dark:hover { background: #2a2a2a; }
+
+  /* ── Nav ── */
+  .site-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    padding: 12px 40px;
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 16px;
+    height: 60px;
+    padding: 12px 28px;
+    width: 807px;
+    max-width: 100%;
+    box-shadow: 0px 9px 80px rgba(24,24,24,0.07), 0px 2.01px 17.869px rgba(24,24,24,0.05), 0px 0.599px 5.32px rgba(24,24,24,0.03);
+  }
+
+  .nav-logo { flex: 1 0 0; display: flex; align-items: center; }
+  .nav-logo img { width: 93px; height: 28px; object-fit: contain; display: block; filter: invert(1); }
+
+  .nav-links { display: flex; gap: 24px; align-items: center; justify-content: center; }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .nav-link:hover { background: rgba(29,29,29,0.05); }
+
+  .nav-auth { flex: 1 0 0; display: flex; justify-content: flex-end; }
+
+  .nav-launch-btn {
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 8px;
+    background: #1d1d1d;
+    color: #fff;
+    border: none;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  /* ── Hero ── */
+  .nw-hero {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100dvh; /* fix iOS Safari chrome offset */
+    background: var(--green-600);
+    display: flex;
+    align-items: center;
+    padding: 96px 44px;
+    overflow: hidden;
+  }
+
+  /* Concentric pulse: 900×850 frame pinned to the right edge, as in Figma */
+  .nw-pulse {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 900px;
+    height: 850px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  /* Rings and axis in the Figma frame's own coordinates; they overflow to the right and the hero clips them */
+  .nw-pulse-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: visible;
+    fill: none;
+    stroke: var(--green-200);
+    stroke-width: 1.5;
+  }
+
+  /* Node squares where the rings meet the axis and each other; --x/--y/--s from Figma */
+  .nw-pulse-dot {
+    position: absolute;
+    left: var(--x);
+    top: calc(50% + var(--y, 0px));
+    transform: translateY(-50%);
+    width: var(--s);
+    height: var(--s);
+    border-radius: calc(var(--s) * 0.21);
+    background: var(--green-200);
+  }
+
+  /* Hero B — load animation proposal (not based on the Figma keyframes):
+     1. the axis shoots in from the left, like a signal being sent
+     2. each ring blooms open from the point where the axis crosses it, up and down at once,
+        left to right, so the line seems to "open" the rings as it passes
+     3. the nodes pop in column by column as their rings close
+     4. then, every 4.2s, a short light pulse runs along the axis and each column of nodes
+        brightens as it passes: the network stays alive without competing with the headline.
+     Starts at 0.35s, once the hero text (0–0.68s) is mostly in place; settled by ~1.7s.
+     Ring draw: pathLength=1 and a 4-value dash (x, 1-2x, x, 0) reveals [0,x] and [1-x,1],
+     i.e. both directions from the path start; scaleX(-1) moves that start to the ring's left
+     point on the axis. */
+  .nw-pulse {
+    --pulse-ease: cubic-bezier(0.65, 0, 0.35, 1);
+    --pulse-shoot: cubic-bezier(0.3, 0, 0.15, 1); /* fast out, long brake: the axis "shot" */
+    --pulse-period: 4.2s;
+    --pulse-loop-start: 2.4s;
+  }
+
+  .nw-pulse-axis { animation: nw-axis-draw 0.5s var(--pulse-shoot) 0.35s both; }
+
+  .nw-pulse-ring {
+    vector-effect: non-scaling-stroke;
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scaleX(-1);
+    stroke-dasharray: 0.5 0 0.5 0;
+    animation: nw-ring-bloom 0.7s var(--pulse-ease) calc(0.55s + var(--i) * 0.08s) both;
+  }
+
+  .nw-pulse-dot {
+    animation:
+      nw-dot-in 0.25s var(--pulse-ease) calc(1.1s + var(--i) * 0.08s) both,
+      nw-dot-glow var(--pulse-period) linear calc(var(--pulse-loop-start) + var(--g)) infinite;
+  }
+
+  /* travelling light on the axis: one short dash that crosses the whole line, then rests */
+  .nw-pulse-comet {
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-dasharray: 0.06 1.06;
+    stroke-dashoffset: 0.06;
+    filter: drop-shadow(0 0 6px rgba(91, 195, 150, 0.9));
+    animation: nw-comet var(--pulse-period) linear var(--pulse-loop-start) infinite;
+  }
+
+  .nw-hero.is-offscreen .nw-pulse-comet,
+  .nw-hero.is-offscreen .nw-pulse-dot { animation-play-state: paused; }
+
+  @keyframes nw-axis-draw {
+    from { stroke-dashoffset: 1; }
+  }
+
+  @keyframes nw-ring-bloom {
+    from { stroke-dasharray: 0 1 0 0; }
+  }
+
+  @keyframes nw-dot-in {
+    from { scale: 0; }
+  }
+
+  /* 1.6s travel (38% of 4.2s), then hidden until the next loop */
+  @keyframes nw-comet {
+    0%   { stroke-dashoffset: 0.06; }
+    38%  { stroke-dashoffset: -1; }
+    100% { stroke-dashoffset: -1; }
+  }
+
+  /* --g = when the comet reaches the column: (x − 243) / 797 × 1.6s */
+  @keyframes nw-dot-glow {
+    0%, 12%, 100% { background: var(--green-200); scale: 1; }
+    3%            { background: #fff; scale: 1.3; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nw-pulse-ring,
+    .nw-pulse-axis,
+    .nw-pulse-dot { animation: none; }
+    .nw-pulse-comet { display: none; }
+  }
+
+  .nw-hero-fade {
+    position: absolute;
+    inset: 0;
+    /* Full width, with stops measured from the right edge (where the pulse is anchored),
+       so the same rings get darkened at any screen width. At 1440 this equals the Figma layer. */
+    background: linear-gradient(to left, rgba(0,43,32,0) 0, rgba(0,43,32,0) 425px, rgba(0,43,32,0.92) 1022px, var(--green-600) 1440px);
+    pointer-events: none;
+  }
+
+  .nw-hero-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+
+  .nw-hero-top { display: flex; flex-direction: column; gap: 24px; }
+
+  .nw-hero-heading {
+    font-size: 72px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -2.16px;
+    white-space: nowrap;
+  }
+  .nw-hero-heading span { display: block; color: var(--fg-tertiary); }
+
+  .nw-hero-body { color: var(--fg-tertiary); width: 464px; } /* 460 in Figma; +4 so the browser keeps the Figma line break */
+
+  .nw-hero-ctas { display: flex; gap: 12px; }
+
+  /* Hero text plays on load (not on scroll): eyebrow, title, body, CTAs 60ms apart,
+     with a shorter rise than the scroll fade-ups so it settles before the pulse takes over */
+  .nw-hero-in {
+    animation: nw-hero-in 0.5s cubic-bezier(0.45, 0, 0.2, 1) calc(var(--n) * 60ms) both;
+  }
+
+  @keyframes nw-hero-in {
+    from { opacity: 0; transform: translateY(16px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nw-hero-in { animation: none; }
+  }
+
+  /* ── Benefits ── */
+  .nw-benefits {
+    background: var(--green-50);
+    color: var(--green-600);
+    padding: 120px 44px;
+  }
+
+  .nw-benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .nw-benefits-header { display: flex; flex-direction: column; gap: 24px; }
+
+  .nw-benefits-title {
+    font-size: 36px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.72px;
+    width: 380px;
+  }
+  .nw-benefits-title span { display: block; color: var(--green-300); }
+
+  .nw-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .nw-card img { width: 36px; height: 36px; display: block; }
+  .nw-card-text { display: flex; flex-direction: column; gap: 16px; }
+
+  .nw-card-title { font-size: 24px; font-weight: 500; line-height: 1.05; letter-spacing: -0.24px; }
+
+  .nw-card-desc {
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    opacity: 0.75;
+    width: 320px;
+  }
+
+  /* ── Comparison ── */
+  .nw-compare {
+    background: #000;
+    padding: 120px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 96px;
+  }
+
+  .nw-section-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+  }
+
+  .nw-compare-title { width: 899px; }
+
+  .nw-table-wrap { width: 100%; padding: 0 44px; }
+
+  /* Feature column | 1px spacer | Ondo column | 1px spacer | 5 competitor columns.
+     The spacers widen the gap around the Ondo column so its outline has room. */
+  .nw-table {
+    position: relative;
+    display: grid;
+    grid-template-columns: 420px 1px 1fr 1px repeat(5, 1fr);
+    grid-template-rows: repeat(6, auto); /* explicit, so the outline can span all rows */
+    gap: 6px;
+  }
+
+  .nw-table-outline {
+    position: absolute;
+    grid-column: 3 / 4;
+    grid-row: 1 / 7;
+    inset: -7px;
+    border: 1px solid #fff;
+    border-radius: 20px;
+    pointer-events: none;
+  }
+
+  /* Row-by-row entrance: JS sets --r (row index) on each cell and adds .is-visible
+     when the table scrolls into view. The Ondo outline fades in once the last row lands. */
+  .nw-table .nw-cell {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s cubic-bezier(0.45, 0, 0.2, 1),
+                transform 0.6s cubic-bezier(0.45, 0, 0.2, 1);
+    transition-delay: calc(var(--r) * 90ms);
+  }
+
+  .nw-table-outline {
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(0.45, 0, 0.2, 1) 0.9s;
+  }
+
+  .nw-table.is-visible .nw-cell,
+  .nw-table.is-visible .nw-table-outline {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nw-table .nw-cell,
+    .nw-table-outline { opacity: 1; transform: none; transition: none; }
+  }
+
+  .nw-cell {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 40px;
+  }
+
+  .nw-cell--spacer { background: none; padding: 0; }
+
+  .nw-cell--corner {
+    background: none;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 32px 24px;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.2px;
+    color: var(--fg-muted);
+  }
+
+  .nw-cell--head {
+    padding: 20px 12px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    text-align: center;
+  }
+
+  .nw-cell--feature {
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 20px 24px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    white-space: nowrap;
+  }
+
+  .nw-cell--feature img { width: 24px; height: 24px; display: block; }
+  .nw-yes { width: 12px; height: 12px; display: block; }
+  .nw-no { width: 20px; height: 20px; display: block; }
+
+  /* ── How it works ── */
+  .nw-how {
+    background: #000;
+    padding: 40px 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 88px;
+  }
+
+  .nw-how .nw-section-header { gap: 24px; }
+  .nw-how-title { width: 525px; }
+  .nw-how-title span { color: var(--fg-muted); }
+
+  .nw-how-module {
+    display: flex;
+    align-items: center;
+    gap: 64px;
+    width: 100%;
+  }
+
+  .nw-how-steps { flex: 0 0 384px; display: flex; flex-direction: column; }
+
+  .nw-step {
+    display: flex;
+    gap: 24px;
+    background: none;
+    border: none;
+    color: #fff;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  /* Inactive = text at 40%; hover brings it to full white */
+  .nw-step-content { transition: opacity 0.3s; }
+  .nw-step:not(.is-active) .nw-step-content { opacity: 0.4; }
+  .nw-step:not(.is-active):hover .nw-step-content { opacity: 1; }
+
+  /* One continuous grey line down the whole step list. The white fill covers only the active
+     step's segment (JS sets its top/height); while autoplaying it grows through that segment
+     and the next step starts when it reaches the bottom. */
+  .nw-how-steps { position: relative; }
+  .nw-step-bar { flex: 0 0 2px; } /* keeps the 24px gap between line and text */
+
+  .nw-steps-line {
+    position: absolute;
+    top: 0; bottom: 0; left: 0;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+  }
+
+  .nw-steps-line-fill {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    transform-origin: top;
+    transform: scaleY(0);
+  }
+
+  .nw-step-content { display: flex; flex-direction: column; gap: 12px; padding: 24px 0; }
+  .nw-step-num { font-family: var(--serif); font-size: 20px; line-height: 1.32; letter-spacing: -0.2px; }
+  .nw-step-title { font-size: 24px; font-weight: 500; line-height: 1.05; letter-spacing: -0.24px; }
+
+  .nw-step-desc {
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: var(--gray-400);
+    width: var(--w);
+    text-wrap: balance;
+  }
+
+  .nw-how-visual {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    height: 560px;
+    border-radius: 24px;
+    background: var(--green-600);
+    overflow: hidden;
+  }
+
+  /* Step 1 diagram: 904×560 artboard from Figma, centred in the panel */
+  .nw-how-diagram {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 904px;
+    height: 560px;
+    transform: translateX(-50%);
+  }
+
+  .nw-how-diagram > * { position: absolute; }
+
+  .nw-how-isolation {
+    left: 292px; top: 120px;
+    width: 320px; height: 320px;
+    border: 1.25px dashed var(--green-300);
+    border-radius: 36px;
+  }
+
+  .nw-how-line { width: 172px; height: 1.25px; display: block; }
+  .nw-how-node { width: 8px; height: 8px; background: var(--green-300); }
+
+  .nw-how-box {
+    left: 352px; top: 180px;
+    width: 200px;
+    padding: 64px 0;
+    border-radius: 24px;
+    background: var(--green-400);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.14px;
+  }
+
+  .nw-how-box img { width: 40px; height: 40px; display: block; }
+
+  /* ── How it works: step visuals ──
+     One artboard holds the three Figma variants (HIW/Module Step=1/2/3); each element belongs to a
+     layer (.nw-how-layer--1/2/3) and only the active step's layer is shown. On entering, its
+     elements come in with a stagger (--d); on leaving they fade out fast. The Secure hardware box
+     is shared and slides left for step 3, like Figma's smart animate. */
+  .nw-how-visual { --how-ease: cubic-bezier(0.65, 0, 0.35, 1); }
+
+  .nw-how-layer { position: absolute; inset: 0; pointer-events: none; }
+  .nw-how-layer > * { position: absolute; }
+
+  .nw-a {
+    opacity: 0;
+    transition: opacity 0.25s var(--how-ease), transform 0.25s var(--how-ease);
+  }
+
+  .nw-a--pop    { transform: scale(var(--s, 0.6)); }
+  .nw-a--rise   { transform: translateY(8px); }
+  .nw-a--grow-l { transform: scaleX(0); transform-origin: left center; }
+  .nw-a--grow-r { transform: scaleX(0); transform-origin: right center; }
+  /* step 2 spokes grow out of the box centre */
+  .nw-a--burst  { transform: scale(0); transform-box: view-box; transform-origin: 452px 280px; }
+
+  .nw-how-visual[data-step="1"] .nw-how-layer--1 .nw-a,
+  .nw-how-visual[data-step="2"] .nw-how-layer--2 .nw-a,
+  .nw-how-visual[data-step="3"] .nw-how-layer--3 .nw-a {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.45s var(--how-ease) var(--d, 0ms), transform 0.6s var(--how-ease) var(--d, 0ms);
+  }
+
+  .nw-how-box { z-index: 1; transition: transform 0.6s var(--how-ease); }
+  .nw-how-visual[data-step="3"] .nw-how-box { transform: translateX(-252px); } /* x 352 → 100 */
+
+  .nw-how-tag {
+    left: 32px; top: 32px;
+    font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px;
+    color: var(--green-300);
+  }
+
+  .nw-how-spokes { left: 0; top: 0; overflow: visible; }
+  .nw-how-spokes line { stroke: var(--green-300); stroke-width: 1.25; stroke-dasharray: 5.0625 5.0625; }
+
+  .nw-how-attestor {
+    width: 48px; height: 48px;
+    border: 1.25px solid var(--green-300);
+    border-radius: 10px;
+    background: var(--green-600);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 500; line-height: 1.32; letter-spacing: -0.14px;
+  }
+
+  .nw-how-chain-line { height: 1.25px; background: var(--green-300); }
+
+  .nw-how-block {
+    width: 56px; height: 56px;
+    border: 1.25px solid var(--green-300);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .nw-how-block img { width: 24px; height: 24px; display: block; }
+
+  .nw-how-label {
+    font-size: 14px; font-weight: 500; line-height: 1.32; letter-spacing: -0.14px;
+    color: var(--green-300);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nw-a, .nw-how-box { transition: none !important; }
+  }
+
+  /* ── See it in action ── */
+  .nw-action {
+    background: #000;
+    padding: 120px 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 88px;
+  }
+
+  .nw-action .nw-section-header { width: 720px; }
+  .nw-action-body { color: var(--gray-400); width: 460px; }
+
+  /* 48px grid in #1F1F1F on #121212, the only background of this visual */
+  .nw-action-visual {
+    position: relative;
+    width: 100%;
+    height: 680px;
+    border-radius: 24px;
+    overflow: hidden;
+    background-color: #121212;
+    background-image:
+      linear-gradient(to right, #1f1f1f 1px, transparent 1px),
+      linear-gradient(to bottom, #1f1f1f 1px, transparent 1px);
+    background-size: 48px 48px;
+    background-position: -0.5px -0.5px;
+  }
+
+  .nw-action-ui {
+    position: absolute;
+    top: 88px;
+    left: 50%;
+    width: 1100px;
+    height: 687.5px;
+    transform: translateX(-50%);
+    border-radius: 12px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.45);
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── Connect the story ── */
+  .nw-story {
+    background: #fff;
+    color: #000;
+    padding: 120px 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 88px;
+  }
+
+  .nw-story-title span { color: var(--fg-muted); }
+  .nw-story-body { color: var(--gray-600); width: 620px; }
+
+  .nw-story-visual {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 64px;
+    border-radius: 24px;
+    background: var(--green-50);
+  }
+
+  .nw-layer {
+    flex: 1 1 0;
+    align-self: stretch;
+    min-height: 292px;
+    padding: 32px;
+    border-radius: 24px;
+    border: 1px solid var(--green-600);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .nw-layer--execution { background: var(--green-600); color: #fff; }
+  .nw-layer--settlement { color: #000; }
+
+  .nw-layer-heading { display: flex; flex-direction: column; gap: 8px; }
+
+  .nw-layer-kicker,
+  .nw-chip,
+  .nw-connector p { font-size: 14px; font-weight: 500; line-height: 1.32; letter-spacing: -0.14px; }
+
+  .nw-layer--execution .nw-layer-kicker { color: var(--green-200); }
+  .nw-layer--settlement .nw-layer-kicker { color: var(--green-500); }
+
+  .nw-layer-title { font-size: 28px; font-weight: 500; line-height: 1.05; letter-spacing: -0.56px; }
+
+  .nw-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .nw-chip {
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--green-600);
+    color: var(--green-600);
+    white-space: nowrap;
+  }
+
+  .nw-layer--execution .nw-chip { border-color: var(--green-50); color: #fff; }
+
+  .nw-connectors { flex: 0 0 184px; display: flex; flex-direction: column; gap: 40px; }
+
+  .nw-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--green-600);
+    white-space: nowrap;
+  }
+
+  .nw-connector img { width: 100%; height: 1px; display: block; }
+
+  /* Build-in when the diagram scrolls into view (JS adds .is-built once): Execution and its chips,
+     then the two connectors draw left to right, then Settlement and its chips. */
+  .nw-b {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0ms),
+                transform 0.6s cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0ms);
+  }
+
+  .nw-b--draw { transform: scaleX(0); transform-origin: left center; }
+  .nw-b--fade { transform: none; } /* connector labels: fade only */
+
+  .nw-story-visual.is-built .nw-b { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nw-b { opacity: 1; transform: none; transition: none; }
+  }
+
+  /* ── Closing CTA ── */
+  .nw-cta-wrapper { background: #fff; padding: 0 44px 44px; }
+
+  .nw-cta {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    padding: 88px 44px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .nw-cta-bg {
+    position: absolute;
+    left: 0;
+    top: -146.03%;
+    width: 100%;
+    height: 321.15%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .nw-cta-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); }
+
+  .nw-cta-content {
+    position: relative;
+    width: 602px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    text-align: center;
+  }
+
+  .nw-cta-text { display: flex; flex-direction: column; gap: 16px; }
+  .nw-cta-heading { font-size: 48px; font-weight: 500; line-height: 1.05; letter-spacing: -1.44px; }
+
+  /* ── Scroll-triggered entrance animations (same as Nexus) ── */
+  .anim-fade-up {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s cubic-bezier(0.45, 0, 0.2, 1),
+                transform 0.7s cubic-bezier(0.45, 0, 0.2, 1);
+  }
+  .anim-fade-up.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .anim-fade-up { opacity: 1; transform: none; transition: none; }
+  }
+
+  /* ── Footer ── */
+  .nw-footer {
+    background: #000;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nw-footer-main {
+    display: flex;
+    flex-direction: column;
+    gap: 112px;
+    padding: 44px;
+  }
+
+  /* Nav columns */
+  .nw-footer-nav {
+    display: flex;
+    gap: 36px;
+    align-items: flex-start;
+  }
+
+  .nw-footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .nw-footer-col-title {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #fff;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .nw-footer-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 0;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #b1b1b1;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .nw-footer-link:hover { color: #fff; }
+
+  .nw-footer-link img {
+    width: 16px;
+    height: 16px;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  /* Legal text */
+  .nw-footer-legal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .nw-footer-legal-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .nw-footer-legal-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    margin: 0;
+  }
+
+  .nw-footer-legal-text {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.12px;
+    color: #b1b1b1;
+    white-space: pre-wrap;
+  }
+
+  .nw-footer-legal-text a {
+    color: #b1b1b1;
+    text-decoration: underline;
+  }
+
+  /* Big wordmark */
+  .nw-footer-wordmark {
+    width: 100%;
+    aspect-ratio: 1512 / 183.7;
+    display: block;
+    object-fit: contain;
+  }
+
+  /* Bottom bar */
+  .nw-footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 44px;
+    height: 76px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .nw-footer-bottom-left {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .nw-footer-copyright {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.14px;
+    color: #fff;
+  }
+
+  .nw-footer-legal-link {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.14px;
+    color: #b1b1b1;
+    text-decoration: none;
+  }
+
+  .nw-footer-legal-link:hover { color: #fff; }
+
+  .nw-footer-socials {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .nw-footer-social-link {
+    display: flex;
+    align-items: center;
+    opacity: 0.7;
+  }
+
+  .nw-footer-social-link:hover { opacity: 1; }
+
+  .nw-footer-social-link img {
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+
+  @media (max-width: 1024px) {
+    .nw-footer-main { padding: 44px 30px; gap: 64px; }
+    .nw-footer-legal { grid-template-columns: 1fr; gap: 40px; }
+    .nw-footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 32px;
+      height: auto;
+      padding: 20px 30px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .nw-footer-main { padding: 32px 20px; gap: 48px; }
+    .nw-footer-nav { display: grid; grid-template-columns: repeat(2, max-content); gap: 36px; }
+    .nw-footer-bottom { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<header class="site-header">
+  <nav class="site-nav">
+    <div class="nav-logo">
+      <img src="assets/ondo-logo.svg" alt="Ondo">
+    </div>
+    <div class="nav-links">
+      <a class="nav-link" href="#">Products</a>
+      <a class="nav-link" href="#">Resources</a>
+      <a class="nav-link" href="#">Ecosystem</a>
+      <a class="nav-link" href="#">About</a>
+    </div>
+    <div class="nav-auth">
+      <button class="nav-launch-btn">Launch App</button>
+    </div>
+  </nav>
+</header>
+
+<!-- ── Hero ── -->
+<section class="nw-hero">
+  <div class="nw-pulse" aria-hidden="true">
+    <svg class="nw-pulse-svg" width="1040" height="850" viewBox="0 0 1040 850">
+      <line class="nw-pulse-axis" x1="243" y1="425" x2="1040" y2="425" pathLength="1" stroke-dasharray="1"/>
+      <!-- --i = ring order, left to right -->
+      <ellipse class="nw-pulse-ring" style="--i:0" pathLength="1" cx="310" cy="425.5" rx="35.25" ry="57.75"/>
+      <ellipse class="nw-pulse-ring" style="--i:1" pathLength="1" cx="357.46" cy="425" rx="49.33" ry="80.21"/>
+      <ellipse class="nw-pulse-ring" style="--i:2" pathLength="1" cx="440.92" cy="425" rx="74.36" ry="120.27"/>
+      <ellipse class="nw-pulse-ring" style="--i:3" pathLength="1" cx="539.41" cy="425" rx="97.73" ry="157.82"/>
+      <ellipse class="nw-pulse-ring" style="--i:4" pathLength="1" cx="702.15" cy="425" rx="160.33" ry="257.98"/>
+      <ellipse class="nw-pulse-ring" style="--i:5" pathLength="1" cx="841.53" cy="425" rx="187.04" ry="327.25"/>
+      <line class="nw-pulse-comet" x1="243" y1="425" x2="1040" y2="425" pathLength="1"/>
+    </svg>
+    <!-- --i = node column (pop-in stagger); --g = when the axis light reaches that column -->
+    <span class="nw-pulse-dot" style="--i:0; --g:0.13s; --x:303px; --s:10px"></span>
+    <span class="nw-pulse-dot" style="--i:0; --g:0.13s; --x:316.5px; --y:-55.5px; --s:10px"></span>
+    <span class="nw-pulse-dot" style="--i:0; --g:0.13s; --x:316.5px; --y:54px; --s:10px"></span>
+    <span class="nw-pulse-dot" style="--i:1; --g:0.25s; --x:360px; --y:-0.5px; --s:11px"></span>
+    <span class="nw-pulse-dot" style="--i:1; --g:0.25s; --x:375.5px; --y:-71px; --s:11px"></span>
+    <span class="nw-pulse-dot" style="--i:1; --g:0.25s; --x:375.5px; --y:71px; --s:11px"></span>
+    <span class="nw-pulse-dot" style="--i:2; --g:0.4s; --x:436px; --s:12px"></span>
+    <span class="nw-pulse-dot" style="--i:2; --g:0.4s; --x:464px; --y:-111px; --s:12px"></span>
+    <span class="nw-pulse-dot" style="--i:2; --g:0.4s; --x:464px; --y:111px; --s:12px"></span>
+    <span class="nw-pulse-dot" style="--i:3; --g:0.6s; --x:535px; --s:14px"></span>
+    <span class="nw-pulse-dot" style="--i:3; --g:0.6s; --x:564px; --y:-149px; --s:14px"></span>
+    <span class="nw-pulse-dot" style="--i:3; --g:0.6s; --x:564px; --y:149px; --s:14px"></span>
+    <span class="nw-pulse-dot" style="--i:4; --g:0.82s; --x:647px; --s:16px"></span>
+    <span class="nw-pulse-dot" style="--i:4; --g:0.82s; --x:717px; --y:-256px; --s:16px"></span>
+    <span class="nw-pulse-dot" style="--i:4; --g:0.82s; --x:717px; --y:256px; --s:16px"></span>
+  </div>
+  <div class="nw-hero-fade" aria-hidden="true"></div>
+
+  <div class="nw-hero-content">
+    <div class="nw-hero-top">
+      <p class="nw-eyebrow nw-hero-in" style="--n:0">Ondo Network</p>
+      <h1 class="nw-hero-heading nw-hero-in" style="--n:1">
+        Financial markets,
+        <span>moving at a new speed</span>
+      </h1>
+      <p class="nw-body-l nw-hero-body nw-hero-in" style="--n:2">Fast, private execution. Independently verifiable rules. Assets that remain yours to control.</p>
+    </div>
+    <div class="nw-hero-ctas nw-hero-in" style="--n:3">
+      <a href="#see-it-in-action" class="nw-btn nw-btn--light">Explore Ondo Perps</a>
+      <a href="#how-it-works" class="nw-btn nw-btn--outline">See how it works</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Benefits ── -->
+<!-- Card descriptions extend the doc's value props with blog wording: pending client confirmation. -->
+<section class="nw-benefits">
+  <div class="nw-benefits-grid">
+    <div class="nw-benefits-header anim-fade-up">
+      <p class="nw-eyebrow">Why Ondo Network</p>
+      <h2 class="nw-benefits-title">
+        Verifiable without
+        <span>being fully visible.</span>
+      </h2>
+    </div>
+    <div class="nw-card anim-fade-up" style="transition-delay:80ms">
+      <img src="assets/network/icon-clock-arrows-32.svg" alt="">
+      <div class="nw-card-text">
+        <h3 class="nw-card-title">Speed</h3>
+        <p class="nw-card-desc">Execute at speeds approaching centralized exchanges, matching in milliseconds.</p>
+      </div>
+    </div>
+    <div class="nw-card anim-fade-up" style="transition-delay:160ms">
+      <img src="assets/network/icon-lock-32.svg" alt="">
+      <div class="nw-card-text">
+        <h3 class="nw-card-title">Privacy</h3>
+        <p class="nw-card-desc">Keep sensitive positions and order flow off public ledgers and out of view.</p>
+      </div>
+    </div>
+    <div class="nw-card anim-fade-up" style="transition-delay:240ms">
+      <img src="assets/network/icon-search-32.svg" alt="">
+      <div class="nw-card-text">
+        <h3 class="nw-card-title">Verifiability</h3>
+        <p class="nw-card-desc">Let approved third parties check that execution followed the rules, step by step.</p>
+      </div>
+    </div>
+    <div class="nw-card anim-fade-up" style="transition-delay:320ms">
+      <img src="assets/network/icon-key-32.svg" alt="">
+      <div class="nw-card-text">
+        <h3 class="nw-card-title">Control</h3>
+        <p class="nw-card-desc">No single operator can move user funds alone. Assets remain yours to control.</p>
+      </div>
+    </div>
+    <div class="nw-card anim-fade-up" style="transition-delay:400ms">
+      <img src="assets/network/icon-shield-check-32.svg" alt="">
+      <div class="nw-card-text">
+        <h3 class="nw-card-title">Decentralized Security</h3>
+        <p class="nw-card-desc">Multiple attestors already running; more can join as Network activity grows.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Comparison ── -->
+<!-- Values from the blog chart "Built for Institutional-Grade Execution". -->
+<section class="nw-compare">
+  <div class="nw-section-header anim-fade-up">
+    <p class="nw-eyebrow">How it compares</p>
+    <h2 class="nw-h2 nw-compare-title">Built for institutional-grade execution.</h2>
+  </div>
+  <div class="nw-table-wrap">
+    <div class="nw-table" id="compareTable">
+      <div class="nw-cell nw-cell--corner">Features:</div>
+      <div class="nw-cell nw-cell--spacer"></div>
+      <div class="nw-cell nw-cell--head">Ondo Network</div>
+      <div class="nw-cell nw-cell--spacer"></div>
+      <div class="nw-cell nw-cell--head">CEXs</div>
+      <div class="nw-cell nw-cell--head">Standard Public Blockchains</div>
+      <div class="nw-cell nw-cell--head">App-Specific Chains</div>
+      <div class="nw-cell nw-cell--head">ZK Exchanges</div>
+      <div class="nw-cell nw-cell--head">Permissioned Networks</div>
+      <!-- Feature rows are built by the script below from COMPARE_ROWS -->
+      <div class="nw-table-outline" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── How it works ── -->
+<!-- Step 01 and 03 subtitles add blog wording to the doc sentences: pending client confirmation. -->
+<section class="nw-how" id="how-it-works">
+  <div class="nw-section-header anim-fade-up">
+    <p class="nw-eyebrow">How it works</p>
+    <h2 class="nw-h2 nw-how-title">
+      Execute privately.
+      <span>Verify independently.</span>
+    </h2>
+  </div>
+  <div class="nw-how-module">
+    <div class="nw-how-steps">
+      <span class="nw-steps-line" aria-hidden="true"><span class="nw-steps-line-fill"></span></span>
+      <button class="nw-step is-active" type="button" aria-pressed="true" data-ms="4000">
+        <span class="nw-step-bar"></span>
+        <span class="nw-step-content">
+          <span class="nw-step-num">01</span>
+          <span class="nw-step-title">Execute</span>
+          <span class="nw-step-desc" style="--w:296px">Secure hardware runs applications privately, isolated in verified enclaves.</span>
+        </span>
+      </button>
+      <button class="nw-step" type="button" aria-pressed="false" data-ms="4000">
+        <span class="nw-step-bar"></span>
+        <span class="nw-step-content">
+          <span class="nw-step-num">02</span>
+          <span class="nw-step-title">Verify</span>
+          <span class="nw-step-desc" style="--w:304px">Independent attestors verify approved code and collectively provision keys.</span>
+        </span>
+      </button>
+      <button class="nw-step" type="button" aria-pressed="false" data-ms="4000">
+        <span class="nw-step-bar"></span>
+        <span class="nw-step-content">
+          <span class="nw-step-num">03</span>
+          <span class="nw-step-title">Settle</span>
+          <span class="nw-step-desc" style="--w:272px">Asset transfers settle on public blockchains, confirmed by attestors.</span>
+        </span>
+      </button>
+    </div>
+    <div class="nw-how-visual" data-step="1" aria-hidden="true">
+      <!-- Step 2 tag sits on the panel, not the artboard -->
+      <div class="nw-how-layer nw-how-layer--2">
+        <p class="nw-how-tag nw-a nw-a--rise">Independent attestors</p>
+      </div>
+      <div class="nw-how-diagram">
+        <!-- Step 1 · Execute: isolated enclave -->
+        <div class="nw-how-layer nw-how-layer--1">
+          <div class="nw-how-isolation nw-a nw-a--pop" style="--s:0.92"></div>
+          <img class="nw-how-line nw-a nw-a--grow-r" style="left:120px; top:220px; --d:200ms" src="assets/network/hiw-line.svg" alt="">
+          <img class="nw-how-line nw-a nw-a--grow-r" style="left:120px; top:280px; --d:250ms" src="assets/network/hiw-line.svg" alt="">
+          <img class="nw-how-line nw-a nw-a--grow-r" style="left:120px; top:340px; --d:300ms" src="assets/network/hiw-line.svg" alt="">
+          <img class="nw-how-line nw-a nw-a--grow-l" style="left:612px; top:220px; --d:200ms" src="assets/network/hiw-line.svg" alt="">
+          <img class="nw-how-line nw-a nw-a--grow-l" style="left:612px; top:280px; --d:250ms" src="assets/network/hiw-line.svg" alt="">
+          <img class="nw-how-line nw-a nw-a--grow-l" style="left:612px; top:340px; --d:300ms" src="assets/network/hiw-line.svg" alt="">
+          <span class="nw-how-node nw-a nw-a--pop" style="left:116px; top:216px; --d:550ms"></span>
+          <span class="nw-how-node nw-a nw-a--pop" style="left:116px; top:276px; --d:600ms"></span>
+          <span class="nw-how-node nw-a nw-a--pop" style="left:116px; top:336px; --d:650ms"></span>
+          <span class="nw-how-node nw-a nw-a--pop" style="left:780px; top:216px; --d:550ms"></span>
+          <span class="nw-how-node nw-a nw-a--pop" style="left:780px; top:276px; --d:600ms"></span>
+          <span class="nw-how-node nw-a nw-a--pop" style="left:780px; top:336px; --d:650ms"></span>
+        </div>
+
+        <!-- Step 2 · Verify: six attestors around the enclave -->
+        <div class="nw-how-layer nw-how-layer--2">
+          <svg class="nw-how-spokes" width="904" height="560" viewBox="0 0 904 560">
+            <line class="nw-a nw-a--burst" style="--d:100ms" x1="452" y1="280" x2="593.75" y2="107.23"/>
+            <line class="nw-a nw-a--burst" style="--d:100ms" x1="452" y1="280" x2="735.5" y2="280"/>
+            <line class="nw-a nw-a--burst" style="--d:100ms" x1="452" y1="280" x2="593.75" y2="452.77"/>
+            <line class="nw-a nw-a--burst" style="--d:100ms" x1="452" y1="280" x2="310.25" y2="452.77"/>
+            <line class="nw-a nw-a--burst" style="--d:100ms" x1="452" y1="280" x2="168.5" y2="280"/>
+            <line class="nw-a nw-a--burst" style="--d:100ms" x1="452" y1="280" x2="310.25" y2="107.23"/>
+          </svg>
+          <span class="nw-how-attestor nw-a nw-a--pop" style="left:569.75px; top:83.23px; --d:300ms">1</span>
+          <span class="nw-how-attestor nw-a nw-a--pop" style="left:711.5px; top:256px; --d:360ms">2</span>
+          <span class="nw-how-attestor nw-a nw-a--pop" style="left:569.75px; top:428.77px; --d:420ms">3</span>
+          <span class="nw-how-attestor nw-a nw-a--pop" style="left:286.25px; top:428.77px; --d:480ms">4</span>
+          <span class="nw-how-attestor nw-a nw-a--pop" style="left:144.5px; top:256px; --d:540ms">5</span>
+          <span class="nw-how-attestor nw-a nw-a--pop" style="left:286.25px; top:83.23px; --d:600ms">6</span>
+        </div>
+
+        <!-- Step 3 · Settle: transfers settle on a public chain, each block confirmed in turn.
+             Whole group centred in the panel (Figma: box at x 100, chain ends at x 804). -->
+        <div class="nw-how-layer nw-how-layer--3">
+          <span class="nw-how-chain-line nw-a nw-a--grow-l" style="left:300px; top:279.375px; width:160px; --d:300ms"></span>
+          <p class="nw-how-label nw-a nw-a--rise" style="left:310px; top:250px; width:140px; text-align:center; --d:450ms">Asset transfers</p>
+          <span class="nw-how-block nw-a nw-a--pop" style="left:460px; top:252px; --s:0.8; --d:550ms"><img class="nw-a nw-a--pop" style="--d:950ms" src="assets/network/hiw-check.svg" alt=""></span>
+          <span class="nw-how-chain-line nw-a nw-a--grow-l" style="left:516px; top:279.375px; width:40px; --d:620ms"></span>
+          <span class="nw-how-block nw-a nw-a--pop" style="left:556px; top:252px; --s:0.8; --d:650ms"><img class="nw-a nw-a--pop" style="--d:1030ms" src="assets/network/hiw-check.svg" alt=""></span>
+          <span class="nw-how-chain-line nw-a nw-a--grow-l" style="left:612px; top:279.375px; width:40px; --d:720ms"></span>
+          <span class="nw-how-block nw-a nw-a--pop" style="left:652px; top:252px; --s:0.8; --d:750ms"><img class="nw-a nw-a--pop" style="--d:1110ms" src="assets/network/hiw-check.svg" alt=""></span>
+          <span class="nw-how-chain-line nw-a nw-a--grow-l" style="left:708px; top:279.375px; width:40px; --d:820ms"></span>
+          <span class="nw-how-block nw-a nw-a--pop" style="left:748px; top:252px; --s:0.8; --d:850ms"><img class="nw-a nw-a--pop" style="--d:1190ms" src="assets/network/hiw-check.svg" alt=""></span>
+          <p class="nw-how-label nw-a nw-a--rise" style="left:460px; top:320px; --d:1000ms">Public blockchains</p>
+        </div>
+
+        <div class="nw-how-box">
+          <img src="assets/network/hiw-ondo-mark.svg" alt="">
+          Secure hardware
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── See it in action ── -->
+<section class="nw-action" id="see-it-in-action">
+  <div class="nw-section-header anim-fade-up">
+    <p class="nw-eyebrow">See it in action</p>
+    <h2 class="nw-h2">Already powering Ondo Perps</h2>
+    <p class="nw-body-l nw-action-body">Ondo Network’s first live application brings its infrastructure to perpetual futures trading.</p>
+    <a href="#" class="nw-btn nw-btn--dark">Explore Ondo Perps</a>
+  </div>
+  <div class="nw-action-visual anim-fade-up" style="transition-delay:150ms">
+    <img class="nw-action-ui" src="assets/network/perps-ui.png" alt="Ondo Perps trading interface">
+  </div>
+</section>
+
+<!-- ── Connect the story ── -->
+<!-- Chips and connector labels come from the blog post: pending client confirmation. -->
+<section class="nw-story">
+  <div class="nw-section-header anim-fade-up">
+    <p class="nw-eyebrow">Building on Ondo Chain</p>
+    <h2 class="nw-h2 nw-story-title">
+      The next chapter of
+      <span>Ondo infrastructure.</span>
+    </h2>
+    <p class="nw-body-l nw-story-body">Building on the ambition behind Ondo Chain, Ondo Network separates execution from settlement to meet financial applications’ needs.</p>
+  </div>
+  <div class="nw-story-visual anim-fade-up" style="transition-delay:150ms">
+    <div class="nw-layer nw-layer--execution nw-b" style="--d:200ms">
+      <div class="nw-layer-heading">
+        <p class="nw-layer-kicker">Ondo Network</p>
+        <p class="nw-layer-title">Execution</p>
+      </div>
+      <div class="nw-chips">
+        <span class="nw-chip nw-b" style="--d:320ms">Secure hardware</span>
+        <span class="nw-chip nw-b" style="--d:380ms">Attestor quorum</span>
+        <span class="nw-chip nw-b" style="--d:440ms">Signed log</span>
+      </div>
+    </div>
+    <div class="nw-connectors">
+      <div class="nw-connector">
+        <p class="nw-b nw-b--fade" style="--d:650ms">Asset transfers settle</p>
+        <img class="nw-b nw-b--draw" style="--d:550ms" src="assets/network/story-line-solid.svg" alt="">
+      </div>
+      <div class="nw-connector">
+        <p class="nw-b nw-b--fade" style="--d:800ms">Onchain events confirmed</p>
+        <img class="nw-b nw-b--draw" style="--d:700ms" src="assets/network/story-line-dashed.svg" alt="">
+      </div>
+    </div>
+    <div class="nw-layer nw-layer--settlement nw-b" style="--d:850ms">
+      <div class="nw-layer-heading">
+        <p class="nw-layer-kicker">Public blockchains</p>
+        <p class="nw-layer-title">Settlement</p>
+      </div>
+      <div class="nw-chips">
+        <span class="nw-chip nw-b" style="--d:970ms">Asset transfers</span>
+        <span class="nw-chip nw-b" style="--d:1030ms">Onchain events</span>
+        <span class="nw-chip nw-b" style="--d:1090ms">Durable settlement</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Closing CTA ── -->
+<!-- CTA label still TBD with the client. -->
+<div class="nw-cta-wrapper">
+  <div class="nw-cta">
+    <img class="nw-cta-bg" src="assets/network/cta-bg.jpg" alt="" aria-hidden="true">
+    <div class="nw-cta-overlay" aria-hidden="true"></div>
+    <div class="nw-cta-content anim-fade-up">
+      <div class="nw-cta-text">
+        <p class="nw-cta-heading">What will you build next?</p>
+        <p class="nw-body-l">Explore what Ondo Network could enable for your application.</p>
+      </div>
+      <a href="#" class="nw-btn nw-btn--white">Contact us</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── Footer ── -->
+<footer class="nw-footer">
+  <div class="nw-footer-main">
+
+    <!-- Nav columns -->
+    <nav class="nw-footer-nav">
+      <div class="nw-footer-col">
+        <span class="nw-footer-col-title">Invest</span>
+        <a href="#" class="nw-footer-link">USDY</a>
+        <a href="#" class="nw-footer-link">OUSG</a>
+        <a href="#" class="nw-footer-link">Bridge</a>
+        <a href="#" class="nw-footer-link">Convert</a>
+        <a href="#" class="nw-footer-link">Global Markets</a>
+      </div>
+      <div class="nw-footer-col">
+        <span class="nw-footer-col-title">Partners</span>
+        <a href="#" class="nw-footer-link">Ecosystem</a>
+        <a href="#" class="nw-footer-link">Foundation <img src="assets/nexus-footer-external.svg" alt=""></a>
+        <a href="#" class="nw-footer-link">Flux Finance <img src="assets/nexus-footer-external.svg" alt=""></a>
+      </div>
+      <div class="nw-footer-col">
+        <span class="nw-footer-col-title">Explore</span>
+        <a href="#" class="nw-footer-link">Insights</a>
+        <a href="#" class="nw-footer-link">Docs <img src="assets/nexus-footer-external.svg" alt=""></a>
+        <a href="#" class="nw-footer-link">Trust &amp; Security <img src="assets/nexus-footer-external.svg" alt=""></a>
+        <a href="#" class="nw-footer-link">Bug Bounty <img src="assets/nexus-footer-external.svg" alt=""></a>
+      </div>
+      <div class="nw-footer-col">
+        <span class="nw-footer-col-title">Company</span>
+        <a href="#" class="nw-footer-link">Team</a>
+        <a href="#" class="nw-footer-link">Careers <img src="assets/nexus-footer-external.svg" alt=""></a>
+        <a href="#" class="nw-footer-link">Media Kit <img src="assets/nexus-footer-external.svg" alt=""></a>
+        <a href="#" class="nw-footer-link">Contact Us</a>
+      </div>
+    </nav>
+
+    <!-- Legal text -->
+    <div class="nw-footer-legal">
+      <div class="nw-footer-legal-col">
+        <hr class="nw-footer-legal-divider">
+        <p class="nw-footer-legal-text">[*] Important Information Regarding Token Regulatory and Eligibility Matters: The tokenized assets referenced herein (i.e. (i) the tokenized stocks, tokenized ETFs and tokenized ADRs now known as Ondo Stocks, and formerly known as Ondo tokenized stocks and ETFs, or as Ondo Global Markets tokens (collectively, the "Ondo Stocks"), (ii) USDY tokens and (iii) OUSG tokens) (collectively, the "Tokens") have not been registered under the US Securities Act of 1933, as amended (the "Act") or the securities or financial instrument laws of any other jurisdiction. The Tokens may not be offered or sold in the United States or to US persons unless registered under the Act or an exemption from the registration requirements thereof is available. In certain jurisdictions, including the United Kingdom, Switzerland and Singapore, the Ondo Stocks and USDY tokens are offered and sold only to qualified investors or professional clients, as the case may be (or that jurisdiction's analogue thereof). OUSG tokens are available solely to persons who are accredited investors (as defined in Rule 501 of Regulation D under the Act) and qualified purchasers (as defined in Section 2(a)(51) of the US Investment Company Act of 1940, as amended (the "40 Act"). Other jurisdiction-based prohibitions and restrictions apply. See docs.ondo.finance for details. The Token issuers are not registered as investment companies under the 40 Act, as amended, or as an Alternative Investment Funds or Undertakings for Collective Investment in Transferable Securities in the EEA, or under the securities or financial instrument laws of any other jurisdiction.
+
+Important Information Regarding Ondo Stocks and USDY Tokens: Ondo Stocks provide their holders with economic exposure to the value of their underlying assets, including the value of dividends (less applicable tax withholdings). However, Ondo Stocks are not themselves stocks, ETFs or ADRs, and Ondo Stocks do not provide their holders with rights to hold or receive their respective underlying assets. Similarly, USDY tokens provide their holders with economic exposure to short-term US treasuries, but USDY tokens are not themselves US treasuries and do not provide their holders with rights to hold or receive any US treasuries.
+
+Important Information for EEA/EU Investors in Ondo Stocks: In the EEA/EU, a base prospectus relating to the Ondo Stocks has been approved by the Financial Market Authority Liechtenstein (FMA) and notified, at the issuer's request, to certain EEA Member States (the "Relevant EEA States"), making many Ondo Stocks available to both professional and retail investors, though certain Ondo Stocks are only available to professional investors in the EEA/EU. The prospectus is published at app.ondo.finance at each applicable Ondo Stocks webpage. The approval of the prospectus should not be understood as an endorsement of the Ondo Stocks. Investors residing in the EU/EEA should read the prospectus, and the relevant final terms and KID for each applicable Ondo Stock, before investing in order to fully understand the potential risks and rewards associated with the decision to invest. This notice is a marketing communication and does not constitute a prospectus.
+
+Important Information Regarding Ondo Stocks on Binance's Multilateral Trading Facility authorised in Abu Dhabi Global Market: Certain Ondo Stocks (referred to in the UAE as "Digital Securities") have been admitted to trading on Nest Exchange Limited, a Multilateral Trading Facility for Digital Assets operated by Binance in the Abu Dhabi Global Market ("ADGM"), authorised by the Financial Services Regulatory Authority (the "FSRA"). Such Digital Securities are available for trading by those investors eligible for a Binance account. The ADGM FSRA has no responsibility for reviewing or verifying any documents in connection with the admission to trading of such Digital Securities in the ADGM. The FSRA has not approved the documents in connection with the admission to trading nor taken steps to verify the information set out in it and has no responsibility for it. No offer of securities is being made in ADGM. Prospective purchasers of such Digital Securities admitted to trading should conduct their own due diligence on such Digital Securities.</p>
+      </div>
+      <div class="nw-footer-legal-col">
+        <hr class="nw-footer-legal-divider">
+        <p class="nw-footer-legal-text">Important Information Regarding Token Issuers and Other Persons: Ondo Stocks and USDY tokens are issued by Ondo Global Markets (BVI) Limited, a British Virgin Islands business company. OUSG tokens are issued by Ondo I LP, a Delaware (USA) limited partnership (the "Fund"). Ondo Finance Inc., a Delaware (USA) corporation, provides tokenization services to, and is an equity holder of, Ondo Global Markets (BVI) Limited. Ondo Finance Inc. is also the sole member of both the general partner of the Fund and the investment adviser to the Fund, Ondo Capital Management LLC (the "Adviser"). The Adviser is a Registered Investment Adviser registered with the U.S. Securities and Exchange Commission ("SEC"). The Adviser's current written disclosure statement (Form ADV Part 2A) discussing its advisory services and fees is available upon request or at the SEC's Investment Adviser Public Disclosure website (www.adviserinfo.sec.gov). Registration as an investment adviser does not imply a certain level of skill or training. The Adviser shall not be responsible for any errors or omissions, or for the results obtained from the use of the information provided by the Adviser, the Fund or any of their respective affiliates, control persons, agents or representatives.
+
+¹ APY (Annual Percentage Yield) is accurate as of 2025-11-26. For USDY, APY is set monthly by Ondo in accordance with the USDY governing documents. For OUSG, APY is calculated by annualizing the increase in price over the past 30 days.</p>
+      </div>
+    </div>
+
+    <!-- Big wordmark -->
+    <img class="nw-footer-wordmark anim-fade-up" src="assets/nexus-footer-wordmark.svg" alt="Ondo Finance">
+
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="nw-footer-bottom">
+    <div class="nw-footer-bottom-left">
+      <span class="nw-footer-copyright">Ondo © 2025</span>
+      <a href="#" class="nw-footer-legal-link">Terms of Service</a>
+      <a href="#" class="nw-footer-legal-link">Privacy Policy</a>
+    </div>
+    <div class="nw-footer-socials">
+      <a href="#" class="nw-footer-social-link"><img src="assets/nexus-footer-twitter.svg" alt="X / Twitter"></a>
+      <a href="#" class="nw-footer-social-link"><img src="assets/nexus-footer-github.svg" alt="GitHub"></a>
+      <a href="#" class="nw-footer-social-link"><img src="assets/nexus-footer-telegram.svg" alt="Telegram"></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Comparison rows: true = supported (green dot), false = not supported (cross).
+  // Column order: Ondo Network, CEXs, Standard Public Blockchains, App-Specific Chains, ZK Exchanges, Permissioned Networks
+  const COMPARE_ROWS = [
+    { icon: 'cmp-clock-arrows', label: 'Low latency / high throughput',   values: [true, true,  false, false, false, false] },
+    { icon: 'cmp-lock',         label: 'Private order flow and positions', values: [true, true,  false, false, false, true ] },
+    { icon: 'cmp-shield-check', label: 'Verifiable fairness',              values: [true, false, true,  true,  true,  false] },
+    { icon: 'cmp-wallet',       label: 'Non-custodial design',             values: [true, false, true,  true,  true,  true ] },
+    { icon: 'cmp-user-group',   label: 'Decentralized security',           values: [true, false, true,  true,  true,  true ] },
+  ];
+
+  const table = document.getElementById('compareTable');
+  const outline = table.querySelector('.nw-table-outline');
+  const cell = (cls, html) => {
+    const el = document.createElement('div');
+    el.className = 'nw-cell ' + cls;
+    el.innerHTML = html;
+    return el;
+  };
+  const mark = (yes) => yes
+    ? '<img class="nw-yes" src="assets/network/cmp-yes.svg" alt="Yes">'
+    : '<img class="nw-no" src="assets/network/cmp-no.svg" alt="No">';
+
+  COMPARE_ROWS.forEach((row) => {
+    const cells = [cell('nw-cell--feature', `<img src="assets/network/${row.icon}.svg" alt="">${row.label}`)];
+    row.values.forEach((v, i) => {
+      if (i <= 1) cells.push(cell('nw-cell--spacer', '')); // spacers on both sides of the Ondo column
+      cells.push(cell('', mark(v)));
+    });
+    cells.forEach((c) => table.insertBefore(c, outline));
+  });
+
+  // Row index for the row-by-row entrance (9 grid cells per row, header row = 0)
+  table.querySelectorAll('.nw-cell').forEach((c, i) => c.style.setProperty('--r', Math.floor(i / 9)));
+
+  const rowObserver = new IntersectionObserver(([e]) => {
+    if (!e.isIntersecting) return;
+    table.classList.add('is-visible');
+    rowObserver.disconnect();
+  }, { threshold: 0.2 });
+  rowObserver.observe(table);
+})();
+
+// ── How it works carousel ──
+// Click a step to show it. Autoplay moves to the next step when the fill reaches the bottom of
+// the active step's segment; it only runs while the module is on screen.
+// Each step lasts data-ms milliseconds (on the .nw-step button), 4000 by default.
+(function () {
+  const STEP_MS = 4000;
+  const module = document.querySelector('.nw-how-module');
+  const visual = module.querySelector('.nw-how-visual');
+  const steps = [...module.querySelectorAll('.nw-step')];
+  const fill = module.querySelector('.nw-steps-line-fill');
+  const autoplay = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let progress = null;
+  let inView = false;
+
+  function show(i) {
+    steps.forEach((s, n) => {
+      s.classList.toggle('is-active', n === i);
+      s.setAttribute('aria-pressed', n === i);
+    });
+    visual.dataset.step = i + 1;
+
+    fill.style.top = steps[i].offsetTop + 'px';
+    fill.style.height = steps[i].offsetHeight + 'px';
+    if (progress) progress.cancel();
+    if (!autoplay) {
+      fill.style.transform = 'scaleY(1)';
+      return;
+    }
+    progress = fill.animate(
+      [{ transform: 'scaleY(0)' }, { transform: 'scaleY(1)' }],
+      { duration: Number(steps[i].dataset.ms) || STEP_MS, easing: 'linear', fill: 'forwards' }
+    );
+    progress.onfinish = () => show((i + 1) % steps.length);
+    if (!inView) progress.pause();
+  }
+
+  steps.forEach((s, i) => s.addEventListener('click', () => show(i)));
+  show(0);
+
+  if (!autoplay) return;
+  new IntersectionObserver(([e]) => {
+    inView = e.isIntersecting;
+    if (progress) inView ? progress.play() : progress.pause();
+  }, { threshold: 0.4 }).observe(module);
+})();
+
+// ── Connect the story: build the diagram once it scrolls into view ──
+(function () {
+  const diagram = document.querySelector('.nw-story-visual');
+  const observer = new IntersectionObserver(([e]) => {
+    if (!e.isIntersecting) return;
+    diagram.classList.add('is-built');
+    observer.disconnect();
+  }, { threshold: 0.3 });
+  observer.observe(diagram);
+})();
+
+// ── Hero B: pause the looping axis light while the hero is off screen ──
+(function () {
+  const hero = document.querySelector('.nw-hero');
+  new IntersectionObserver(([e]) => hero.classList.toggle('is-offscreen', !e.isIntersecting)).observe(hero);
+})();
+
+// ── Scroll entrance animations (same as Nexus) ──
+(function () {
+  function releaseLayer(el) {
+    el.style.transform   = 'none';
+    el.style.transition  = 'none';
+    el.style.willChange  = 'auto';
+    el.classList.remove('anim-fade-up'); // removes class so Chrome drops the compositing layer
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const el = e.target;
+        el.classList.add('is-visible');
+        el.addEventListener('transitionend', function done(evt) {
+          if (evt.propertyName === 'transform') {
+            releaseLayer(el);
+            el.removeEventListener('transitionend', done);
+          }
+        });
+        // Fallback: force-release after 1.5 s even if transitionend never fires
+        setTimeout(() => releaseLayer(el), 1500);
+        observer.unobserve(el);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.anim-fade-up').forEach(el => observer.observe(el));
+  });
+})();
+</script>
+
+</body>
+</html>

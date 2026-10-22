@@ -1,0 +1,16 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="83.8095" height="83.8095" viewBox="0 0 83.8095 83.8095" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="2" clip-path="url(#clip0_0_532)">
+<circle id="BG Ellipse" cx="41.9048" cy="41.9048" r="41.9048" fill="#002B20"/>
+<g id="Ondo Asset Logo" clip-path="url(#clip1_0_532)">
+<path id="Icon" fill-rule="evenodd" clip-rule="evenodd" d="M42.608 16.333C42.1626 16.1223 41.6462 16.1223 41.2007 16.333L25.005 23.9959L32.5716 31.5624L51.2371 31.5624L58.8037 23.9958L42.608 16.333ZM60.2321 25.4243L52.6655 32.9908L52.6655 51.6564L60.232 59.2229L67.8949 43.0271C68.1056 42.5817 68.1056 42.0653 67.8949 41.6199L60.2321 25.4243ZM58.8036 60.6513L51.2371 53.0848L32.5716 53.0848L25.0051 60.6512L41.2007 68.314C41.6462 68.5248 42.1626 68.5248 42.608 68.314L58.8036 60.6513ZM23.5767 59.2229L31.1432 51.6564L31.1432 32.9908L23.5766 25.4243L15.9139 41.6199C15.7031 42.0653 15.7031 42.5817 15.9139 43.0271L23.5767 59.2229ZM50.6455 51.0647L33.1632 51.0647V33.5825H50.6455L50.6455 51.0647Z" fill="white"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_0_532">
+<rect width="83.8095" height="83.8095" fill="white"/>
+</clipPath>
+<clipPath id="clip1_0_532">
+<rect width="53.6381" height="53.6381" fill="white" transform="translate(15.0853 15.5039)"/>
+</clipPath>
+</defs>
+</svg>

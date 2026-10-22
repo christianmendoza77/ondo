@@ -1,0 +1,2288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus – Ondo Finance</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<style>
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  ::-webkit-scrollbar { display: none; }
+  * { -ms-overflow-style: none; scrollbar-width: none; }
+
+  body {
+    font-family: 'Gellix', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #000;
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Nav ── */
+  .site-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    padding: 12px 40px;
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 12px;
+    height: 58px;
+    padding: 10px 28px;
+    width: 792px;
+    max-width: 100%;
+    box-shadow: 0px 9px 80px rgba(24,24,24,0.07), 0px 2.01px 17.869px rgba(24,24,24,0.05), 0px 0.599px 5.32px rgba(24,24,24,0.03);
+  }
+
+  .nav-logo { flex: 1 0 0; display: flex; align-items: center; }
+  .nav-logo img { width: 93px; height: 28px; object-fit: contain; display: block; filter: invert(1); }
+
+  .nav-links { display: flex; gap: 24px; align-items: center; justify-content: center; }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .nav-auth { flex: 1 0 0; display: flex; justify-content: flex-end; }
+
+  .nav-launch-btn {
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 8px;
+    background: #1d1d1d;
+    color: #fff;
+    border: none;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .nav-hamburger {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 8px;
+  }
+  .nav-hamburger svg { display: block; }
+
+  /* ── Nexus Hero ── */
+  .nexus-hero {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100dvh; /* fix iOS Safari chrome offset */
+    background: #000;
+    display: flex;
+    align-items: center;
+    padding: 0 44px;
+    overflow: hidden;
+  }
+
+  /* ── Hero Background (left + right panels) ── */
+  .nexus-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    display: flex;
+  }
+
+  .nexus-bg-left {
+    flex: 0 0 46.25%; /* 740/1600 */
+  }
+
+  .nexus-bg-right {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    contain: paint;
+  }
+
+  .nexus-bg-group {
+    position: absolute;
+    width: 2000px;
+    height: 1778px;
+    left: 0; /* focal point at group x=1000, off-screen to the right — nothing bleeds left */
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .nexus-bg-scrim-top {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 88px;
+    background: linear-gradient(to bottom, #000 0%, transparent 100%);
+    z-index: 2;
+  }
+
+  .nexus-bg-scrim-bottom {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 88px;
+    background: linear-gradient(to top, #000 0%, transparent 100%);
+    z-index: 2;
+  }
+
+  /* Blue blob — peeks 140px from the right edge */
+  .nexus-blob {
+    position: absolute;
+    width: 900px;
+    height: 900px;
+    border-radius: 50%;
+    background: rgba(0, 140, 255, 0.75);
+    filter: blur(500px);
+    top: 50%;
+    transform: translateY(-50%);
+    right: -900px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Ticker rows — radiate from left-center focal point, animated via JS */
+  .trow {
+    position: absolute;
+    left: 0;
+    top: calc(50% - 44px);
+    width: 2000px;
+    height: 88px;
+    display: flex;
+    align-items: center;
+    padding-left: 160px; /* offset items away from left edge */
+    gap: 700px;          /* push second item off-screen; only first is visible */
+    white-space: nowrap;
+    transform-origin: 1115px center;
+    pointer-events: none;
+  }
+
+  .ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+  }
+
+  .ticker-item img {
+    width: 84px;
+    height: 84px;
+    object-fit: contain;
+    flex-shrink: 0;
+    display: block;
+  }
+
+  .ticker-item span {
+    font-size: 84px;
+    font-weight: 500;
+    line-height: 1.05;
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  /* Left content */
+  .nexus-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+    flex: 0 0 auto;
+  }
+
+  .nexus-top {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    cursor: default;
+  }
+
+  .nexus-eyebrow {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    color: #fff;
+  }
+
+  .nexus-heading {
+    font-size: 72px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -2.16px;
+    color: #fff;
+  }
+
+  .nexus-heading-dim {
+    display: block;
+    color: #b1b1b1;
+  }
+
+  .nexus-body {
+    font-family: 'ABC Arizona Text', Georgia, serif;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.32;
+    letter-spacing: -0.2px;
+    color: #b1b1b1;
+    max-width: 368px;
+  }
+
+  /* CTAs */
+  .nexus-ctas {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+
+  .nexus-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    padding: 0 16px;
+    background: #fff;
+    color: #000;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+
+  .nexus-btn-primary:hover { background: #e0e0e0; }
+
+  .nexus-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    height: 44px;
+    padding: 0;
+    background: transparent;
+    color: #fff;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .nexus-btn-secondary:hover { opacity: 0.75; }
+
+  /* ── How Nexus Works ── */
+  /* Title scrolls normally; then steps + panel pin while the step copy scrolls natively.
+     Each step block is 100vh tall: its copy sticks in a slot next to the panel and is
+     pushed out by the next one. The pinned panel fills the viewport minus the section's
+     top/bottom padding: --nx-ph = panel height, --nx-top = slot / panel top. */
+  .nexus-how {
+    --nx-ease: cubic-bezier(0.45, 0, 0.2, 1);
+    --nx-pad-top: 136px;
+    --nx-pad-bottom: 88px;
+    --nx-ph: max(360px, calc(100vh - var(--nx-pad-top) - var(--nx-pad-bottom)));
+    --nx-top: var(--nx-pad-top);
+    --nx-progress-h: var(--nx-ph);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 96px;
+    padding: var(--nx-pad-top) 44px var(--nx-pad-bottom);
+    background: #000;
+  }
+
+  .nexus-how-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    position: relative;
+    width: 100%;
+  }
+
+  .nexus-how-label {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  .nexus-how-titles {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .nexus-how-h2-dim { display: block; color: #b1b1b1; }
+
+  .nexus-how-h2 {
+    font-size: 56px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -1.68px;
+    color: #fff;
+    max-width: 525px;
+  }
+
+  .nexus-how-body {
+    font-family: 'ABC Arizona Text', Georgia, serif;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.32;
+    letter-spacing: -0.2px;
+    color: rgba(240,240,240,0.7);
+    max-width: 548px;
+  }
+
+  .nexus-how-row {
+    display: flex;
+    gap: 40px;
+    align-items: stretch;
+    width: 100%;
+    max-width: 1512px;
+  }
+
+  /* Two columns: progress line | step blocks (no negative margins, so the sticky line releases with step 03) */
+  .nexus-how-steps {
+    position: relative;
+    flex: 0 0 394px; /* 2px line + 32px gap + 360px text box */
+    display: grid;
+    grid-template-columns: 2px 1fr;
+    column-gap: 32px;
+  }
+
+  /* Progress line: pinned beside the step copy; JS sets --nx-progress (0 → 1).
+     The sticky wrapper is as tall as the step slot so it releases together with step 03;
+     the visible line (track + fill) is --nx-progress-h tall at its top. */
+  .nexus-how-progress {
+    position: sticky;
+    top: var(--nx-top);
+    width: 2px;
+    height: var(--nx-ph);
+    grid-column: 1;
+    grid-row: 1 / span 3;
+    align-self: start;
+    pointer-events: none;
+  }
+
+  .nexus-how-progress::before,
+  .nexus-how-progress::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--nx-progress-h);
+    border-radius: 1px;
+  }
+
+  .nexus-how-progress::before { background: rgba(255, 255, 255, 0.15); }
+
+  .nexus-how-progress::after {
+    background: rgba(255, 255, 255, 0.9);
+    transform-origin: top;
+    transform: scaleY(var(--nx-progress, 0));
+  }
+
+  .nexus-how-step {
+    grid-column: 2;
+    height: 100vh;
+  }
+
+  .nexus-how-step-sticky {
+    position: sticky;
+    top: var(--nx-top);
+    height: var(--nx-ph);
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .nexus-how-num {
+    font-family: 'ABC Arizona Text', Georgia, serif;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.56px;
+    color: #fff;
+  }
+
+  .nexus-how-step-text {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .nexus-how-step-title {
+    font-size: 36px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.72px;
+    color: #fff;
+    text-wrap: balance;
+  }
+
+  .nexus-how-step-desc {
+    font-family: 'ABC Arizona Text', Georgia, serif;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.32;
+    letter-spacing: -0.2px;
+    color: #b1b1b1;
+    max-width: 333px;
+    text-wrap: balance;
+  }
+
+  /* Diagram panel */
+  .nx-panel {
+    --nx-dur: 1.8s;
+    --nx-travel: 94px; /* connector length (103) − dot (9) */
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 1000px;
+    height: var(--nx-ph);
+    border-radius: 32px;
+    overflow: hidden;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nexus-how-row > .nx-panel {
+    position: sticky;
+    top: var(--nx-top);
+    align-self: flex-start;
+    padding: 0 52px 0 40px; /* side padding; right +12px so the dashed group's outset sits at 40px, like Holder on the left */
+    justify-content: flex-start;
+  }
+
+  /* Diagram starts at the left padding; the dashed group's 12px outset overhangs into the right padding (as in Figma) */
+  .nexus-how-row > .nx-panel .nx-flow { transform-origin: left center; }
+
+  /* Responsive: cards keep their size, the two lines stretch equally to fill the panel.
+     Group basis = 12 + 208 + 208 + 12, so the free space splits evenly between line A and line B. */
+  .nexus-how-row > .nx-panel .nx-conn { flex: 1 1 0; min-width: 0; }
+  .nexus-how-row > .nx-panel .nx-bts { flex: 1 1 440px; }
+
+  @media (min-width: 1441px) {
+    .nexus-how-row > .nx-panel { padding: 0 76px 0 64px; }
+  }
+
+  .nx-panel[data-state="2"] { --nx-dur: 1.45s; } /* ~20% faster: hints "instant" */
+
+  .nx-panel-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .nx-panel-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 59%; /* portrait photo: matches the Figma crop (plaza, columns, steps) */
+    display: block;
+    transform: scaleX(-1); /* mirrored, as in Figma state 7 (keeps the high-res source) */
+  }
+
+  /* Overlay: #1D1D1D 10% overlay (contrast layer from ondo.finance) + black 60% multiply.
+     They blend only with the photo, since .nx-panel-bg is its own stacking context (z-index: -1). */
+  .nx-panel-shade {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    mix-blend-mode: multiply;
+  }
+
+  .nx-panel-shade--contrast {
+    background: rgba(29, 29, 29, 0.1);
+    mix-blend-mode: overlay;
+  }
+
+  .nx-flow {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    width: 842px;
+    transform: scale(var(--nx-scale, 1));
+  }
+
+  .nx-node {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 208px;
+    height: 88px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(29, 29, 29, 0.45); /* Ondo live glass token (fill 40% → 45%) */
+    -webkit-backdrop-filter: blur(30px) saturate(140%);
+    backdrop-filter: blur(30px) saturate(140%);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.2px;
+    transition: background 300ms var(--nx-ease), color 300ms var(--nx-ease), box-shadow 300ms var(--nx-ease);
+  }
+
+  .nx-node img {
+    width: 80px;
+    height: 24px;
+    display: block;
+    transition: filter 300ms var(--nx-ease);
+  }
+
+  .nx-node.is-active {
+    background: #fff;
+    color: #000;
+    box-shadow: inset 0 0 0 1px transparent;
+  }
+
+  .nx-node.is-active img { filter: invert(1); }
+
+  /* "Behind the scenes" group: Nexus + Ondo */
+  .nx-bts {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-radius: 28px;
+    background: transparent;
+  }
+
+  .nx-bts-border {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+  }
+
+  .nx-bts-label {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.14px;
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  /* Connectors */
+  .nx-conn {
+    position: relative;
+    flex: 0 0 103px;
+    height: 88px;
+  }
+
+  .nx-conn--a { margin-right: -12px; } /* line runs under the group's padding up to Nexus */
+
+  .nx-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    margin-top: -0.5px;
+    background: rgba(255, 255, 255, 0.3);
+    transition: background 300ms var(--nx-ease), box-shadow 300ms var(--nx-ease);
+  }
+
+  .nx-conn.is-active .nx-line {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+  }
+
+  /* Fixed label above the active line — only the dot moves */
+  .nx-chip {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 28px;
+    padding: 5px 9px;
+    border-radius: 99px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.14px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 300ms var(--nx-ease);
+  }
+
+  .nx-chip--fund { background: #004830; color: #ebf0e7; }
+  .nx-chip--usdc { background: #1c3966; color: #b9d2fa; }
+  .nx-chip.is-on { opacity: 1; }
+
+  /* Looping dot: one at a time, travels the active connector */
+  .nx-dot {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 9px;
+    height: 9px;
+    margin-top: -4.5px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+    opacity: 0;
+  }
+
+  .nx-dot::before {
+    content: '';
+    position: absolute;
+    top: 3.5px;
+    right: 4.5px;
+    width: 36px;
+    height: 2px;
+    border-radius: 1px;
+    background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.9));
+  }
+
+  .nx-conn.is-rev .nx-dot::before {
+    right: auto;
+    left: 4.5px;
+    background: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,0.9));
+  }
+
+  .nx-conn.is-active .nx-dot {
+    animation: nx-travel var(--nx-dur) infinite, nx-fade var(--nx-dur) linear infinite;
+  }
+
+  .nx-conn.is-active.is-rev .nx-dot { animation-direction: reverse; }
+
+  /* Brief blank between states so the dot never jumps mid-path */
+  .nx-panel.is-switching .nx-dot { animation: none; opacity: 0; }
+
+  .nexus-how.is-offscreen .nx-dot { animation-play-state: paused; }
+
+  @keyframes nx-travel {
+    0%       { transform: translateX(0); animation-timing-function: cubic-bezier(0.45, 0, 0.35, 1); }
+    78%, 100% { transform: translateX(var(--nx-travel)); }
+  }
+
+  @keyframes nx-fade {
+    0%        { opacity: 0; }
+    8%, 70%   { opacity: 1; }
+    78%, 100% { opacity: 0; }
+  }
+
+  /* Step 3 swap: FUND dot Nexus → Ondo, then USDC dot Ondo → Nexus, in one loop.
+     Each half matches a normal cycle; the fixed label crossfades between halves. */
+  .nx-dot--back { display: none; }
+
+  .nx-conn.is-swap .nx-dot--back { display: block; }
+
+  .nx-dot--back::before,
+  .nx-conn.is-rev .nx-dot--back::before {
+    right: auto;
+    left: 4.5px;
+    background: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,0.9));
+  }
+
+  .nx-conn.is-active.is-swap .nx-dot {
+    animation: nx-swap-fwd calc(var(--nx-dur) * 2) infinite, nx-swap-fwd-fade calc(var(--nx-dur) * 2) linear infinite;
+  }
+
+  .nx-conn.is-active.is-swap .nx-dot--back {
+    animation: nx-swap-back calc(var(--nx-dur) * 2) infinite, nx-swap-back-fade calc(var(--nx-dur) * 2) linear infinite;
+  }
+
+  .nx-conn.is-active.is-swap .nx-chip--fund { animation: nx-swap-chip-a calc(var(--nx-dur) * 2) linear infinite; }
+  .nx-conn.is-active.is-swap .nx-chip--usdc { animation: nx-swap-chip-b calc(var(--nx-dur) * 2) linear infinite; }
+
+  .nexus-how.is-offscreen .nx-chip { animation-play-state: paused; }
+
+  @keyframes nx-swap-fwd {
+    0%        { transform: translateX(0); animation-timing-function: cubic-bezier(0.45, 0, 0.35, 1); }
+    39%, 100% { transform: translateX(var(--nx-travel)); }
+  }
+
+  @keyframes nx-swap-back {
+    0%        { transform: translateX(var(--nx-travel)); }
+    50%       { transform: translateX(var(--nx-travel)); animation-timing-function: cubic-bezier(0.45, 0, 0.35, 1); }
+    89%, 100% { transform: translateX(0); }
+  }
+
+  @keyframes nx-swap-fwd-fade {
+    0%        { opacity: 0; }
+    4%, 35%   { opacity: 1; }
+    39%, 100% { opacity: 0; }
+  }
+
+  @keyframes nx-swap-back-fade {
+    0%, 50%   { opacity: 0; }
+    54%, 85%  { opacity: 1; }
+    89%, 100% { opacity: 0; }
+  }
+
+  @keyframes nx-swap-chip-a {
+    0%, 44%   { opacity: 1; }
+    50%, 94%  { opacity: 0; }
+    100%      { opacity: 1; }
+  }
+
+  @keyframes nx-swap-chip-b {
+    0%, 44%   { opacity: 0; }
+    50%, 94%  { opacity: 1; }
+    100%      { opacity: 0; }
+  }
+
+  /* Shorter laptop screens */
+  @media (min-width: 1025px) and (max-width: 1280px) {
+    .nexus-how-steps { flex-basis: 340px; }
+    .nexus-how-step-title { font-size: 32px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nx-conn.is-active .nx-dot,
+    .nx-conn.is-active.is-swap .nx-dot {
+      animation: none;
+      opacity: 1;
+      transform: translateX(calc(var(--nx-travel) / 2));
+    }
+    .nx-conn.is-active.is-swap .nx-dot--back { display: none; }
+    .nx-conn.is-active.is-swap .nx-chip--fund { animation: none; opacity: 1; }
+    .nx-conn.is-active.is-swap .nx-chip--usdc { animation: none; opacity: 0; }
+  }
+
+  /* ── Tablet + mobile (≤1024): autoplay stepper ──
+     No pinning: a 3-segment bar (tap to jump), the step copy crossfading in one spot, and one panel.
+     JS advances a step every few seconds while the section is on screen. */
+  .nx-stepper { display: none; }
+
+  @media (max-width: 1024px) {
+    .nexus-how { gap: 64px; padding: 96px 44px 88px; }
+    .nexus-how-header { gap: 32px; }
+    .nexus-how-h2 { font-size: 44px; letter-spacing: -1.32px; }
+    .nexus-how-body { font-size: 18px; letter-spacing: -0.18px; }
+
+    .nexus-how-row { flex-direction: column; gap: 40px; }
+    .nexus-how-steps { display: none; }
+
+    .nx-stepper { display: flex; flex-direction: column; gap: 40px; }
+
+    .nx-stepper-bar { display: flex; gap: 4px; }
+
+    /* Each segment is a full-width × 44px tap target: line on top, number below */
+    .nx-seg {
+      flex: 1 1 0;
+      min-width: 0;
+      min-height: 44px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 0;
+      background: none;
+      border: 0;
+      color: #fff;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .nx-seg-line {
+      position: relative;
+      width: 100%;
+      height: 2px;
+      border-radius: 1px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .nx-seg-fill {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.9);
+      transform-origin: left center;
+      transform: scaleX(var(--p, 0));
+    }
+
+    .nx-seg-num {
+      font-family: 'ABC Arizona Text', Georgia, serif;
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.24px;
+      opacity: 0.4;
+      transition: opacity 300ms var(--nx-ease);
+    }
+
+    .nx-seg.is-active .nx-seg-num { opacity: 1; }
+    .nx-seg:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.6); outline-offset: 6px; border-radius: 2px; }
+
+    /* All three copies share one grid cell, so the block keeps the tallest height and never jumps */
+    .nx-stepper-copy { display: grid; }
+
+    .nx-stepper-item {
+      grid-area: 1 / 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      opacity: 0;
+      transform: translateY(8px);
+      visibility: hidden;
+      transition: opacity 200ms var(--nx-ease), transform 200ms var(--nx-ease), visibility 0s linear 200ms;
+    }
+
+    .nx-stepper-item.is-active {
+      opacity: 1;
+      transform: none;
+      visibility: visible;
+      transition: opacity 300ms var(--nx-ease) 150ms, transform 300ms var(--nx-ease) 150ms, visibility 0s;
+    }
+
+    .nx-stepper-title {
+      font-size: 28px;
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.56px;
+      color: #fff;
+    }
+
+    .nx-stepper-desc {
+      font-family: 'ABC Arizona Text', Georgia, serif;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.32;
+      letter-spacing: -0.18px;
+      color: #b1b1b1;
+      text-wrap: balance;
+    }
+
+    /* Panel: full width, not pinned; nodes a step smaller than desktop */
+    .nexus-how-row > .nx-panel {
+      --nx-outset: 8px;
+      position: relative;
+      top: auto;
+      align-self: stretch;
+      flex: none;
+      width: 100%;
+      max-width: none;
+      height: 384px;
+      padding: 0 24px;
+      border-radius: 24px;
+    }
+
+    .nx-node { flex-basis: 192px; height: 80px; font-size: 18px; letter-spacing: -0.18px; }
+    .nx-conn { height: 80px; }
+    .nx-bts { padding: 8px; }
+    .nx-bts-border rect { rx: 24px; }
+    .nexus-how-row > .nx-panel .nx-conn--a { margin-right: -8px; }
+    .nexus-how-row > .nx-panel .nx-bts { flex: 1 1 400px; } /* 8 + 192 + 192 + 8 */
+  }
+
+  /* Mobile: same stepper, vertical diagram (Holder → Nexus → Ondo top to bottom) */
+  @media (max-width: 768px) {
+    .nexus-how { gap: 48px; padding: 64px 20px; }
+    .nexus-how-header { gap: 24px; }
+    .nexus-how-label { font-size: 15px; letter-spacing: -0.15px; }
+    .nexus-how-h2 { font-size: 32px; letter-spacing: -0.64px; }
+    .nexus-how-body { font-size: 16px; letter-spacing: -0.16px; }
+
+    .nexus-how-row,
+    .nx-stepper { gap: 40px; }
+
+    .nx-seg-num { font-size: 20px; letter-spacing: -0.2px; }
+    .nx-stepper-title { font-size: 24px; letter-spacing: -0.72px; }
+    .nx-stepper-desc { font-size: 16px; letter-spacing: -0.16px; }
+
+    /* Bottom padding leaves room for the "Behind the scenes" label under the dashed group */
+    .nexus-how-row > .nx-panel { height: auto; padding: 40px 24px 70px; justify-content: center; }
+    .nexus-how-row > .nx-panel .nx-flow { flex-direction: column; width: 216px; transform: none; }
+
+    .nx-node { flex: none; width: 200px; height: 64px; font-size: 16px; letter-spacing: -0.16px; border-radius: 16px; }
+
+    .nexus-how-row > .nx-panel .nx-bts { flex: none; flex-direction: column; width: 100%; padding: 8px; }
+    .nx-bts-border rect { rx: 20px; }
+    .nx-bts-label { top: 100%; bottom: auto; margin: 12px 0 0; }
+
+    /* Holder → group edge is 56px, so Holder → Nexus reads as 64px like the inner connector */
+    .nexus-how-row > .nx-panel .nx-conn { flex: none; width: 100%; height: 64px; }
+    .nexus-how-row > .nx-panel .nx-conn--a { height: 56px; margin-right: 0; }
+
+    .nx-line { left: 50%; right: auto; top: 0; bottom: 0; width: 1px; height: auto; margin: 0 0 0 -0.5px; }
+
+    .nx-chip { top: 50%; left: calc(50% + 14px); transform: translateY(-50%); }
+
+    .nx-dot { top: 0; left: 50%; margin: 0 0 0 -4.5px; }
+    .nx-dot::before { top: auto; bottom: 4.5px; right: auto; left: 3.5px; width: 2px; height: 36px; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.9)); }
+    .nx-conn.is-rev .nx-dot::before { bottom: auto; top: 4.5px; left: 3.5px; background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,0.9)); }
+
+    .nx-conn .nx-dot--back::before { top: 4.5px; bottom: auto; left: 3.5px; background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,0.9)); }
+
+    .nx-conn.is-active .nx-dot { animation-name: nx-travel-y, nx-fade; }
+    .nx-conn.is-active.is-swap .nx-dot { animation-name: nx-swap-fwd-y, nx-swap-fwd-fade; }
+    .nx-conn.is-active.is-swap .nx-dot--back { animation-name: nx-swap-back-y, nx-swap-back-fade; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nx-conn.is-active .nx-dot,
+      .nx-conn.is-active.is-swap .nx-dot { transform: translateY(calc(var(--nx-travel) / 2)); }
+    }
+
+    @keyframes nx-travel-y {
+      0%        { transform: translateY(0); animation-timing-function: cubic-bezier(0.45, 0, 0.35, 1); }
+      78%, 100% { transform: translateY(var(--nx-travel)); }
+    }
+
+    @keyframes nx-swap-fwd-y {
+      0%        { transform: translateY(0); animation-timing-function: cubic-bezier(0.45, 0, 0.35, 1); }
+      39%, 100% { transform: translateY(var(--nx-travel)); }
+    }
+
+    @keyframes nx-swap-back-y {
+      0%        { transform: translateY(var(--nx-travel)); }
+      50%       { transform: translateY(var(--nx-travel)); animation-timing-function: cubic-bezier(0.45, 0, 0.35, 1); }
+      89%, 100% { transform: translateY(0); }
+    }
+  }
+
+  /* ── Why Choose Nexus ── */
+  .nexus-why {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 96px;
+    padding: 120px 44px;
+  }
+
+  .nexus-why-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    width: 769px;
+    max-width: 100%;
+  }
+
+  .nexus-why-eyebrow {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #000;
+  }
+
+  .nexus-why-h2 {
+    font-size: 56px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -1.68px;
+    color: #000;
+    text-align: center;
+    width: 100%;
+  }
+
+  .nexus-why-grid {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .nexus-why-card {
+    flex: 1;
+    min-width: 0;
+    background: #ebf0e7;
+    border-radius: 24px;
+    padding: 30px;
+    height: 240px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nexus-why-card-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .nexus-why-icon {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    display: block;
+    object-fit: contain;
+  }
+
+  .nexus-why-text {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .nexus-why-title {
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.24px;
+    color: #002b20;
+  }
+
+  /* ── Partner Logos ── */
+  .nexus-logos {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 96px;
+    padding: 120px 44px;
+  }
+
+  .nexus-logos-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+  }
+
+  .nexus-logos-eyebrow {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #000;
+  }
+
+  .nexus-logos-h2 {
+    font-size: 56px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -1.68px;
+    color: #000;
+  }
+
+  .nexus-logos-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 12px;
+    width: 100%;
+    height: 252px;
+  }
+
+  .nexus-logo-card {
+    background: #f0f0f0;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow: hidden;
+  }
+
+  .nexus-logo-card img {
+    height: 40px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* ── Closing CTA ── */
+  .nexus-cta-wrapper {
+    background: #fff;
+    padding: 44px;
+  }
+
+  .nexus-cta {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    padding: 88px 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nexus-cta-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .nexus-cta-bg img:nth-child(1),
+  .nexus-cta-bg img:nth-child(2) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .nexus-cta-bg-photo {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .nexus-cta-bg-photo img {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 406.48%;
+    top: -153.24%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .nexus-cta-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .nexus-cta-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    width: 602px;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .nexus-cta-text {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .nexus-cta-heading {
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -1.44px;
+  }
+
+  .nexus-cta-heading .line1 { color: #fff; display: block; }
+  .nexus-cta-heading .line2 { color: rgba(240, 240, 240, 0.7); display: block; }
+
+  .nexus-cta-body {
+    font-family: 'ABC Arizona Text', Georgia, serif;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.32;
+    letter-spacing: -0.2px;
+    color: #fff;
+  }
+
+  .nexus-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    padding: 0 16px;
+    background: #fff;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .nexus-cta-btn:hover { background: #f0f0f0; }
+
+  @media (max-width: 1024px) {
+    .nexus-cta-wrapper { padding: 30px; }
+    .nexus-cta { padding: 80px 44px; }
+    .nexus-cta-heading { font-size: 36px; letter-spacing: -0.72px; }
+    .nexus-cta-body { font-size: 18px; letter-spacing: -0.18px; }
+  }
+
+  @media (max-width: 768px) {
+    .nexus-cta-wrapper { padding: 30px 20px; }
+    .nexus-cta { padding: 80px 20px; }
+    .nexus-cta-heading { font-size: 28px; letter-spacing: -0.56px; }
+    .nexus-cta-body { font-size: 16px; letter-spacing: -0.16px; max-width: 260px; }
+  }
+
+  /* ── Footer ── */
+  .nexus-footer {
+    background: #000;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nexus-footer-main {
+    display: flex;
+    flex-direction: column;
+    gap: 112px;
+    padding: 44px;
+  }
+
+  /* Nav columns */
+  .nexus-footer-nav {
+    display: flex;
+    gap: 36px;
+    align-items: flex-start;
+  }
+
+  .nexus-footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .nexus-footer-col-title {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #fff;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .nexus-footer-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 0;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #b1b1b1;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .nexus-footer-link:hover { color: #fff; }
+
+  .nexus-footer-link img {
+    width: 16px;
+    height: 16px;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  /* Legal text */
+  .nexus-footer-legal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .nexus-footer-legal-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .nexus-footer-legal-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    margin: 0;
+  }
+
+  .nexus-footer-legal-text {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.12px;
+    color: #b1b1b1;
+    white-space: pre-wrap;
+  }
+
+  .nexus-footer-legal-text a {
+    color: #b1b1b1;
+    text-decoration: underline;
+  }
+
+  /* Big wordmark */
+  .nexus-footer-wordmark {
+    width: 100%;
+    aspect-ratio: 1512 / 183.7;
+    display: block;
+    object-fit: contain;
+  }
+
+  /* Bottom bar */
+  .nexus-footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 44px;
+    height: 76px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .nexus-footer-bottom-left {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .nexus-footer-copyright {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.14px;
+    color: #fff;
+  }
+
+  .nexus-footer-legal-link {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.14px;
+    color: #b1b1b1;
+    text-decoration: none;
+  }
+
+  .nexus-footer-legal-link:hover { color: #fff; }
+
+  .nexus-footer-socials {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .nexus-footer-social-link {
+    display: flex;
+    align-items: center;
+    opacity: 0.7;
+  }
+
+  .nexus-footer-social-link:hover { opacity: 1; }
+
+  .nexus-footer-social-link img {
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+
+  @media (max-width: 1024px) {
+    .nexus-footer-main { padding: 44px 30px; gap: 64px; }
+    .nexus-footer-legal { grid-template-columns: 1fr; gap: 40px; }
+    .nexus-footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 32px;
+      height: auto;
+      padding: 20px 30px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .nexus-footer-main { padding: 32px 20px; gap: 48px; }
+    .nexus-footer-nav { display: grid; grid-template-columns: repeat(2, max-content); gap: 36px; }
+    .nexus-footer-bottom { padding: 20px; }
+  }
+
+  /* ── Scroll-triggered entrance animations ── */
+  .anim-fade-up {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s cubic-bezier(0.45, 0, 0.2, 1),
+                transform 0.7s cubic-bezier(0.45, 0, 0.2, 1);
+  }
+  .anim-fade-up.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Card stagger */
+  .anim-card:nth-child(2) { transition-delay: 80ms; }
+  .anim-card:nth-child(3) { transition-delay: 160ms; }
+  .anim-card:nth-child(4) { transition-delay: 240ms; }
+
+  .nexus-why-desc {
+    font-family: 'ABC Arizona Text', Georgia, serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.32;
+    letter-spacing: -0.16px;
+    color: #002b20;
+    opacity: 0.8;
+  }
+
+  /* ── Responsive: tablet (≤1024) + mobile (≤768) — Figma "Handoff" 900 / 400 frames ── */
+
+  /* Hero token marquee: tablet/mobile replacement for the desktop fan (built by JS) */
+  .nexus-marquee { display: none; }
+
+  @media (max-width: 1024px) {
+    /* Nav: full-width transparent bar over the dark hero; turns black once the page scrolls */
+    .site-header { padding: 0; }
+    .site-nav {
+      width: 100%;
+      max-width: 100%;
+      height: 60px;
+      padding: 12px 20px;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      transition: background 300ms ease;
+    }
+    .site-header.is-solid .site-nav { background: #000; }
+    .nav-logo img { filter: none; }
+    .nav-links { display: none; }
+    .nav-launch-btn { background: #fff; color: #000; }
+    .nav-hamburger { display: flex; margin-left: 16px; }
+    .nav-hamburger path { stroke: #fff; }
+
+    /* Hero: centered copy, token marquee along the bottom over a blue glow */
+    .nexus-hero {
+      flex-direction: column;
+      justify-content: center;
+      min-height: 100svh;
+      padding: 60px 44px 160px;
+      text-align: center;
+      background:
+        radial-gradient(ellipse 70% 40% at 50% 100%, rgba(0, 110, 230, 0.32), transparent 75%),
+        linear-gradient(to bottom, #000 0%, #000 35%, #031a33 100%);
+    }
+    .nexus-bg { display: none; }
+    .nexus-content { align-items: center; }
+    .nexus-top { align-items: center; }
+    .nexus-heading { font-size: 56px; letter-spacing: -1.68px; }
+    .nexus-body { font-size: 18px; letter-spacing: -0.18px; max-width: 328px; }
+    .nexus-ctas { gap: 12px; justify-content: center; }
+    .nexus-btn-secondary {
+      padding: 0 16px;
+      border-radius: 8px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+    }
+
+    .nexus-marquee {
+      --mq-size: 42px;      /* side tokens */
+      --mq-scale: 1.4512;   /* centre token: 61 / 42 */
+      --mq-gap: 96px;
+      display: block;
+      position: absolute;
+      left: 0; right: 0;
+      bottom: 56px;
+      height: 64px;
+      pointer-events: none;
+    }
+    .mq-item {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      display: flex;
+      align-items: center;
+      gap: calc(var(--mq-size) * 0.24);
+      opacity: 0.3;
+      transform-origin: center;
+      white-space: nowrap;
+      will-change: transform;
+    }
+    .mq-item.is-active { opacity: 1; }
+    .mq-item img { width: var(--mq-size); height: var(--mq-size); display: block; flex-shrink: 0; }
+    .mq-item span { font-size: var(--mq-size); font-weight: 500; line-height: 1.05; color: #fff; }
+
+    /* Why choose Nexus: 2 × 2 cards */
+    .nexus-why { padding: 96px 30px; gap: 80px; }
+    .nexus-why-header { gap: 24px; }
+    .nexus-why-h2 { font-size: 44px; letter-spacing: -1.32px; }
+    .nexus-why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .nexus-why-title { font-size: 20px; letter-spacing: -0.2px; }
+
+    /* Partners: 3 columns */
+    .nexus-logos { padding: 96px 30px; gap: 80px; }
+    .nexus-logos-h2 { font-size: 44px; letter-spacing: -1.32px; }
+    .nexus-logos-grid { grid-template-columns: repeat(3, 1fr); grid-template-rows: none; height: auto; }
+    .nexus-logo-card { height: 120px; }
+  }
+
+  @media (max-width: 768px) {
+    .nexus-hero { padding: 60px 20px 136px; }
+    .nexus-eyebrow { font-size: 15px; letter-spacing: -0.15px; }
+    .nexus-heading { font-size: 40px; letter-spacing: -1.2px; }
+    .nexus-body { font-size: 16px; letter-spacing: -0.16px; max-width: 260px; }
+    .nexus-marquee { --mq-size: 32px; --mq-scale: 1.4286; --mq-gap: 64px; bottom: 48px; height: 48px; }
+
+    .nexus-why { padding: 64px 20px; gap: 56px; }
+    .nexus-why-header { gap: 28px; }
+    .nexus-why-eyebrow { font-size: 15px; letter-spacing: -0.15px; }
+    .nexus-why-h2 { font-size: 32px; letter-spacing: -0.64px; }
+    .nexus-why-grid { grid-template-columns: 1fr; }
+    .nexus-why-card { height: 224px; }
+    .nexus-why-title { font-size: 18px; letter-spacing: -0.18px; }
+    .nexus-why-desc { font-family: inherit; font-size: 15px; letter-spacing: -0.15px; }
+
+    .nexus-logos { padding: 64px 20px; gap: 56px; }
+    .nexus-logos-eyebrow { font-size: 15px; letter-spacing: -0.15px; }
+    .nexus-logos-h2 { font-size: 32px; letter-spacing: -0.64px; }
+    .nexus-logos-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<header class="site-header">
+  <nav class="site-nav">
+    <div class="nav-logo">
+      <img src="assets/ondo-logo.svg" alt="Ondo">
+    </div>
+    <div class="nav-links">
+      <a class="nav-link" href="#">Products</a>
+      <a class="nav-link" href="#">Resources</a>
+      <a class="nav-link" href="#">Ecosystem</a>
+      <a class="nav-link" href="#">About</a>
+    </div>
+    <div class="nav-auth">
+      <button class="nav-launch-btn">Launch App</button>
+      <button class="nav-hamburger" aria-label="Open menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 6H20M4 12H20M4 18H20" stroke="#000" stroke-width="1" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<!-- ── Hero ── -->
+<section class="nexus-hero">
+
+  <!-- Background: left panel (vacío) + right panel (tickers) -->
+  <div class="nexus-bg" aria-hidden="true">
+    <div class="nexus-bg-left"></div>
+    <div class="nexus-bg-right">
+      <div class="nexus-blob" aria-hidden="true"></div>
+      <div class="nexus-bg-group" id="tickerGroup"></div>
+      <div class="nexus-bg-scrim-top"></div>
+      <div class="nexus-bg-scrim-bottom"></div>
+    </div>
+  </div>
+
+  <!-- Left content -->
+  <div class="nexus-content">
+    <div class="nexus-top anim-fade-up">
+      <p class="nexus-eyebrow">Nexus</p>
+      <h1 class="nexus-heading">
+        Our Technology,
+        <span class="nexus-heading-dim">Your Tokens</span>
+      </h1>
+      <p class="nexus-body">Instant liquidity infrastructure for regulated issuers of tokenized funds.</p>
+    </div>
+    <div class="nexus-ctas anim-fade-up" style="transition-delay:150ms">
+      <a href="#" class="nexus-btn-primary">Talk to our team</a>
+      <a href="#how-nexus-works" class="nexus-btn-secondary" style="cursor:pointer">See how it works</a>
+    </div>
+  </div>
+
+  <!-- Tablet/mobile: tokens step along a horizontal row (built by JS) -->
+  <div class="nexus-marquee" id="tokenMarquee" aria-hidden="true"></div>
+
+</section>
+
+<!-- ── How Nexus Works ── -->
+<section class="nexus-how" id="how-nexus-works">
+
+  <!-- Header (scrolls normally, not pinned) -->
+  <div class="nexus-how-header">
+    <p class="nexus-how-label anim-fade-up">How Nexus works</p>
+    <div class="nexus-how-titles">
+      <h2 class="nexus-how-h2 anim-fade-up" style="transition-delay:80ms">Instant Redemptions, <span class="nexus-how-h2-dim">Without the Wait</span></h2>
+      <p class="nexus-how-body anim-fade-up" style="transition-delay:160ms">Nexus lets your tokenholders redeem into stablecoins in near-real time, while Ondo provides the liquidity behind the scenes.</p>
+    </div>
+  </div>
+
+  <div class="nexus-how-row">
+
+    <!-- Tablet/mobile: autoplay stepper above the same panel (replaces the pinned scroll steps) -->
+    <div class="nx-stepper">
+      <div class="nx-stepper-bar" role="tablist" aria-label="How Nexus works, step by step">
+        <button class="nx-seg is-active" type="button" role="tab" aria-selected="true" data-step="1"><span class="nx-seg-line"><span class="nx-seg-fill"></span></span><span class="nx-seg-num">01</span></button>
+        <button class="nx-seg" type="button" role="tab" aria-selected="false" data-step="2"><span class="nx-seg-line"><span class="nx-seg-fill"></span></span><span class="nx-seg-num">02</span></button>
+        <button class="nx-seg" type="button" role="tab" aria-selected="false" data-step="3"><span class="nx-seg-line"><span class="nx-seg-fill"></span></span><span class="nx-seg-num">03</span></button>
+      </div>
+      <div class="nx-stepper-copy">
+        <div class="nx-stepper-item is-active" data-step="1">
+          <h3 class="nx-stepper-title">Request Redemption</h3>
+          <p class="nx-stepper-desc">A holder requests redemption of your tokenized fund.</p>
+        </div>
+        <div class="nx-stepper-item" data-step="2">
+          <h3 class="nx-stepper-title">Nexus provides instant liquidity</h3>
+          <p class="nx-stepper-desc">Nexus provides instant liquidity and settles in stablecoins (e.g. USDC).</p>
+        </div>
+        <div class="nx-stepper-item" data-step="3">
+          <h3 class="nx-stepper-title">Ondo manages &amp; rebalances</h3>
+          <p class="nx-stepper-desc">Ondo manages the resulting inventory and rebalances the liquidity buffer.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step copy: each block is 100vh; its copy sticks next to the panel until the next one pushes it out -->
+    <div class="nexus-how-steps">
+      <div class="nexus-how-progress" aria-hidden="true"></div>
+      <div class="nexus-how-step" data-step="1">
+        <div class="nexus-how-step-sticky">
+          <p class="nexus-how-num">01</p>
+          <div class="nexus-how-step-text">
+            <h3 class="nexus-how-step-title">Request<br>Redemption</h3>
+            <p class="nexus-how-step-desc">A holder requests redemption of your tokenized fund.</p>
+          </div>
+        </div>
+      </div>
+      <div class="nexus-how-step" data-step="2">
+        <div class="nexus-how-step-sticky">
+          <p class="nexus-how-num">02</p>
+          <div class="nexus-how-step-text">
+            <h3 class="nexus-how-step-title">Nexus provides<br>instant liquidity</h3>
+            <p class="nexus-how-step-desc">Nexus provides instant liquidity and settles in stablecoins (e.g. USDC).</p>
+          </div>
+        </div>
+      </div>
+      <div class="nexus-how-step" data-step="3">
+        <div class="nexus-how-step-sticky">
+          <p class="nexus-how-num">03</p>
+          <div class="nexus-how-step-text">
+            <h3 class="nexus-how-step-title">Ondo manages<br>&amp; rebalances</h3>
+            <p class="nexus-how-step-desc">Ondo manages the resulting inventory and rebalances the liquidity buffer.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <!-- Actor diagram: Holder → Nexus → Ondo (state set by JS) -->
+      <div class="nx-panel" data-state="1" role="img" aria-label="Diagram: a holder sends fund tokens to Nexus, Nexus pays the holder USDC, and Ondo rebalances the liquidity buffer behind the scenes.">
+        <div class="nx-panel-bg" aria-hidden="true">
+          <img src="assets/nexus-how-panel-v3.jpg" alt="">
+          <span class="nx-panel-shade nx-panel-shade--contrast"></span>
+          <span class="nx-panel-shade"></span>
+        </div>
+        <div class="nx-flow" aria-hidden="true">
+          <div class="nx-node is-active" data-node="holder">Holder</div>
+          <div class="nx-conn nx-conn--a is-active" data-conn="a">
+            <span class="nx-chip nx-chip--fund is-on" data-chip="fund">Fund</span>
+            <span class="nx-chip nx-chip--usdc" data-chip="usdc">USDC</span>
+            <span class="nx-line"></span>
+            <span class="nx-dot"></span>
+          </div>
+          <div class="nx-bts">
+            <svg class="nx-bts-border" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <rect width="100%" height="100%" rx="27.5" fill="none" stroke="#fff" stroke-width="1" stroke-dasharray="1 4" vector-effect="non-scaling-stroke"/>
+            </svg>
+            <span class="nx-bts-label">Behind the scenes</span>
+            <div class="nx-node" data-node="nexus">Nexus</div>
+            <div class="nx-conn nx-conn--b" data-conn="b">
+              <span class="nx-chip nx-chip--fund" data-chip="fund">Fund</span>
+              <span class="nx-chip nx-chip--usdc" data-chip="usdc">USDC</span>
+              <span class="nx-line"></span>
+              <span class="nx-dot"></span>
+              <span class="nx-dot nx-dot--back"></span>
+            </div>
+            <div class="nx-node" data-node="ondo"><img src="assets/ondo-logo-white.svg" alt=""></div>
+          </div>
+        </div>
+      </div>
+
+  </div>
+</section>
+
+<!-- ── Why Choose Nexus ── -->
+<section class="nexus-why">
+
+  <div class="nexus-why-header">
+    <p class="nexus-why-eyebrow anim-fade-up">Why choose Nexus</p>
+    <h2 class="nexus-why-h2 anim-fade-up" style="transition-delay:80ms">Built for Regulated Issuers</h2>
+  </div>
+
+  <div class="nexus-why-grid">
+
+    <div class="nexus-why-card anim-fade-up anim-card">
+      <div class="nexus-why-card-inner">
+        <img class="nexus-why-icon" src="assets/nexus-icon-speed.svg" alt="">
+        <div class="nexus-why-text">
+          <p class="nexus-why-title">Speed</p>
+          <p class="nexus-why-desc">Near-instant, 24/7 stablecoin redemptions for your tokenholders.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="nexus-why-card anim-fade-up anim-card">
+      <div class="nexus-why-card-inner">
+        <img class="nexus-why-icon" src="assets/nexus-icon-trust.svg" alt="">
+        <div class="nexus-why-text">
+          <p class="nexus-why-title">Trust</p>
+          <p class="nexus-why-desc">Institutional-grade infrastructure with security, transparency, and compliance.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="nexus-why-card anim-fade-up anim-card">
+      <div class="nexus-why-card-inner">
+        <img class="nexus-why-icon" src="assets/nexus-icon-control.svg" alt="">
+        <div class="nexus-why-text">
+          <p class="nexus-why-title">Control</p>
+          <p class="nexus-why-desc">KYC/KYB, custody, disclosures, reporting, and operational guardrails.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="nexus-why-card anim-fade-up anim-card">
+      <div class="nexus-why-card-inner">
+        <img class="nexus-why-icon" src="assets/nexus-icon-scale.svg" alt="">
+        <div class="nexus-why-text">
+          <p class="nexus-why-title">Scale</p>
+          <p class="nexus-why-desc">A single path from token issuance to real tokenholder liquidity, without stitching together vendors.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ── Partner Logos ── -->
+<section class="nexus-logos">
+
+  <div class="nexus-logos-header">
+    <p class="nexus-logos-eyebrow anim-fade-up">Trusted by Institution Partners</p>
+    <h2 class="nexus-logos-h2 anim-fade-up" style="transition-delay:80ms">Network of Top-Tier Partners</h2>
+  </div>
+
+  <div class="nexus-logos-grid">
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:0ms"><img src="assets/nexus-logo-noble.svg" alt="Noble"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:50ms"><img src="assets/nexus-logo-plume.svg" alt="Plume"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:100ms"><img src="assets/nexus-logo-sphere.svg" alt="Sphere Finance"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:150ms"><img src="assets/nexus-logo-stonex.svg" alt="StoneX"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:200ms"><img src="assets/nexus-logo-supra.svg" alt="Supra"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:250ms"><img src="assets/nexus-logo-switchboard.svg" alt="Switchboard"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:300ms"><img src="assets/nexus-logo-wisdomtree.svg" alt="WisdomTree"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:350ms"><img src="assets/nexus-logo-xrpledger.svg" alt="XRP Ledger"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:400ms"><img src="assets/nexus-logo-blackrock.svg" alt="BlackRock"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:450ms"><img src="assets/nexus-logo-ripple.svg" alt="Ripple"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:500ms"><img src="assets/nexus-logo-franklin.svg" alt="Franklin Templeton"></div>
+    <div class="nexus-logo-card anim-fade-up anim-card" style="transition-delay:550ms"><img src="assets/nexus-logo-sui.svg" alt="Sui"></div>
+  </div>
+
+</section>
+
+<!-- ── Closing CTA ── -->
+<div class="nexus-cta-wrapper">
+  <div class="nexus-cta">
+
+    <div class="nexus-cta-bg" aria-hidden="true">
+      <img src="assets/nexus-cta-bg1.png" alt="">
+      <img src="assets/nexus-cta-bg2.png" alt="">
+      <div class="nexus-cta-bg-photo">
+        <img src="assets/nexus-cta-bg3.png" alt="">
+      </div>
+      <div class="nexus-cta-overlay"></div>
+    </div>
+
+    <div class="nexus-cta-content anim-fade-up">
+      <div class="nexus-cta-text">
+        <p class="nexus-cta-heading">
+          <span class="line1">Bring instant liquidity</span>
+          <span class="line2">to your tokenized fund</span>
+        </p>
+        <p class="nexus-cta-body">Talk to our team about integrating Nexus for your investors.</p>
+      </div>
+      <a href="#" class="nexus-cta-btn">Contact us</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Footer ── -->
+<footer class="nexus-footer">
+  <div class="nexus-footer-main">
+
+    <!-- Nav columns -->
+    <nav class="nexus-footer-nav">
+      <div class="nexus-footer-col">
+        <span class="nexus-footer-col-title">Invest</span>
+        <a href="#" class="nexus-footer-link">USDY</a>
+        <a href="#" class="nexus-footer-link">OUSG</a>
+        <a href="#" class="nexus-footer-link">Bridge</a>
+        <a href="#" class="nexus-footer-link">Convert</a>
+        <a href="#" class="nexus-footer-link">Global Markets</a>
+      </div>
+      <div class="nexus-footer-col">
+        <span class="nexus-footer-col-title">Partners</span>
+        <a href="#" class="nexus-footer-link">Ecosystem</a>
+        <a href="#" class="nexus-footer-link">Foundation <img src="assets/nexus-footer-external.svg" alt=""></a>
+        <a href="#" class="nexus-footer-link">Flux Finance <img src="assets/nexus-footer-external.svg" alt=""></a>
+      </div>
+      <div class="nexus-footer-col">
+        <span class="nexus-footer-col-title">Explore</span>
+        <a href="#" class="nexus-footer-link">Insights</a>
+        <a href="#" class="nexus-footer-link">Docs <img src="assets/nexus-footer-external.svg" alt=""></a>
+        <a href="#" class="nexus-footer-link">Trust &amp; Security <img src="assets/nexus-footer-external.svg" alt=""></a>
+        <a href="#" class="nexus-footer-link">Bug Bounty <img src="assets/nexus-footer-external.svg" alt=""></a>
+      </div>
+      <div class="nexus-footer-col">
+        <span class="nexus-footer-col-title">Company</span>
+        <a href="#" class="nexus-footer-link">Team</a>
+        <a href="#" class="nexus-footer-link">Careers <img src="assets/nexus-footer-external.svg" alt=""></a>
+        <a href="#" class="nexus-footer-link">Media Kit <img src="assets/nexus-footer-external.svg" alt=""></a>
+        <a href="#" class="nexus-footer-link">Contact Us</a>
+      </div>
+    </nav>
+
+    <!-- Legal text -->
+    <div class="nexus-footer-legal">
+      <div class="nexus-footer-legal-col">
+        <hr class="nexus-footer-legal-divider">
+        <p class="nexus-footer-legal-text">* The tokenized assets referenced herein (including Global Markets tokens including Ondo tokenized stocks and Ondo tokenized ETFs, USDY tokens and OUSG tokens) (the "Tokens") have not been registered under the US Securities Act of 1933, as amended ("Act") or the securities or financial instrument laws of any other jurisdiction. The Tokens may not be offered or sold in the United States or to US persons unless registered under the Act or an exemption from the registration requirements thereof is available. In certain jurisdictions, including the European Economic Area, the United Kingdom and Switzerland, the Tokens are offered and sold only to qualified investors or professional clients, as the case may be (or that jurisdiction's analogue thereof). Other jurisdiction-based prohibitions and restrictions apply. See docs.ondo.finance for details.
+
+Global Markets tokens provide their holders with economic exposure to the value of their underlying publicly traded assets, including the value of dividends (less applicable tax withholdings). However, the Tokens are not themselves stocks or ETFs, and they do not provide their holders with rights to hold or receive their respective underlying assets.
+
+The communications on this web page are only intended for actual or potential business relationships or technical integrations with respect to Tokens. Nothing herein constitutes any offer to sell, or any solicitation of an offer to buy, any assets (including any Tokens or assets that may be deployed to or accessible via Ondo Chain). Nothing herein constitutes investment, legal, tax or financial advice. Acquiring Tokens involves risks. A holder of Tokens may incur losses, including total loss of their purchase price. Past performance may not be (and for the Tokens will not be) an indication of future results. Investors are responsible for conducting their own research, investigation, verification, checks or consultation for professional or investment advice. Ondo Capital Management LLC (the "Adviser"), the investment adviser of the OUSG issuer (the "Fund") is a Registered Investment Adviser registered with the U.S. Securities and Exchange Commission ("SEC"). The Adviser's current written disclosure statement (Form ADV Part 2A) discussing its advisory services and fees is available upon request or at the SEC's Investment Adviser Public Disclosure website (www.adviserinfo.sec.gov). Registration as an investment adviser does not imply a certain level of skill or training. The Adviser shall not be responsible for any errors or omissions, or for the results obtained from the use of the information provided by the Adviser, the Fund or any of their respective affiliates, control persons, agents or representatives. The Token issuers, their affiliates, their respective shareholders and members, and their respective directors, officers, employees, consultants, agents and representatives (the "Ondo Persons") do not endorse, the Ondo Persons do not make any representation or warranty whatsoever (express or implied, including but not limited to any warranty of merchantability, fitness for a particular purpose, or non-infringement) regarding, and THE ONDO PERSONS SHALL NOT HAVE ANY LIABILITY WHATSOEVER WITH RESPECT TO ANYONE'S USE OF, any third-party products, services or technologies referenced herein.</p>
+      </div>
+      <div class="nexus-footer-legal-col">
+        <hr class="nexus-footer-legal-divider">
+        <p class="nexus-footer-legal-text">Additional terms and restrictions apply. See <a href="#">docs.ondo.finance/legal/terms-of-service</a>, <a href="#">docs.ondo.finance</a>, <a href="#">ondo.finance</a> and (as applicable) the Token offering documents for details.
+
+The communications herein may contain forward-looking statements, including, but not limited to, statements regarding future financial performance, business strategies, or expectations for the growth or development of Ondo Finance, any Token Issuer, or any of their respective affiliates (each, an "Applicable Entity"). These statements are based on management's current expectations, estimates, projections, and beliefs, and are subject to a number of risks, uncertainties, and assumptions that could cause actual results to differ materially from those anticipated. Forward-looking statements can be identified by the use of terminology such as "may," "will," "should," "expect," "intend," "plan," "anticipate," "believe," "estimate," "predict," "potential," "continue," or the negative of these terms or other similar expressions. Factors that could cause actual results to differ materially from those contemplated by the forward-looking statements include, but are not limited to, the following: economic, competitive, legal, governmental, and technological factors affecting the operations, markets, products, services, or prices of any Applicable Entity. No Applicable Entity undertakes any obligation to update or revise any forward-looking statements, whether as a result of new information, future events, or otherwise, except as required by law.
+
+¹ The proportion of unique blockchain addresses holding our token compared to the total number of addresses holding tokens across all competitors.
+
+² APY (Annual Percentage Yield) is accurate as of 2025-11-26. For USDY, APY is set monthly by Ondo in accordance with the USDY governing documents. For OUSG, APY is calculated by annualizing the increase in price over the past 30 days.
+
+³ Example rates only. Actual rates may vary over time.</p>
+      </div>
+    </div>
+
+    <!-- Big wordmark -->
+    <img class="nexus-footer-wordmark anim-fade-up" src="assets/nexus-footer-wordmark.svg" alt="Ondo Finance">
+
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="nexus-footer-bottom">
+    <div class="nexus-footer-bottom-left">
+      <span class="nexus-footer-copyright">Ondo © 2025</span>
+      <a href="#" class="nexus-footer-legal-link">Terms of Service</a>
+      <a href="#" class="nexus-footer-legal-link">Privacy Policy</a>
+    </div>
+    <div class="nexus-footer-socials">
+      <a href="#" class="nexus-footer-social-link"><img src="assets/nexus-footer-twitter.svg" alt="X / Twitter"></a>
+      <a href="#" class="nexus-footer-social-link"><img src="assets/nexus-footer-github.svg" alt="GitHub"></a>
+      <a href="#" class="nexus-footer-social-link"><img src="assets/nexus-footer-telegram.svg" alt="Telegram"></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const TOKENS = [
+    { name: 'RLUSD', icon: 'assets/nexus-rlusd.svg' },
+    { name: 'OUSG',  icon: 'assets/nexus-ousg.svg'  },
+    { name: 'ULTRA', icon: 'assets/nexus-ultra.svg' },
+    { name: 'BUIDL', icon: 'assets/nexus-buidl.svg' },
+    { name: 'PYUSD', icon: 'assets/nexus-pyusd.svg' },
+    { name: 'BENJI', icon: 'assets/nexus-benji.svg' },
+    { name: 'USDC',  icon: 'assets/nexus-usdc.svg'  },
+  ];
+  const N          = TOKENS.length;  // 7
+  const STEP       = 15;             // degrees per step
+  const MAX_ANG    = 60;             // ±60° visible fan spread
+  const INTERVAL   = 2500;          // ms between steps
+  const TRANS_MS   = 900;           // rotation transition ms
+  const BEZIER     = 'cubic-bezier(0.33, 1, 0.82, 1)';
+  const ITEMS      = 2;             // items per row (second one off-screen, for continuity)
+
+  const group = document.getElementById('tickerGroup');
+  const rows  = [];  // sorted by angle (ascending), each: { el, angle }
+  let   nextTIdx = 5; // first token for recycled rows (BENJI, after initial +60° PYUSD)
+
+  /* Build one row element */
+  function makeRow(tokenIdx, angle) {
+    const tok = TOKENS[tokenIdx % N];
+    const el  = document.createElement('div');
+    el.className = 'trow';
+    el.style.transform = `rotate(${angle}deg)`;
+    el.style.opacity   = angle === 0 ? '1' : '0.3';
+    for (let i = 0; i < ITEMS; i++) {
+      const item = document.createElement('div');
+      item.className = 'ticker-item';
+      item.innerHTML  = `<img src="${tok.icon}" alt=""><span>${tok.name}</span>`;
+      el.appendChild(item);
+    }
+    return el;
+  }
+
+  /* Swap a row's token in-place */
+  function updateToken(el, tokenIdx) {
+    const tok = TOKENS[tokenIdx % N];
+    el.querySelectorAll('.ticker-item').forEach(item => {
+      item.querySelector('img').src         = tok.icon;
+      item.querySelector('span').textContent = tok.name;
+    });
+  }
+
+  /* Init 9 rows: -60° to +60° in steps of 15° */
+  for (let a = -MAX_ANG; a <= MAX_ANG; a += STEP) {
+    // 0°→RLUSD(0), +15°→OUSG(1), +30°→ULTRA(2), +45°→BUIDL(3), +60°→PYUSD(4)
+    // -15°→USDC(6), -30°→BENJI(5), -45°→PYUSD(4), -60°→BUIDL(3)
+    const offset   = Math.round(a / STEP);
+    const tokenIdx = ((offset % N) + N) % N;
+    const el       = makeRow(tokenIdx, a);
+    group.appendChild(el);
+    rows.push({ el, angle: a });
+  }
+
+  /* Step: rotate everything -15°, recycle the off-screen row */
+  function step() {
+    // Move all rows by -STEP
+    rows.forEach(r => {
+      r.angle -= STEP;
+      r.el.style.transition = `transform ${TRANS_MS}ms ${BEZIER}, opacity 0.45s ease`;
+      r.el.style.transform  = `rotate(${r.angle}deg)`;
+      r.el.style.opacity    = r.angle === 0 ? '1' : '0.3';
+    });
+
+    // rows[0] just went to -75° (off-screen) → recycle after transition
+    const gone = rows.shift();
+    setTimeout(() => {
+      gone.el.style.transition = 'none';
+      gone.angle               = MAX_ANG;
+      gone.el.style.transform  = `rotate(${MAX_ANG}deg)`;
+      gone.el.style.opacity    = '0.3';
+      updateToken(gone.el, nextTIdx);
+      nextTIdx = (nextTIdx + 1) % N;
+      // force layout flush to commit position before re-enabling transition
+      gone.el.getBoundingClientRect();
+      gone.el.style.transition = `transform ${TRANS_MS}ms ${BEZIER}, opacity 0.45s ease`;
+      rows.push(gone);
+    }, TRANS_MS + 60);
+  }
+
+  const compact = window.matchMedia('(max-width: 1024px)');
+
+  /* ── Tablet/mobile marquee: same tokens and rhythm, laid out in a row.
+     The centre token is full size and opacity; each step slides the row one token left. ── */
+  const marquee = document.getElementById('tokenMarquee');
+  const mqItems = TOKENS.map(tok => {
+    const el = document.createElement('div');
+    el.className = 'mq-item';
+    el.innerHTML = `<img src="${tok.icon}" alt=""><span>${tok.name}</span>`;
+    marquee.appendChild(el);
+    return el;
+  });
+  const HALF = Math.floor(N / 2); // offsets −3…+3 around the centre
+  let mqActive = 0;
+
+  function offsetOf(i) { return ((i - mqActive + N + HALF) % N) - HALF; }
+
+  function layoutMarquee(animate) {
+    if (!compact.matches) return;
+    const cs = getComputedStyle(marquee);
+    const scale = parseFloat(cs.getPropertyValue('--mq-scale')) || 1;
+    const gap = parseFloat(cs.getPropertyValue('--mq-gap')) || 0;
+    const w = mqItems.map(el => el.offsetWidth); // unscaled widths
+    const byOffset = {};
+    mqItems.forEach((el, i) => { byOffset[offsetOf(i)] = i; });
+    const x = { 0: 0 };
+    const vis = o => w[byOffset[o]] * (o === 0 ? scale : 1); // visual width at an offset
+    for (let o = 1; o <= HALF; o++) {
+      x[o]  = x[o - 1]  + vis(o - 1) / 2 + gap + vis(o) / 2;
+      x[-o] = x[-o + 1] - vis(-o + 1) / 2 - gap - vis(-o) / 2;
+    }
+    mqItems.forEach((el, i) => {
+      const o = offsetOf(i);
+      const wrapped = animate && o === HALF; // came round from the far left, off-screen: jump
+      el.style.transition = (animate && !wrapped) ? `transform ${TRANS_MS}ms ${BEZIER}, opacity 0.45s ease` : 'none';
+      el.style.transform = `translate(calc(-50% + ${x[o]}px), -50%) scale(${o === 0 ? scale : 1})`;
+      el.classList.toggle('is-active', o === 0);
+    });
+  }
+
+  function stepMarquee() {
+    mqActive = (mqActive + 1) % N;
+    layoutMarquee(true);
+  }
+
+  setInterval(() => { if (compact.matches) stepMarquee(); else step(); }, INTERVAL);
+  window.addEventListener('resize', () => layoutMarquee(false));
+  compact.addEventListener('change', () => layoutMarquee(false));
+  if (document.fonts) document.fonts.ready.then(() => layoutMarquee(false));
+  layoutMarquee(false);
+
+  /* Tablet/mobile nav sits transparent over the hero; give it a black bar once the page scrolls */
+  const header = document.querySelector('.site-header');
+  const solid = () => header.classList.toggle('is-solid', window.scrollY > 8);
+  window.addEventListener('scroll', solid, { passive: true });
+  solid();
+})();
+
+// ── How Nexus Works ──
+// Desktop: pinned panel + natively scrolling steps.
+// Tablet/mobile (≤1024): autoplay stepper — same panel, steps advance on a timer while on screen.
+(function () {
+  const section = document.querySelector('.nexus-how');
+  if (!section) return;
+
+  const steps = Array.from(section.querySelectorAll('.nexus-how-step'));
+  const boxes = steps.map(el => el.querySelector('.nexus-how-step-sticky'));
+  const panel = section.querySelector('.nexus-how-row > .nx-panel');
+  const progress = section.querySelector('.nexus-how-progress');
+  const compact = window.matchMedia('(max-width: 1024px)');
+  const mobile = window.matchMedia('(max-width: 768px)');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const MIN_FLOW = { desktop: 830, tablet: 700 }; // diagram width (incl. the dashed group's outset); below it, scale down
+
+  // Which node is active, which connector carries the dot, which label shows, and direction
+  const STATES = {
+    1: { node: 'holder', conn: 'a', chip: 'fund', rev: false }, // FUND: Holder → Nexus
+    2: { node: 'nexus',  conn: 'a', chip: 'usdc', rev: true  }, // USDC: Nexus → Holder
+    3: { node: 'ondo',   conn: 'b', chip: null,   rev: false, swap: true } // FUND: Nexus → Ondo, then USDC: Ondo → Nexus (CSS loop)
+  };
+
+  function applyState(p, n) {
+    const s = STATES[n];
+    p.dataset.state = n;
+    p.querySelectorAll('.nx-node').forEach(el => el.classList.toggle('is-active', el.dataset.node === s.node));
+    p.querySelectorAll('.nx-conn').forEach(el => {
+      const on = el.dataset.conn === s.conn;
+      el.classList.toggle('is-active', on);
+      el.classList.toggle('is-rev', on && s.rev);
+      el.classList.toggle('is-swap', on && !!s.swap);
+    });
+    p.querySelectorAll('.nx-chip').forEach(el => {
+      el.classList.toggle('is-on', el.closest('.nx-conn').dataset.conn === s.conn && el.dataset.chip === s.chip);
+    });
+  }
+
+  let current = 1;
+  let switchTimer;
+
+  function setStep(n) {
+    if (n === current) return;
+    current = n;
+    panel.classList.add('is-switching');
+    applyState(panel, n);
+    clearTimeout(switchTimer);
+    switchTimer = setTimeout(() => panel.classList.remove('is-switching'), 250);
+  }
+
+  // ── Desktop: scroll-driven ──
+  function slotTop() { return parseFloat(getComputedStyle(panel).top) || 0; }
+
+  function onScroll() {
+    if (compact.matches) return;
+    const top = slotTop();
+    const ph = panel.offsetHeight;
+    const last = boxes.length - 1;
+    let active = 1;
+
+    // y = distance of each step copy from its slot (0 = pinned in the slot)
+    boxes.forEach((box, i) => {
+      const y = box.getBoundingClientRect().top - top;
+      if (y <= ph * 0.5) active = i + 1;
+      let o;
+      if (y > 0) o = i === 0 ? 1 : 1 - 0.7 * Math.min(1, y / ph);       // waiting below: 30% "peek" → 100% in the slot
+      else       o = i === last ? 1 : 1 - Math.min(1, -y / (ph * 0.5));  // pushed above: fades out
+      box.style.opacity = o.toFixed(3);
+    });
+
+    setStep(active);
+
+    // Progress: 0 when step 1 reaches the slot → full when the pin releases (end of step 3)
+    const span = steps[last].offsetTop + steps[last].offsetHeight - steps[0].offsetTop - ph;
+    const p = Math.min(1, Math.max(0, (top - steps[0].getBoundingClientRect().top) / span));
+    progress.style.setProperty('--nx-progress', p.toFixed(4));
+  }
+
+  // ── Tablet/mobile: autoplay stepper ──
+  const STEP_MS = 5000;
+  const segs = Array.from(section.querySelectorAll('.nx-seg'));
+  const items = Array.from(section.querySelectorAll('.nx-stepper-item'));
+  const stepper = section.querySelector('.nx-stepper');
+  let elapsed = 0, last = 0, raf = 0, inView = false;
+
+  function paintBar() {
+    segs.forEach((seg, i) => {
+      const n = i + 1;
+      const p = n < current ? 1 : n > current ? 0 : (reduced.matches ? 1 : elapsed / STEP_MS);
+      seg.style.setProperty('--p', Math.min(1, p).toFixed(4));
+      seg.classList.toggle('is-active', n === current);
+      seg.setAttribute('aria-selected', n === current ? 'true' : 'false');
+    });
+  }
+
+  function render() {
+    items.forEach(el => el.classList.toggle('is-active', +el.dataset.step === current));
+    paintBar();
+  }
+
+  function goTo(n) {
+    elapsed = 0;
+    setStep(n);
+    render();
+  }
+
+  function tick(t) {
+    raf = 0;
+    if (!running()) return;
+    if (last) elapsed += t - last;
+    last = t;
+    if (elapsed >= STEP_MS) goTo(current % 3 + 1); // after 03, back to 01
+    paintBar();
+    raf = requestAnimationFrame(tick);
+  }
+
+  // Runs only while at least half the section's stepper area is visible and the tab is in front
+  function running() { return compact.matches && inView && !document.hidden && !reduced.matches; }
+
+  function syncAutoplay() {
+    if (running()) { if (!raf) { last = 0; raf = requestAnimationFrame(tick); } }
+    else if (raf) { cancelAnimationFrame(raf); raf = 0; }
+  }
+
+  segs.forEach(seg => seg.addEventListener('click', () => { goTo(+seg.dataset.step); last = 0; }));
+
+  // Swipe left/right on the copy or the panel to move between steps
+  let sx = 0, sy = 0;
+  [stepper, panel].forEach(el => {
+    el.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+    el.addEventListener('touchend', e => {
+      if (!compact.matches) return;
+      const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+      if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+      goTo(dx < 0 ? current % 3 + 1 : (current + 1) % 3 + 1);
+      last = 0;
+    }, { passive: true });
+  });
+
+  new IntersectionObserver(([e]) => { inView = e.isIntersecting; syncAutoplay(); }, { threshold: 0.5 })
+    .observe(panel);
+  document.addEventListener('visibilitychange', syncAutoplay);
+
+  // ── Layout ──
+  // Lines stretch to fill the panel; only when it's narrower than the design does the diagram scale down
+  function fit() {
+    const flow = panel.querySelector('.nx-flow');
+    const conns = panel.querySelectorAll('.nx-conn');
+    if (mobile.matches) { // vertical diagram: fixed width, dot travels the line's height
+      flow.style.width = '';
+      flow.style.setProperty('--nx-scale', 1);
+      conns.forEach(c => c.style.setProperty('--nx-travel', (c.offsetHeight - 9) + 'px'));
+      return;
+    }
+    const cs = getComputedStyle(panel);
+    const outset = parseFloat(cs.getPropertyValue('--nx-outset')) || 12;
+    const min = compact.matches ? MIN_FLOW.tablet : MIN_FLOW.desktop;
+    const want = panel.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) + outset;
+    flow.style.width = Math.max(want, min) + 'px';
+    flow.style.setProperty('--nx-scale', Math.min(1, want / min));
+    // Dot travel = each line's real length − dot size
+    conns.forEach(c => c.style.setProperty('--nx-travel', (c.offsetWidth - 9) + 'px'));
+  }
+
+  // Progress line = height of the tallest step copy (number → description), so it never jumps between steps
+  function sizeProgress() {
+    if (compact.matches) return;
+    const h = Math.max(...boxes.map(b => {
+      const first = b.firstElementChild, txt = b.querySelector('.nexus-how-step-text');
+      return txt.offsetTop + txt.offsetHeight - first.offsetTop;
+    }));
+    if (h > 0) progress.style.setProperty('--nx-progress-h', h + 'px');
+  }
+
+  function onResize() {
+    fit();
+    sizeProgress();
+    if (compact.matches) {
+      boxes.forEach(b => { b.style.opacity = ''; });
+      render(); // keep the running timer: mobile browsers fire resize as the URL bar slides
+    } else {
+      onScroll();
+    }
+    syncAutoplay();
+  }
+
+  // Pause the loops while the section is off-screen
+  new IntersectionObserver(([e]) => section.classList.toggle('is-offscreen', !e.isIntersecting)).observe(section);
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onResize);
+  compact.addEventListener('change', onResize);
+  mobile.addEventListener('change', onResize);
+  reduced.addEventListener('change', () => { paintBar(); syncAutoplay(); });
+  if (document.fonts) document.fonts.ready.then(() => { fit(); sizeProgress(); }); // text metrics change once web fonts load
+  onResize();
+})();
+
+// ── Scroll entrance animations ──
+(function () {
+  function releaseLayer(el) {
+    el.style.transform   = 'none';
+    el.style.transition  = 'none';
+    el.style.willChange  = 'auto';
+    el.classList.remove('anim-fade-up'); // removes class so Chrome drops the compositing layer
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const el = e.target;
+        el.classList.add('is-visible');
+        el.addEventListener('transitionend', function done(evt) {
+          if (evt.propertyName === 'transform') {
+            releaseLayer(el);
+            el.removeEventListener('transitionend', done);
+          }
+        });
+        // Fallback: force-release after 1.5 s even if transitionend never fires
+        setTimeout(() => releaseLayer(el), 1500);
+        observer.unobserve(el);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.anim-fade-up').forEach(el => observer.observe(el));
+  });
+})();
+</script>
+
+</body>
+</html>
