@@ -20,6 +20,13 @@
     --green-200: #5bc396;
     --green-100: #d5e5cf;
     --green-50:  #ebf0e7;
+    /* Navy/blue family used by How it works and the story graph (Second Pass) */
+    --navy-900: #0e1e38;
+    --navy-700: #1c3966;
+    --blue-500: #365f9f;
+    --blue-300: #8cb1ed;
+    --blue-200: #b9d2fa;
+    --blue-50:  #e0ecff;
     --bg-secondary: #1d1d1d;
     --fg-tertiary: #b1b1b1;
     --fg-muted: #626262;
@@ -64,6 +71,8 @@
   .nw-btn--outline:hover { border-color: rgba(240,240,240,0.6); }
   .nw-btn--dark { background: var(--bg-secondary); color: #fff; }
   .nw-btn--dark:hover { background: #2a2a2a; }
+  .nw-btn--link { color: #000; padding: 0 16px; } /* Nebula Tertiary button */
+  .nw-btn--link:hover { text-decoration: underline; text-underline-offset: 4px; }
 
   /* ── Nav ── */
   .site-header {
@@ -124,165 +133,52 @@
   }
 
   /* ── Hero ── */
+  /* Full-bleed photo (15% black overlay baked into the export) with a frosted glass card on the
+     left: Figma 556 wide at left 44 / top 96, filling the height down to 44 from the bottom */
   .nw-hero {
     position: relative;
-    min-height: 100vh;
-    min-height: 100dvh; /* fix iOS Safari chrome offset */
-    background: var(--green-600);
+    height: 100vh;
+    height: 100dvh; /* fix iOS Safari chrome offset */
+    min-height: 720px; /* the card needs room for copy + CTAs */
+    background: #3a3a3a url("assets/network/hero-photo-full.jpg") center / cover no-repeat;
+    color: #000;
     display: flex;
-    align-items: center;
-    padding: 96px 44px;
+    padding: 96px 44px 44px;
     overflow: hidden;
   }
 
-  /* Concentric pulse: 900×850 frame pinned to the right edge, as in Figma */
-  .nw-pulse {
-    position: absolute;
-    top: 50%;
-    right: 0;
-    width: 900px;
-    height: 850px;
-    transform: translateY(-50%);
-    pointer-events: none;
-  }
-
-  /* Rings and axis in the Figma frame's own coordinates; they overflow to the right and the hero clips them */
-  .nw-pulse-svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    overflow: visible;
-    fill: none;
-    stroke: var(--green-200);
-    stroke-width: 1.5;
-  }
-
-  /* Node squares where the rings meet the axis and each other; --x/--y/--s from Figma */
-  .nw-pulse-dot {
-    position: absolute;
-    left: var(--x);
-    top: calc(50% + var(--y, 0px));
-    transform: translateY(-50%);
-    width: var(--s);
-    height: var(--s);
-    border-radius: calc(var(--s) * 0.21);
-    background: var(--green-200);
-  }
-
-  /* Hero load animation (replaces the Figma "animation frames" sequence):
-     1. the axis shoots in from the left, like a signal being sent
-     2. each ring blooms open from the point where the axis crosses it, up and down at once,
-        left to right, so the line seems to "open" the rings as it passes
-     3. the nodes pop in column by column as their rings close
-     4. then, every 4.2s, a short light pulse runs along the axis and each column of nodes
-        brightens as it passes: the network stays alive without competing with the headline.
-     Starts at 0.35s, once the hero text (0–0.68s) is mostly in place; settled by ~1.7s.
-     Ring draw: pathLength=1 and a 4-value dash (x, 1-2x, x, 0) reveals [0,x] and [1-x,1],
-     i.e. both directions from the path start; scaleX(-1) moves that start to the ring's left
-     point on the axis. */
-  .nw-pulse {
-    --pulse-ease: cubic-bezier(0.65, 0, 0.35, 1);
-    --pulse-shoot: cubic-bezier(0.3, 0, 0.15, 1); /* fast out, long brake: the axis "shot" */
-    --pulse-period: 4.2s;
-    --pulse-loop-start: 2.4s;
-  }
-
-  .nw-pulse-axis { animation: nw-axis-draw 0.5s var(--pulse-shoot) 0.35s both; }
-
-  .nw-pulse-ring {
-    vector-effect: non-scaling-stroke;
-    transform-box: fill-box;
-    transform-origin: center;
-    transform: scaleX(-1);
-    stroke-dasharray: 0.5 0 0.5 0;
-    animation: nw-ring-bloom 0.7s var(--pulse-ease) calc(0.55s + var(--i) * 0.08s) both;
-  }
-
-  .nw-pulse-dot {
-    animation:
-      nw-dot-in 0.25s var(--pulse-ease) calc(1.1s + var(--i) * 0.08s) both,
-      nw-dot-glow var(--pulse-period) linear calc(var(--pulse-loop-start) + var(--g)) infinite;
-  }
-
-  /* travelling light on the axis: one short dash that crosses the whole line, then rests */
-  .nw-pulse-comet {
-    stroke: #fff;
-    stroke-width: 2;
-    stroke-dasharray: 0.06 1.06;
-    stroke-dashoffset: 0.06;
-    filter: drop-shadow(0 0 6px rgba(91, 195, 150, 0.9));
-    animation: nw-comet var(--pulse-period) linear var(--pulse-loop-start) infinite;
-  }
-
-  .nw-hero.is-offscreen .nw-pulse-comet,
-  .nw-hero.is-offscreen .nw-pulse-dot { animation-play-state: paused; }
-
-  @keyframes nw-axis-draw {
-    from { stroke-dashoffset: 1; }
-  }
-
-  @keyframes nw-ring-bloom {
-    from { stroke-dasharray: 0 1 0 0; }
-  }
-
-  @keyframes nw-dot-in {
-    from { scale: 0; }
-  }
-
-  /* 1.6s travel (38% of 4.2s), then hidden until the next loop */
-  @keyframes nw-comet {
-    0%   { stroke-dashoffset: 0.06; }
-    38%  { stroke-dashoffset: -1; }
-    100% { stroke-dashoffset: -1; }
-  }
-
-  /* --g = when the comet reaches the column: (x − 243) / 797 × 1.6s */
-  @keyframes nw-dot-glow {
-    0%, 12%, 100% { background: var(--green-200); scale: 1; }
-    3%            { background: #fff; scale: 1.3; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .nw-pulse-ring,
-    .nw-pulse-axis,
-    .nw-pulse-dot { animation: none; }
-    .nw-pulse-comet { display: none; }
-  }
-
-  .nw-hero-fade {
-    position: absolute;
-    inset: 0;
-    /* Full width, with stops measured from the right edge (where the pulse is anchored),
-       so the same rings get darkened at any screen width. At 1440 this equals the Figma layer. */
-    background: linear-gradient(to left, rgba(0,43,32,0) 0, rgba(0,43,32,0) 425px, var(--green-600) 720px);
-    pointer-events: none;
-  }
-
-  .nw-hero-content {
+  .nw-hero-card {
     position: relative;
-    z-index: 2;
+    width: 556px;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 56px;
+    justify-content: space-between;
+    gap: 64px;
+    padding: 48px;
+    border-radius: 20px;
+    background: rgba(240, 240, 240, 0.05);
+    -webkit-backdrop-filter: blur(120px); /* Figma background blur 240 */
+    backdrop-filter: blur(120px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3); /* 1px inside stroke, white 30% */
   }
 
-  .nw-hero-top { display: flex; flex-direction: column; gap: 24px; }
+  .nw-hero-top { display: flex; flex-direction: column; gap: 20px; }
 
   .nw-hero-heading {
     font-size: 72px;
     font-weight: 500;
     line-height: 1.05;
     letter-spacing: -2.16px;
-    white-space: nowrap;
   }
-  .nw-hero-heading span { display: block; color: var(--fg-tertiary); }
+  .nw-hero-heading span { display: block; color: var(--fg-muted); }
 
-  .nw-hero-body { color: var(--fg-tertiary); width: 464px; } /* 460 in Figma; +4 so the browser keeps the Figma line break */
+  .nw-hero-body { color: rgba(0,0,0,0.7); width: 427px; max-width: 100%; } /* 423 in Figma; +4 keeps the line break */
 
   .nw-hero-ctas { display: flex; gap: 12px; }
 
   /* Hero text plays on load (not on scroll): eyebrow, title, body, CTAs 60ms apart,
-     with a shorter rise than the scroll fade-ups so it settles before the pulse takes over */
+     with a shorter rise than the scroll fade-ups */
   .nw-hero-in {
     animation: nw-hero-in 0.5s cubic-bezier(0.45, 0, 0.2, 1) calc(var(--n) * 60ms) both;
   }
@@ -296,20 +192,21 @@
   }
 
   /* ── Benefits ── */
-  /* Dark, so it joins the dark block that runs down to See it in action */
+  /* Whole section pale green (Green/50); the grid sits straight on it */
   .nw-benefits {
-    background: #000;
-    color: #fff;
-    padding: 120px 44px 40px;
+    background: var(--green-50);
+    color: #000;
+    padding: 120px 44px;
   }
 
+  /* Pale green container holding the header cell + five white cards */
   .nw-benefits-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
   }
 
-  .nw-benefits-header { display: flex; flex-direction: column; gap: 24px; }
+  .nw-benefits-header { display: flex; flex-direction: column; gap: 24px; padding: 24px; color: var(--green-600); }
 
   .nw-benefits-title {
     font-size: 36px;
@@ -318,11 +215,11 @@
     letter-spacing: -0.72px;
     width: 380px;
   }
-  .nw-benefits-title span { display: block; color: var(--green-200); }
+  .nw-benefits-title span { display: block; }
 
   /* Outline cards: Grayscale/800 border, no fill */
   .nw-card {
-    border: 1px solid #1d1d1d;
+    background: #fff;
     border-radius: 24px;
     padding: 30px;
     display: flex;
@@ -340,13 +237,14 @@
     font-size: 16px;
     line-height: 1.32;
     letter-spacing: -0.16px;
-    color: #b1b1b1;
+    color: rgba(0,0,0,0.7);
     width: 320px;
   }
 
   /* ── Comparison ── */
   .nw-compare {
-    background: #000;
+    background: #fff;
+    color: #000;
     padding: 120px 0;
     display: flex;
     flex-direction: column;
@@ -381,7 +279,7 @@
     grid-column: 3 / 4;
     grid-row: 1 / 7;
     inset: -7px;
-    border: 1px solid #fff;
+    border: 1px solid #000;
     border-radius: 20px;
     pointer-events: none;
   }
@@ -413,7 +311,7 @@
   }
 
   .nw-cell {
-    background: var(--bg-secondary);
+    background: #f0f0f0;
     border-radius: 16px;
     display: flex;
     align-items: center;
@@ -432,7 +330,7 @@
     font-weight: 500;
     line-height: 1.32;
     letter-spacing: -0.16px;
-    color: var(--fg-muted);
+    color: #313131;
   }
 
   .nw-cell--head {
@@ -456,13 +354,36 @@
   }
 
   .nw-cell--feature img { width: 24px; height: 24px; display: block; }
+  .nw-cell--ondo { background: var(--green-100); color: var(--green-600); }
   .nw-yes { width: 12px; height: 12px; display: block; }
+  .nw-table [data-off] { display: none; }
+
+  /* Pager: tablet/mobile only */
+  .nw-table-pager { display: none; }
+  .nw-pager-btn {
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--navy-900);
+    border-radius: 20px;
+    background: none;
+    color: var(--navy-900);
+    cursor: pointer;
+    transition: opacity 0.2s, background 0.2s;
+  }
+  .nw-pager-btn:hover:not(:disabled) { background: rgba(14, 30, 56, 0.06); }
+  .nw-pager-btn:disabled { opacity: 0.3; cursor: default; }
+  .nw-pager-count {
+    font-size: 14px; font-weight: 500; line-height: 1.32; letter-spacing: -0.14px;
+    color: var(--fg-muted);
+    font-variant-numeric: tabular-nums;
+  }
   .nw-no { width: 20px; height: 20px; display: block; }
 
   /* ── How it works ── */
   .nw-how {
-    background: #000;
-    padding: 40px 44px;
+    background: #fff;
+    color: #000;
+    padding: 40px 44px 120px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -487,7 +408,7 @@
     gap: 24px;
     background: none;
     border: none;
-    color: #fff;
+    color: #000;
     font: inherit;
     text-align: left;
     cursor: pointer;
@@ -508,7 +429,7 @@
     position: absolute;
     top: 0; bottom: 0; left: 0;
     width: 2px;
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(0, 0, 0, 0.15);
     pointer-events: none;
   }
 
@@ -516,7 +437,7 @@
     position: absolute;
     left: 0;
     width: 100%;
-    background: #fff;
+    background: #000;
     transform-origin: top;
     transform: scaleY(0);
   }
@@ -530,7 +451,7 @@
     font-size: 16px;
     line-height: 1.32;
     letter-spacing: -0.16px;
-    color: var(--gray-400);
+    color: var(--fg-muted);
     width: var(--w);
     text-wrap: balance;
   }
@@ -541,7 +462,8 @@
     min-width: 0;
     height: 560px;
     border-radius: 24px;
-    background: var(--green-600);
+    background: var(--navy-900);
+    color: #fff;
     overflow: hidden;
   }
 
@@ -560,19 +482,19 @@
   .nw-how-isolation {
     left: 292px; top: 120px;
     width: 320px; height: 320px;
-    border: 1.25px dashed var(--green-200);
+    border: 1.25px dashed var(--blue-300);
     border-radius: 36px;
   }
 
-  .nw-how-line { width: 172px; height: 1.25px; background: var(--green-200); }
-  .nw-how-node { width: 8px; height: 8px; background: var(--green-200); }
+  .nw-how-line { width: 172px; height: 1.25px; background: var(--blue-300); }
+  .nw-how-node { width: 8px; height: 8px; background: var(--blue-300); }
 
   .nw-how-box {
     left: 352px; top: 180px;
     width: 200px;
     padding: 64px 0;
     border-radius: 24px;
-    background: var(--green-400);
+    background: var(--blue-500);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -584,6 +506,8 @@
   }
 
   .nw-how-box img { width: 40px; height: 40px; display: block; }
+
+  .nw-how-active-desc { display: none; }
 
   /* ── How it works: step visuals ──
      One artboard holds the three Figma variants (HIW/Module Step=1/2/3); each element belongs to a
@@ -621,26 +545,26 @@
   .nw-how-tag {
     left: 32px; top: 32px;
     font-size: 16px; font-weight: 500; line-height: 1.32; letter-spacing: -0.16px;
-    color: var(--green-100);
+    color: var(--blue-200);
   }
 
   .nw-how-spokes { left: 0; top: 0; overflow: visible; }
-  .nw-how-spokes line { stroke: var(--green-400); stroke-width: 1.25; stroke-dasharray: 5.0625 5.0625; }
+  .nw-how-spokes line { stroke: var(--blue-500); stroke-width: 1.25; stroke-dasharray: 5.0625 5.0625; }
 
   .nw-how-attestor {
     width: 48px; height: 48px;
-    border: 1.25px solid var(--green-200);
+    border: 1.25px solid var(--blue-300);
     border-radius: 10px;
-    background: var(--green-600);
+    background: var(--navy-900);
     display: flex; align-items: center; justify-content: center;
     font-size: 14px; font-weight: 500; line-height: 1.32; letter-spacing: -0.14px;
   }
 
-  .nw-how-chain-line { height: 1.25px; background: var(--green-200); }
+  .nw-how-chain-line { height: 1.25px; background: var(--blue-300); }
 
   .nw-how-block {
     width: 56px; height: 56px;
-    border: 1.25px solid var(--green-200);
+    border: 1.25px solid var(--blue-300);
     border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
   }
@@ -649,7 +573,7 @@
 
   .nw-how-label {
     font-size: 14px; font-weight: 500; line-height: 1.32; letter-spacing: -0.14px;
-    color: var(--green-100);
+    color: var(--blue-200);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -667,27 +591,29 @@
   }
 
   .nw-action .nw-section-header { width: 720px; }
+  .nw-action .nw-btn--dark { background: #313131; }
+  .nw-action .nw-btn--dark:hover { background: #3d3d3d; }
   .nw-action-body { color: var(--gray-400); width: 460px; }
 
-  /* Skyline photo (10% black overlay baked into the export), the only background of this visual */
+  /* Static background: B&W architecture photo with the 30% black overlay baked in (Figma frame
+     1352×680, r24). The monitor + Perps UI mockup sits on top and fades up on scroll like the
+     rest of the page; the frame crops the monitor stand at the bottom, as in Figma */
   .nw-action-visual {
     position: relative;
     width: 100%;
-    height: 680px;
+    aspect-ratio: 1352 / 680;
     border-radius: 24px;
     overflow: hidden;
-    background: #121212 url("assets/network/action-bg.jpg") center / cover no-repeat;
+    background: #121212 url("assets/network/action-frame-bg.jpg") center / cover no-repeat;
   }
 
-  .nw-action-ui {
+  /* Figma: mockup 1023×750 at 165 / 47 inside the frame, kept in % so it scales with it */
+  .nw-action-mockup {
     position: absolute;
-    top: 113px;
-    left: 50%;
-    width: 1100px;
-    height: 688px;
-    transform: translateX(-50%);
-    border-radius: 12px;
-    object-fit: cover;
+    left: 12.204%;
+    top: 6.912%;
+    width: 75.666%;
+    height: auto;
     display: block;
   }
 
@@ -709,9 +635,9 @@
     width: 100%;
     display: flex;
     align-items: center;
-    padding: 64px;
-    border-radius: 24px;
-    background: var(--green-50);
+    padding: 24px;
+    border-radius: 32px;
+    background: var(--blue-50);
   }
 
   .nw-layer {
@@ -720,14 +646,14 @@
     min-height: 292px;
     padding: 32px;
     border-radius: 24px;
-    border: 1px solid var(--green-600);
+    border: 1px solid var(--navy-900);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
   }
 
-  .nw-layer--execution { background: var(--green-600); color: #fff; }
-  .nw-layer--settlement { color: #000; }
+  .nw-layer--execution { background: var(--navy-900); color: #fff; }
+  .nw-layer--settlement { background: #fff; border-color: #fff; color: var(--navy-900); }
 
   .nw-layer-heading { display: flex; flex-direction: column; gap: 8px; }
 
@@ -735,8 +661,8 @@
   .nw-chip,
   .nw-connector p { font-size: 14px; font-weight: 500; line-height: 1.32; letter-spacing: -0.14px; }
 
-  .nw-layer--execution .nw-layer-kicker { color: var(--green-200); }
-  .nw-layer--settlement .nw-layer-kicker { color: var(--green-500); }
+  .nw-layer--execution .nw-layer-kicker { color: var(--blue-300); }
+  .nw-layer--settlement .nw-layer-kicker { color: var(--navy-700); }
 
   .nw-layer-title { font-size: 28px; font-weight: 500; line-height: 1.05; letter-spacing: -0.56px; }
 
@@ -745,21 +671,21 @@
   .nw-chip {
     padding: 8px 14px;
     border-radius: 999px;
-    border: 1px solid var(--green-600);
-    color: var(--green-600);
+    border: 1px solid var(--navy-900);
+    color: var(--navy-900);
     white-space: nowrap;
   }
 
-  .nw-layer--execution .nw-chip { border-color: var(--green-50); color: #fff; }
+  .nw-layer--execution .nw-chip { border-color: var(--blue-50); color: var(--blue-50); }
 
-  .nw-connectors { flex: 0 0 184px; display: flex; flex-direction: column; gap: 40px; }
+  .nw-connectors { flex: 0 0 240px; display: flex; flex-direction: column; gap: 40px; }
 
   .nw-connector {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    color: var(--green-600);
+    color: var(--navy-700);
     white-space: nowrap;
   }
 
@@ -1007,6 +933,193 @@
     .nw-footer-nav { display: grid; grid-template-columns: repeat(2, max-content); gap: 36px; }
     .nw-footer-bottom { padding: 20px; }
   }
+
+  /* ═══════════════════ Tablet (Figma "Tablet 900": 30px side padding, Tablet/* text styles) ═══════════════════ */
+  @media (max-width: 1024px) {
+    /* Nav: full-width white bar, links hidden */
+    .site-header { padding: 0; }
+    .site-nav { width: 100%; height: 60px; padding: 12px 30px; border-radius: 0; box-shadow: none; }
+    .nav-links { display: none; }
+
+    /* Shared text styles */
+    .nw-h2 { font-size: 44px; letter-spacing: -1.32px; }
+    .nw-body-l { font-size: 18px; letter-spacing: -0.18px; }
+    .nw-section-header { max-width: 100%; }
+    .nw-how-title,
+    .nw-story-body { width: auto; max-width: 620px; }
+
+    /* Hero: glass card across the top, hugging its content; photo shows below it */
+    .nw-hero {
+      height: auto;
+      min-height: 1000px;
+      padding: 84px 30px 83px;
+      align-items: flex-start;
+      background-position: center bottom;
+    }
+    .nw-hero-card { width: 100%; justify-content: flex-start; gap: 40px; padding: 40px; }
+    .nw-hero-heading { font-size: 56px; letter-spacing: -1.68px; }
+    .nw-hero-heading span { display: inline; }
+    .nw-hero-body { width: auto; }
+
+    /* Benefits: 2 columns (header cell + 5 cards = 3 rows) */
+    .nw-benefits { padding: 96px 30px; }
+    .nw-benefits-grid { grid-template-columns: repeat(2, 1fr); }
+    .nw-benefits-header { padding: 8px; }
+    .nw-benefits-title { font-size: 28px; letter-spacing: -0.56px; width: auto; }
+    .nw-card-title { font-size: 20px; letter-spacing: -0.2px; }
+
+    /* Comparison: feature | Ondo 140 | 3 competitor columns of 140, paged */
+    .nw-compare { padding: 96px 0; gap: 64px; }
+    .nw-compare .nw-section-header { padding: 0 30px; }
+    .nw-compare-title { width: auto; }
+    .nw-table-wrap { padding: 0 30px; }
+    .nw-table { grid-template-columns: minmax(0, 1fr) 1px 140px 1px repeat(3, 140px); }
+    .nw-cell--head { padding: 16px 12px; }
+    .nw-cell--corner { min-height: 95px; } /* Figma header row is 95 tall */
+    .nw-cell--feature { padding: 20px 16px 20px 24px; white-space: normal; }
+    .nw-table-pager {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 16px;
+      width: 100%;
+      padding: 0 30px;
+      margin-top: -40px; /* table → pager is 24 in Figma; the section gap is 64 */
+    }
+    .nw-pager-count { order: -1; }
+
+    /* How it works: steps in a row above the panel, line along their top edge */
+    .nw-how { padding: 40px 30px 96px; gap: 64px; }
+    .nw-how-module { flex-direction: column; align-items: stretch; gap: 40px; }
+    .nw-how-steps { flex: none; flex-direction: row; gap: 8px; }
+    .nw-step { flex: 1 1 0; min-width: 0; }
+    .nw-step-bar { display: none; }
+    .nw-steps-line { top: 0; bottom: auto; left: 0; right: 0; width: auto; height: 2px; }
+    .nw-steps-line-fill { transform-origin: left; transform: scaleX(0); }
+    .nw-step-content { padding: 26px 0 0; } /* 2px line + 24 */
+    .nw-step-num { font-size: 18px; letter-spacing: -0.18px; }
+    .nw-step-title { font-size: 20px; letter-spacing: -0.2px; }
+    .nw-step-desc { width: auto; }
+    .nw-how-visual { flex: none; height: 480px; }
+    .nw-how-diagram { top: 50%; transform: translate(-50%, -50%); }
+
+    /* See it in action */
+    .nw-action { padding: 96px 44px; gap: 64px; }
+    .nw-action .nw-section-header { width: auto; max-width: 720px; }
+
+    /* Connect the story */
+    .nw-story { padding: 96px 30px; gap: 64px; }
+    .nw-layer { padding: 24px; }
+    .nw-layer-title { font-size: 24px; letter-spacing: -0.24px; }
+    .nw-connectors { flex-basis: 176px; }
+
+    /* Closing CTA */
+    .nw-cta-wrapper { padding: 0 30px 44px; }
+    .nw-cta { padding: 64px 44px; }
+    .nw-cta-content { width: 100%; max-width: 602px; }
+    .nw-cta-heading { font-size: 36px; letter-spacing: -0.72px; }
+  }
+
+  /* ═══════════════════ Mobile (Figma "Mobile 400": 20px side padding, Mobile/* text styles) ═══════════════════ */
+  @media (max-width: 768px) {
+    .site-nav { padding: 12px 20px; }
+
+    .nw-eyebrow { font-size: 15px; letter-spacing: -0.15px; }
+    .nw-h2 { font-size: 32px; letter-spacing: -0.64px; }
+    .nw-body-l { font-size: 16px; letter-spacing: -0.16px; }
+    .nw-section-header { gap: 20px; }
+
+    /* Hero */
+    .nw-hero { min-height: 820px; padding: 84px 20px; }
+    .nw-hero-card { padding: 24px; }
+    .nw-hero-heading { font-size: 40px; letter-spacing: -1.2px; }
+    .nw-hero-heading span { display: block; }
+    .nw-hero-ctas { flex-direction: column; align-items: flex-start; }
+
+    /* Benefits: one column */
+    .nw-benefits { padding: 64px 20px; }
+    .nw-benefits-grid { grid-template-columns: 1fr; }
+    .nw-benefits-header { padding: 0 0 16px; gap: 20px; }
+    .nw-benefits-title { font-size: 24px; letter-spacing: -0.72px; }
+    .nw-card { padding: 24px; }
+    .nw-card-title { font-size: 18px; letter-spacing: -0.18px; }
+    .nw-card-desc { font-size: 15px; letter-spacing: -0.15px; width: auto; }
+
+    /* Comparison: feature | Ondo 96 | one competitor 96, paged one at a time */
+    .nw-compare { padding: 64px 0; }
+    .nw-compare .nw-section-header,
+    .nw-table-wrap,
+    .nw-table-pager { padding-left: 20px; padding-right: 20px; }
+    .nw-table { grid-template-columns: minmax(0, 1fr) 1px 96px 1px 96px; }
+    .nw-cell--corner { padding: 32px 12px 32px 16px; min-height: 84px; }
+    .nw-cell--head {
+      align-self: end;
+      min-height: 64px;
+      padding: 14px 10px;
+      font-size: 14px;
+      letter-spacing: -0.14px;
+    }
+    /* Header cells sit at the bottom of the 84px header row, so the outline starts 20px lower */
+    .nw-table-outline { top: 13px; }
+    .nw-cell--feature { padding: 16px 12px 16px 16px; }
+    .nw-cell--feature,
+    .nw-cell--corner { font-size: 15px; letter-spacing: -0.15px; } /* Mobile bodyM-gx */
+    .nw-cell--feature img { display: none; }
+    .nw-table-pager { justify-content: space-between; gap: 12px; margin-top: -36px; } /* 28 below the table */
+    .nw-pager-count { order: 0; }
+
+    /* How it works: number + title only in the steps; the active description sits below */
+    .nw-how { padding: 24px 20px 64px; }
+    .nw-how-module { gap: 32px; }
+    .nw-step-content { padding-top: 18px; gap: 6px; } /* 2px line + 16 */
+    .nw-step-num { font-size: 16px; letter-spacing: -0.16px; }
+    .nw-step-title { font-size: 18px; letter-spacing: -0.18px; }
+    .nw-step-desc { display: none; }
+    .nw-how-active-desc {
+      display: block;
+      font-family: var(--serif);
+      font-size: 15px;
+      line-height: 1.32;
+      letter-spacing: -0.15px;
+      color: var(--fg-muted);
+    }
+    /* Panel 280 tall, diagram at half scale; its labels are doubled so they read at 12px */
+    .nw-how-visual { height: 280px; border-radius: 12px; }
+    .nw-how-diagram { transform: translate(-50%, -50%) scale(0.5); }
+    .nw-how-box { font-size: 24px; letter-spacing: -0.24px; }
+    .nw-how-label,
+    .nw-how-attestor { font-size: 24px; letter-spacing: -0.24px; }
+    .nw-how-tag { left: 16px; top: 16px; font-size: 12px; letter-spacing: -0.12px; }
+
+    /* See it in action: taller crop, the monitor fills the width */
+    .nw-action { padding: 64px 20px; gap: 56px; }
+    .nw-action-body { width: auto; max-width: 320px; }
+    .nw-action-visual { aspect-ratio: 360 / 254; }
+    .nw-action-mockup { left: 0.28%; top: 8.66%; width: 99.72%; }
+
+    /* Connect the story: stacked, connectors become two short vertical lines */
+    .nw-story { padding: 64px 20px; gap: 40px; }
+    .nw-story-visual { flex-direction: column; align-items: stretch; padding: 16px; }
+    .nw-layer { flex: none; min-height: 0; gap: 32px; }
+    .nw-connectors { flex: none; flex-direction: row; justify-content: center; gap: 32px; }
+    .nw-connector {
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      width: 120px;
+      height: 72px;
+      white-space: normal;
+    }
+    .nw-connector img { display: none; }
+    .nw-connector::before { content: ""; flex: 0 0 1px; align-self: stretch; }
+    .nw-connector--solid::before { background: var(--navy-900); }
+    .nw-connector--dashed::before { background: repeating-linear-gradient(to bottom, var(--navy-900) 0 5px, transparent 5px 10px); }
+
+    /* Closing CTA */
+    .nw-cta-wrapper { padding: 0 20px 20px; }
+    .nw-cta { min-height: 344px; align-items: center; padding: 64px 20px; }
+    .nw-cta-heading { font-size: 28px; letter-spacing: -0.56px; }
+  }
 </style>
 </head>
 <body>
@@ -1031,49 +1144,18 @@
 
 <!-- ── Hero ── -->
 <section class="nw-hero">
-  <div class="nw-pulse" aria-hidden="true">
-    <svg class="nw-pulse-svg" width="1040" height="850" viewBox="0 0 1040 850">
-      <line class="nw-pulse-axis" x1="243" y1="425" x2="1040" y2="425" pathLength="1" stroke-dasharray="1"/>
-      <!-- --i = ring order, left to right -->
-      <ellipse class="nw-pulse-ring" style="--i:0" pathLength="1" cx="310" cy="425.5" rx="35.25" ry="57.75"/>
-      <ellipse class="nw-pulse-ring" style="--i:1" pathLength="1" cx="357.46" cy="425" rx="49.33" ry="80.21"/>
-      <ellipse class="nw-pulse-ring" style="--i:2" pathLength="1" cx="440.92" cy="425" rx="74.36" ry="120.27"/>
-      <ellipse class="nw-pulse-ring" style="--i:3" pathLength="1" cx="539.41" cy="425" rx="97.73" ry="157.82"/>
-      <ellipse class="nw-pulse-ring" style="--i:4" pathLength="1" cx="702.15" cy="425" rx="160.33" ry="257.98"/>
-      <ellipse class="nw-pulse-ring" style="--i:5" pathLength="1" cx="841.53" cy="425" rx="187.04" ry="327.25"/>
-      <line class="nw-pulse-comet" x1="243" y1="425" x2="1040" y2="425" pathLength="1"/>
-    </svg>
-    <!-- --i = node column (pop-in stagger); --g = when the axis light reaches that column -->
-    <span class="nw-pulse-dot" style="--i:0; --g:0.13s; --x:304px; --s:8px"></span>
-    <span class="nw-pulse-dot" style="--i:0; --g:0.13s; --x:317.5px; --y:-55.5px; --s:8px"></span>
-    <span class="nw-pulse-dot" style="--i:0; --g:0.13s; --x:317.5px; --y:54px; --s:8px"></span>
-    <span class="nw-pulse-dot" style="--i:1; --g:0.25s; --x:361px; --y:-0.5px; --s:9px"></span>
-    <span class="nw-pulse-dot" style="--i:1; --g:0.25s; --x:376.5px; --y:-71px; --s:9px"></span>
-    <span class="nw-pulse-dot" style="--i:1; --g:0.25s; --x:376.5px; --y:71px; --s:9px"></span>
-    <span class="nw-pulse-dot" style="--i:2; --g:0.4s; --x:437px; --s:10px"></span>
-    <span class="nw-pulse-dot" style="--i:2; --g:0.4s; --x:465px; --y:-111px; --s:10px"></span>
-    <span class="nw-pulse-dot" style="--i:2; --g:0.4s; --x:465px; --y:111px; --s:10px"></span>
-    <span class="nw-pulse-dot" style="--i:3; --g:0.6s; --x:536.5px; --s:11px"></span>
-    <span class="nw-pulse-dot" style="--i:3; --g:0.6s; --x:565.5px; --y:-149px; --s:11px"></span>
-    <span class="nw-pulse-dot" style="--i:3; --g:0.6s; --x:565.5px; --y:149px; --s:11px"></span>
-    <span class="nw-pulse-dot" style="--i:4; --g:0.82s; --x:649px; --s:12px"></span>
-    <span class="nw-pulse-dot" style="--i:4; --g:0.82s; --x:719px; --y:-256px; --s:12px"></span>
-    <span class="nw-pulse-dot" style="--i:4; --g:0.82s; --x:719px; --y:256px; --s:12px"></span>
-  </div>
-  <div class="nw-hero-fade" aria-hidden="true"></div>
-
-  <div class="nw-hero-content">
+  <div class="nw-hero-card">
     <div class="nw-hero-top">
       <p class="nw-eyebrow nw-hero-in" style="--n:0">Ondo Network</p>
       <h1 class="nw-hero-heading nw-hero-in" style="--n:1">
-        Financial markets,
-        <span>moving at a new speed</span>
+        Markets, faster
+        <span>than ever</span>
       </h1>
       <p class="nw-body-l nw-hero-body nw-hero-in" style="--n:2">Fast, private execution. Independently verifiable rules. Assets that remain yours to control.</p>
     </div>
     <div class="nw-hero-ctas nw-hero-in" style="--n:3">
-      <a href="#see-it-in-action" class="nw-btn nw-btn--light">Explore Ondo Perps</a>
-      <a href="#how-it-works" class="nw-btn nw-btn--outline">See how it works</a>
+      <a href="#see-it-in-action" class="nw-btn nw-btn--dark">Explore Ondo Perps</a>
+      <a href="#how-it-works" class="nw-btn nw-btn--link">See how it works</a>
     </div>
   </div>
 </section>
@@ -1138,16 +1220,23 @@
     <div class="nw-table" id="compareTable">
       <div class="nw-cell nw-cell--corner">Features:</div>
       <div class="nw-cell nw-cell--spacer"></div>
-      <div class="nw-cell nw-cell--head">Ondo Network</div>
+      <div class="nw-cell nw-cell--head nw-cell--ondo">Ondo Network</div>
       <div class="nw-cell nw-cell--spacer"></div>
-      <div class="nw-cell nw-cell--head">CEXs</div>
-      <div class="nw-cell nw-cell--head">Standard Public Blockchains</div>
-      <div class="nw-cell nw-cell--head">App-Specific Chains</div>
-      <div class="nw-cell nw-cell--head">ZK Exchanges</div>
-      <div class="nw-cell nw-cell--head">Permissioned Networks</div>
+      <div class="nw-cell nw-cell--head" data-col="1">CEXs</div>
+      <div class="nw-cell nw-cell--head" data-col="2">Standard Public Blockchains</div>
+      <div class="nw-cell nw-cell--head" data-col="3">App-Specific Chains</div>
+      <div class="nw-cell nw-cell--head" data-col="4">ZK Exchanges</div>
+      <div class="nw-cell nw-cell--head" data-col="5">Permissioned Networks</div>
       <!-- Feature rows are built by the script below from COMPARE_ROWS -->
       <div class="nw-table-outline" aria-hidden="true"></div>
     </div>
+  </div>
+  <!-- Tablet/mobile only: the competitor columns are paged (3 per page on tablet, 1 on mobile);
+       Ondo Network and the feature column stay fixed -->
+  <div class="nw-table-pager">
+    <button class="nw-pager-btn nw-pager-prev" type="button" aria-label="Previous columns"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M12 4.5 6.5 10l5.5 5.5" stroke="currentColor" stroke-width="1.25"/></svg></button>
+    <span class="nw-pager-count" aria-live="polite">1 / 2</span>
+    <button class="nw-pager-btn nw-pager-next" type="button" aria-label="Next columns"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M8 4.5 13.5 10 8 15.5" stroke="currentColor" stroke-width="1.25"/></svg></button>
   </div>
 </section>
 
@@ -1189,6 +1278,8 @@
         </span>
       </button>
     </div>
+    <!-- Mobile only: the active step's description, moved out of the steps row (JS fills it) -->
+    <p class="nw-how-active-desc" aria-live="polite"></p>
     <div class="nw-how-visual" data-step="1" aria-hidden="true">
       <!-- Panel tag = the active step's title; it sits on the panel, not the artboard -->
       <div class="nw-how-layer nw-how-layer--1"><p class="nw-how-tag nw-a nw-a--rise">Execute</p></div>
@@ -1264,8 +1355,8 @@
     <p class="nw-body-l nw-action-body">Ondo Network’s first live application brings its infrastructure to perpetual futures trading.</p>
     <a href="#" class="nw-btn nw-btn--dark">Explore Ondo Perps</a>
   </div>
-  <div class="nw-action-visual anim-fade-up" style="transition-delay:150ms">
-    <img class="nw-action-ui" src="assets/network/perps-ui.png" alt="Ondo Perps trading interface">
+  <div class="nw-action-visual">
+    <img class="nw-action-mockup anim-fade-up" style="transition-delay:150ms" src="assets/network/mockup-perps.png" width="1023" height="750" alt="Ondo Perps trading interface on a desktop monitor">
   </div>
 </section>
 
@@ -1293,11 +1384,11 @@
       </div>
     </div>
     <div class="nw-connectors">
-      <div class="nw-connector">
+      <div class="nw-connector nw-connector--solid">
         <p class="nw-b nw-b--fade" style="--d:650ms">Asset transfers settle</p>
         <img class="nw-b nw-b--draw" style="--d:550ms" src="assets/network/story-line-solid.svg" alt="">
       </div>
-      <div class="nw-connector">
+      <div class="nw-connector nw-connector--dashed">
         <p class="nw-b nw-b--fade" style="--d:800ms">Onchain events confirmed</p>
         <img class="nw-b nw-b--draw" style="--d:700ms" src="assets/network/story-line-dashed.svg" alt="">
       </div>
@@ -1320,7 +1411,7 @@
 <!-- CTA label still TBD with the client. -->
 <div class="nw-cta-wrapper">
   <div class="nw-cta">
-    <img class="nw-cta-bg" src="assets/network/cta-bg-skyline.jpg" alt="" aria-hidden="true">
+    <img class="nw-cta-bg" src="assets/network/cta-bg-oculus.jpg" alt="" aria-hidden="true">
     <div class="nw-cta-content anim-fade-up">
       <div class="nw-cta-text">
         <p class="nw-cta-heading">What will you build next?</p>
@@ -1435,7 +1526,9 @@ Important Information Regarding Ondo Stocks on Binance's Multilateral Trading Fa
     const cells = [cell('nw-cell--feature', `<img src="assets/network/${row.icon}.svg" alt="">${row.label}`)];
     row.values.forEach((v, i) => {
       if (i <= 1) cells.push(cell('nw-cell--spacer', '')); // spacers on both sides of the Ondo column
-      cells.push(cell('', mark(v)));
+      const c = cell(i === 0 ? 'nw-cell--ondo' : '', mark(v));
+      if (i > 0) c.dataset.col = i;
+      cells.push(c);
     });
     cells.forEach((c) => table.insertBefore(c, outline));
   });
@@ -1449,6 +1542,68 @@ Important Information Regarding Ondo Stocks on Binance's Multilateral Trading Fa
     rowObserver.disconnect();
   }, { threshold: 0.2 });
   rowObserver.observe(table);
+
+  // Paging (tablet/mobile): show `per` competitor columns at a time. The last page is clamped so
+  // it is always full (tablet: CEXs–App-Specific, then App-Specific–Permissioned), which keeps
+  // every grid row the same length.
+  const pager = document.querySelector('.nw-table-pager');
+  const prev = pager.querySelector('.nw-pager-prev');
+  const next = pager.querySelector('.nw-pager-next');
+  const count = pager.querySelector('.nw-pager-count');
+  const TOTAL = 5;
+  const mqMobile = matchMedia('(max-width: 768px)');
+  const mqTablet = matchMedia('(max-width: 1024px)');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let page = 0;
+
+  const perPage = () => (mqMobile.matches ? 1 : mqTablet.matches ? 3 : TOTAL);
+  const pageCount = () => Math.ceil(TOTAL / perPage());
+
+  function render(dir) {
+    const per = perPage();
+    const pages = pageCount();
+    page = Math.min(page, pages - 1);
+    const first = Math.min(page * per, TOTAL - per) + 1; // 1-based first visible column
+    const shown = [];
+    table.querySelectorAll('[data-col]').forEach((c) => {
+      const col = Number(c.dataset.col);
+      const on = col >= first && col < first + per;
+      c.toggleAttribute('data-off', !on);
+      if (on) shown.push(c);
+    });
+    count.textContent = `${page + 1} / ${pages}`;
+    prev.disabled = page === 0;
+    next.disabled = page === pages - 1;
+    if (dir && !reduce) {
+      shown.forEach((c) => c.animate(
+        [{ opacity: 0, transform: `translateX(${dir * 16}px)` }, { opacity: 1, transform: 'none' }],
+        { duration: 350, easing: 'cubic-bezier(0.45, 0, 0.2, 1)' }
+      ));
+    }
+  }
+
+  const go = (d) => {
+    const target = Math.max(0, Math.min(pageCount() - 1, page + d));
+    if (target === page) return;
+    page = target;
+    render(d);
+  };
+  prev.addEventListener('click', () => go(-1));
+  next.addEventListener('click', () => go(1));
+
+  // Swipe sideways on the table to page
+  let x0 = null, y0 = null;
+  table.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+  table.addEventListener('touchend', (e) => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+    x0 = null;
+  }, { passive: true });
+
+  mqMobile.addEventListener('change', () => render(0));
+  mqTablet.addEventListener('change', () => render(0));
+  render(0);
 })();
 
 // ── How it works carousel ──
@@ -1464,6 +1619,10 @@ Important Information Regarding Ondo Stocks on Binance's Multilateral Trading Fa
   const autoplay = !matchMedia('(prefers-reduced-motion: reduce)').matches;
   let progress = null;
   let inView = false;
+  let current = 0;
+  const activeDesc = module.querySelector('.nw-how-active-desc');
+  // Tablet/mobile: the steps sit in a row and the line runs along their top edge
+  const horizontal = matchMedia('(max-width: 1024px)');
 
   function show(i) {
     steps.forEach((s, n) => {
@@ -1472,15 +1631,22 @@ Important Information Regarding Ondo Stocks on Binance's Multilateral Trading Fa
     });
     visual.dataset.step = i + 1;
 
-    fill.style.top = steps[i].offsetTop + 'px';
-    fill.style.height = steps[i].offsetHeight + 'px';
+    current = i;
+    activeDesc.textContent = steps[i].querySelector('.nw-step-desc').textContent;
+
+    const row = horizontal.matches;
+    const axis = row ? 'scaleX' : 'scaleY';
+    fill.style.top = row ? '0' : steps[i].offsetTop + 'px';
+    fill.style.height = row ? '100%' : steps[i].offsetHeight + 'px';
+    fill.style.left = row ? steps[i].offsetLeft + 'px' : '0';
+    fill.style.width = row ? steps[i].offsetWidth + 'px' : '100%';
     if (progress) progress.cancel();
     if (!autoplay) {
-      fill.style.transform = 'scaleY(1)';
+      fill.style.transform = axis + '(1)';
       return;
     }
     progress = fill.animate(
-      [{ transform: 'scaleY(0)' }, { transform: 'scaleY(1)' }],
+      [{ transform: axis + '(0)' }, { transform: axis + '(1)' }],
       { duration: Number(steps[i].dataset.ms) || STEP_MS, easing: 'linear', fill: 'forwards' }
     );
     progress.onfinish = () => show((i + 1) % steps.length);
@@ -1488,6 +1654,7 @@ Important Information Regarding Ondo Stocks on Binance's Multilateral Trading Fa
   }
 
   steps.forEach((s, i) => s.addEventListener('click', () => show(i)));
+  horizontal.addEventListener('change', () => show(current));
   show(0);
 
   if (!autoplay) return;
@@ -1506,12 +1673,6 @@ Important Information Regarding Ondo Stocks on Binance's Multilateral Trading Fa
     observer.disconnect();
   }, { threshold: 0.3 });
   observer.observe(diagram);
-})();
-
-// ── Hero: pause the looping axis light while the hero is off screen ──
-(function () {
-  const hero = document.querySelector('.nw-hero');
-  new IntersectionObserver(([e]) => hero.classList.toggle('is-offscreen', !e.isIntersecting)).observe(hero);
 })();
 
 // ── Scroll entrance animations (same as Nexus) ──
