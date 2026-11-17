@@ -401,7 +401,7 @@
      sits at y 216 and the foot at y 1977, i.e. y 68 and 1829 inside the cropped canvas. */
   .nw-action { overflow: clip; }
   .nw-action-track {
-    --w: calc(1.134 * min(1290px, calc(100vw - 40px), calc((100vh - 136px) * 1.684))); /* v2: 1.134× the fitted size (1.2 × 0.9 × 1.05) */
+    --w: calc(1.2474 * min(1290px, calc(100vw - 40px), calc((100vh - 136px) * 1.684))); /* v2: 1.2474× the fitted size (1.2 × 0.9 × 1.05 × 1.1) */
     width: 100%;
     height: calc(var(--w) * 1861 / 2967 + 80vh);         /* 80vh of scroll while pinned = the turn */
     margin-top: calc(24px - var(--w) * 68 / 2967);      /* v2: bezel 104px under the copy (section gap 80 + 24) */
@@ -409,7 +409,7 @@
   }
   .nw-action-stage {
     position: sticky;
-    top: calc(136px - var(--w) * 68 / 2967);          /* pins with the bezel 64px under the nav (the turned corner rises above it) */
+    top: calc(112px - var(--w) * 68 / 2967);          /* pins with the bezel 40px under the nav (the turned corner rises above it); the static gap above is set by the track's margin-top */
     display: flex; justify-content: center;
   }
   /* Soft contact shadow under the base (foot at y 1829 of the cropped canvas) so the monitor doesn't float */
