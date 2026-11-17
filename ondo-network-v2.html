@@ -396,30 +396,32 @@
      (screen facing left) to front-on. A sticky stage pins it with the bezel's top edge 24px under
      the nav (96px from the top); while pinned, scroll progress picks the frame and scales the
      canvas from "monitor 80px from the viewport sides" down to 1. JS sets --s / --tx and draws.
-     Frame geometry (1780×1305 px): front-on monitor x 263–1517, bezel top y 130, stand foot y 1187. */
+     HD frames: rendered 2967×2175 (250%, matte glass), cropped to the monitor at x 411–2556 /
+     y 148–2009 → 2145×1861. --w is the width of the full (uncropped) frame; in it the bezel top
+     sits at y 216 and the foot at y 1977, i.e. y 68 and 1829 inside the cropped canvas. */
   .nw-action { overflow: clip; }
   .nw-action-track {
     --w: calc(1.134 * min(1290px, calc(100vw - 40px), calc((100vh - 136px) * 1.684))); /* v2: 1.134× the fitted size (1.2 × 0.9 × 1.05) */
     width: 100%;
-    height: calc(var(--w) * 1305 / 1780 + 80vh);         /* 80vh of scroll while pinned = the turn */
-    margin-top: calc(24px - var(--w) * 130 / 1780);     /* v2: bezel 104px under the copy (section gap 80 + 24) */
-    margin-bottom: -64px;                              /* v2: tighter gap under the foot (frame has empty space below it) */
+    height: calc(var(--w) * 1861 / 2967 + 80vh);         /* 80vh of scroll while pinned = the turn */
+    margin-top: calc(24px - var(--w) * 68 / 2967);      /* v2: bezel 104px under the copy (section gap 80 + 24) */
+    margin-bottom: calc(var(--w) * 165 / 2967 - 64px);  /* same gap under the foot as before the crop */
   }
   .nw-action-stage {
     position: sticky;
-    top: calc(96px - var(--w) * 130 / 1780);          /* pins with the bezel 24px under the nav */
+    top: calc(136px - var(--w) * 68 / 2967);          /* pins with the bezel 64px under the nav (the turned corner rises above it) */
     display: flex; justify-content: center;
   }
-  /* Soft contact shadow under the base (foot at y 1187 of 1305) so the monitor doesn't float */
+  /* Soft contact shadow under the base (foot at y 1829 of the cropped canvas) so the monitor doesn't float */
   .nw-action-stage::before {
     /* Matches Figma "Contact shadow (adjust layer opacity)": 369×92 under the 1187-wide mockup,
        centre 13px above the foot, layer opacity 75%, layer blur 20 (≈ CSS blur 10px), multiply */
     content: "";
     position: absolute;
     left: 50%;
-    top: calc(var(--w) * 1110 / 1780);
-    width: calc(var(--w) * 480 / 1780);
-    height: calc(var(--w) * 120 / 1780);
+    top: calc(var(--w) * 1702 / 2967);
+    width: calc(var(--w) * 800 / 2967);
+    height: calc(var(--w) * 200 / 2967);
     transform: translateX(-50%);
     border-radius: 50%;
     background: radial-gradient(closest-side, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.37) 60%, transparent);
@@ -431,9 +433,9 @@
   }
   .nw-action-mockup { position: relative; } /* keeps the canvas above the shadow */
   .nw-action-mockup {
-    width: var(--w);
+    width: calc(var(--w) * 2145 / 2967);   /* cropped canvas inside the full frame width --w */
     height: auto;
-    aspect-ratio: 1780 / 1305;
+    aspect-ratio: 2145 / 1861;
     display: block;
     transform: translateX(var(--tx, 0px)) scale(var(--s, 1));
     transform-origin: 50% 9.96%; /* bezel top edge, horizontally centred */
@@ -968,7 +970,7 @@
   </div>
   <div class="nw-action-track">
     <div class="nw-action-stage">
-      <canvas class="nw-action-mockup" width="1780" height="1305" role="img" aria-label="Ondo Perps trading interface on a desktop monitor"></canvas>
+      <canvas class="nw-action-mockup" width="2145" height="1861" role="img" aria-label="Ondo Perps trading interface on a desktop monitor"></canvas>
     </div>
   </div>
 </section>
